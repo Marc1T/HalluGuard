@@ -1,0 +1,30 @@
+{
+  "variant": "A",
+  "description": "Baseline sans HalluGuard — pipeline LangGraph 4 noeuds",
+  "questions": [
+    {
+      "query": "Qu'est-ce qu'un LLM ?",
+      "answer": " Un LLM (Language Model) est un modèle d'apprentissage automatique spécialisé dans la compréhension et la génération du langage. Ils sont entraînés sur de grandes quantités de données de texte et peuvent générer du texte, résumer des documents, traduire les textes, coder et raisonner. Toutefois, ils ne mettent pas à jour leurs connaissances automatiquement après l'entraînement sans fine-tuning supplémentaire. Les LLMs modernes performants comprennent des exemples tels que GPT-4, Claude, Gemini et Mistral. Notons que ces modèles sont sensibles à la formulation des requêtes, c'est pourquoi l'ingénierie du prompt est importante pour optimiser leurs performances.\n\nSource :\n- Brown et al., Language Models are Few-Shot Learners (2020)\n- Raffel et al., Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer (2020)",
+      "latency_seconds": 333.13,
+      "documents_used": 3,
+      "variant": "A"
+    },
+    {
+      "query": "Comment fonctionne le RAG ?",
+      "answer": " Le RAG (Retrieval-Augmented Generation) est un outil de génération de texte qui fonctionne en trois étapes : indexation des documents, récupération par similarité, et génération. Il réduit les hallucinations en ancrant la génération dans des documents récupérés à partir d'une base de connaissances. Toutefois, ses limites se reposent sur la qualité de cette base de connaissances et la pertinence des fragments de texte récupérés pour répondre aux requêtes.\n\n(Réponse générée en fonction des informations présentées dans le contexte complet fourni)",
+      "latency_seconds": 281.09,
+      "documents_used": 3,
+      "variant": "A"
+    },
+    {
+      "query": "Quelles sont les limites des agents IA ?",
+      "answer": " Les limites des agents IA comprennent notamment le manque de bon sens, la dépendance aux données d'entraînement, ainsi que la difficulté à généraliser en dehors de leur domaine d'entraînement (Dersley, 2018). En outre, les agents IA basés sur des LLM peuvent être susceptibles à des hallucinations, produisant des fausses informations ou des réponses qui ne sont pas fondées sur la réalité (Bender et al., 2021). Il est à noter que certains types d'agents IA, tels que les agents agentifs, peuvent planifier, mémoriser et utiliser des outils externes, ce qui peut les aider à surmonter certaines de ces limites.\n\nReference(s):\n- Bender, M., Kiela, D., Subramanian, A., & Harnad, S. (2021). On the possibility of a useful machine reading comprehension system. arXiv preprint arXiv:2105.14594.\n- Dersley, J. (2018). Machine learning meets natural language processing: Trends and challenges. Natural Language Engineering, 24(3), 629-657.",
+      "latency_seconds": 486.86,
+      "documents_used": 3,
+      "variant": "A"
+    }
+  ],
+  "avg_latency_seconds": 367.03,
+  "min_latency_seconds": 281.09,
+  "max_latency_seconds": 486.86
+}

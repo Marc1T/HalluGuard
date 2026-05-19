@@ -1,0 +1,14 @@
+Le Transformer utilise l'attention multi-têtes (multi-head attention) et traite tous les tokens d'une séquence en parallèle, contrairement aux RNN qui les traitent séquentiellement.
+Le mécanisme d'attention standard a une complexité temporelle et spatiale en O(n²) par rapport à la longueur de séquence n.
+BERT (Bidirectional Encoder Representations from Transformers) est publié par Google en octobre 2018 ; la version BERT-Base a 110 millions de paramètres.
+GPT-3 possède 175 milliards de paramètres et a été entraîné sur 300 milliards de tokens ; son coût d'entraînement est estimé à 4.6 millions de dollars.
+La fenêtre de contexte de GPT-3 est de 4 096 tokens ; GPT-4 Turbo dispose d'une fenêtre de 128 000 tokens.
+Mistral 7B est publié en octobre 2023 par Mistral AI avec 7.3 milliards de paramètres sous licence Apache 2.0.
+Mistral 7B surpasse LLaMA 2 13B sur la majorité des benchmarks de raisonnement et de code malgré sa taille deux fois moindre.
+Le RLHF (Reinforcement Learning from Human Feedback) est décrit dans l'article InstructGPT d'Ouyang et al. (OpenAI, 2022).
+LLaMA 3 est publié par Meta en avril 2024 dans des versions 8B et 70B paramètres.
+Claude 3 Opus est publié par Anthropic en mars 2024 ; Claude 3.5 Sonnet le surpasse en juillet 2024.
+Les LLM ne mettent pas à jour leurs paramètres après l'entraînement ; leur connaissance est figée à la date de coupure (cutoff date).
+Le fine-tuning par LoRA (Low-Rank Adaptation) permet d'adapter un LLM en n'entraînant qu'un faible pourcentage de ses paramètres (< 1%).
+Mistral 7B peut fonctionner entièrement en local via Ollama sur CPU sans nécessiter de GPU ; il utilise environ 4.1 GB de RAM en quantification Q4.
+Les embeddings produits par sentence-transformers/all-MiniLM-L6-v2 ont 384 dimensions et sont générés par un modèle de 22 millions de paramètres.

@@ -1,0 +1,61 @@
+{
+  "title": "Meilleur exemple qualitatif HalluGuard (article scientifique)",
+  "why_selected": "T2 score=0.996 -- detecte par M1 ET M2 -- illustre la contribution BeliefState sur les hallucinations temporelles (avant/depuis/recemment)",
+  "scenario": {
+    "id": "s019",
+    "hallucination_type": "T2",
+    "node_type": "reasoning",
+    "pipeline_length": 7,
+    "query": "ChromaDB a-t-il une limite de documents ?",
+    "hallucinated_claim": "ChromaDB avait une limite stricte de 1000 documents avant sa mise à jour récente qui a supprimé cette contrainte arbitraire.",
+    "reference_evidences": [
+      "ChromaDB ne fixe pas de limite arbitraire sur le nombre de documents et peut indexer des millions d'entrées dès l'origine."
+    ],
+    "expected_label": "hallucinated"
+  },
+  "pipeline_trace": {
+    "etape_1_retrieval": {
+      "action": "ChromaDB HNSW retourne les passages pertinents",
+      "documents_recuperes": [
+        "ChromaDB ne fixe pas de limite arbitraire sur le nombre de documents et peut indexer des millions d'entrées dès l'origine."
+      ],
+      "node": "retrieval"
+    },
+    "etape_2_reasoning_generation": {
+      "action": "Mistral 7B genere une affirmation contenant un marqueur temporel incorrect (avant / recemment)",
+      "output_hallucine": "ChromaDB avait une limite stricte de 1000 documents avant sa mise à jour récente qui a supprimé cette contrainte arbitraire.",
+      "node": "reasoning",
+      "hallucination_type": "T2"
+    },
+    "etape_3_halluguard_M1": {
+      "mechanism": "LightweightVerifier -- NLI inter-sources",
+      "claim_vs_evidence": "\"ChromaDB avait une limite stricte de 1000 documents avant sa mise à jour récente\" vs \"ChromaDB ne fixe pas de limite arbitraire sur le nombre de documents et peut ind\"",
+      "nli_label": "contradiction",
+      "score": 0.996,
+      "decision": "hallucinated",
+      "detected_by_variant_B": true
+    },
+    "etape_4_halluguard_M2": {
+      "mechanism": "BeliefState -- coherence temporelle",
+      "m2_conflict": true,
+      "note": "M2 confirme la contradiction si un fait correct a ete enregistre en session"
+    },
+    "etape_5_dependencydag": {
+      "node_invalidated": "reasoning",
+      "propagation": "descendants marques suspects selon la topologie retrieval->reasoning->tool_call->generation",
+      "delta_steps": 0
+    },
+    "etape_6_policy": {
+      "mode_log": "Entree JSONL dans results/logs/halluguard.log -- reponse originale transmise avec flag hallucinated",
+      "mode_auto_correct": "Reinvocation Mistral avec prompt enrichi : \"La reponse precedente contredit les sources : [evidences]. Genere une reponse corrigee.\""
+    },
+    "resultat_final": {
+      "label": "hallucinated",
+      "score": 0.996,
+      "hallucination_type": "T2",
+      "delta_steps": 0,
+      "latency_ms": 212.6
+    }
+  },
+  "interpretation_pour_article": "Cet exemple illustre la limite des approches RAG sans verification : Mistral genere une affirmation plausible mais factuellement incorrecte sur la temporalite de ChromaDB. M1 (NLI) detecte la contradiction avec les evidences (score=0.996). M2 (BeliefState) renforce la detection si un fait correct a ete vu precedemment dans la session. Le DependencyDAG propage l invalidation aux noeuds aval. Cette chaine de detection multi-couches est la contribution principale de HalluGuard."
+}

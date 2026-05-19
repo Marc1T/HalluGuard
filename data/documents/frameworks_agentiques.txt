@@ -1,0 +1,14 @@
+ReAct (Reasoning + Acting) est un framework agentique introduit par Yao et al. (2022) qui alterne raisonnement verbal et actions sur des outils externes.
+AutoGPT est publié sur GitHub en mars 2023 par Toran Bruce Richards ; il est l'un des premiers agents autonomes basés sur GPT-4.
+LangGraph modélise le pipeline agentique comme un graphe orienté (StateGraph) où les nœuds sont des fonctions Python et les arêtes définissent les transitions.
+Dans LangGraph, la topologie du graphe (nœuds et arêtes) est compilée avant l'exécution ; elle ne peut pas être modifiée dynamiquement pendant l'exécution.
+Le MCP (Model Context Protocol) est un protocole standardisé publié par Anthropic en novembre 2024 pour la communication entre agents et serveurs d'outils via stdio ou HTTP.
+Un serveur MCP expose ses outils via un protocole JSON-RPC sur stdin/stdout ; le client liste les outils disponibles puis les appelle par nom.
+CrewAI est un framework multi-agents publié en 2024 permettant de définir des rôles, des objectifs et des pipelines de collaboration entre agents spécialisés.
+Le protocole A2A (Agent-to-Agent) est proposé par Google en 2024 pour standardiser la délégation de tâches entre agents IA hétérogènes.
+La mémoire d'un agent IA se divise en trois niveaux : mémoire de travail (in-context, limité à la fenêtre de contexte), mémoire épisodique (session, RAM), mémoire sémantique (persistante, disque).
+Le BeliefState maintient jusqu'à 50 faits actifs par session avec une politique d'expulsion par confiance × récence ; les faits invalidés sont conservés avec le statut "invalidated".
+Le DependencyDAG calcule la criticité d'un nœud comme : criticite(n) = nb_descendants(n) × (1 - confiance(n)).
+Les seuils de détection HalluGuard par type de nœud sont : tool_call=0.0 (toujours vérifié), generation=0.0, reasoning=0.4, retrieval=0.6.
+La fenêtre de contexte d'un LLM limite le nombre de tokens traités simultanément : 4 096 pour GPT-3, 8 192 pour LLaMA 2, 128 000 pour GPT-4 Turbo.
+Un pipeline LangGraph 4 nœuds pour le RAG agentique suit l'ordre : retrieval → reasoning → tool_call → generation.

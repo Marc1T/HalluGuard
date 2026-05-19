@@ -1,0 +1,170 @@
+{
+  "schema_version": "a2a/2024-11",
+  "name": "HalluGuard",
+  "description": "Middleware de detection et mitigation des hallucinations dans les pipelines RAG agentiques. Expose 4 tools de verification via protocole MCP/stdio. Integre un verifier NLI inter-sources (M1), un BeliefState temporel persistant (M2) et un DependencyDAG de propagation.",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "ENSAM Meknes — Projet 15",
+    "contact": "s.diallo@edu.umi.ac.ma",
+    "url": "https://github.com/ensam-meknes/halluguard"
+  },
+  "url": "mcp://halluguard/stdio",
+  "protocol": "MCP/stdio",
+  "authentication": {
+    "type": "none",
+    "note": "Deploiement local uniquement — pas d'authentification requise"
+  },
+  "capabilities": {
+    "streaming": false,
+    "push_notifications": false,
+    "state_transition_history": true,
+    "persistent_memory": true,
+    "multi_session": true
+  },
+  "constraints": {
+    "hardware": "CPU uniquement — pas de GPU requis",
+    "model": "cross-encoder/nli-MiniLM2-L6-H768 (117M params, pre-entraine MNLI)",
+    "max_claim_length_chars": 512,
+    "max_evidences_per_call": 10,
+    "belief_state_max_facts": 50,
+    "avg_latency_ms": {
+      "verify_claim": 200,
+      "check_temporal_coherence": 80,
+      "add_fact": 5,
+      "get_belief_state": 2
+    }
+  },
+  "skills": [
+    {
+      "id": "verify_claim",
+      "name": "Verification NLI inter-sources (M1)",
+      "description": "Verifie si une affirmation (claim) est coherente avec un ensemble de documents evidence via NLI. Detecte les hallucinations de type T1 (perception), T3 (planification), T4 (causale) et T5 (delegation). Classifie en contradiction/neutral/entailment et retourne un label binaire correct/hallucinated.",
+      "input_schema": {
+        "type": "object",
+        "required": ["claim"],
+        "properties": {
+          "claim": {"type": "string", "maxLength": 512, "description": "Affirmation a verifier"},
+          "evidences": {"type": "array", "items": {"type": "string"}, "description": "Documents de reference"},
+          "node_type": {
+            "type": "string",
+            "enum": ["retrieval", "reasoning", "tool_call", "generation"],
+            "default": "generation",
+            "description": "Type de noeud LangGraph — determine le seuil de detection"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "score": {"type": "number", "description": "Score de contradiction NLI [0,1]"},
+          "label": {"type": "string", "enum": ["correct", "hallucinated", "insufficient_evidence"]},
+          "confidence": {"type": "number"},
+          "hallucination_type": {"type": "string", "enum": ["T1", "T2", "T3", "T4", "T5", null]},
+          "insufficient_evidence": {"type": "boolean"},
+          "latency_ms": {"type": "number"}
+        }
+      },
+      "tags": ["nli", "hallucination-detection", "M1", "inter-sources"]
+    },
+    {
+      "id": "check_temporal_coherence",
+      "name": "Coherence temporelle BeliefState (M2)",
+      "description": "Verifie qu'une affirmation ne contredit pas les faits etablis dans le BeliefState de la session courante. Specialise dans la detection des hallucinations de type T2 (memoire temporelle) — les inconsistances entre ce que l'agent a afforme a differentes etapes du pipeline.",
+      "input_schema": {
+        "type": "object",
+        "required": ["claim"],
+        "properties": {
+          "claim": {"type": "string", "description": "Affirmation a verifier contre la memoire de session"}
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "conflict": {"type": "boolean", "description": "True si contradiction detectee"},
+          "fact_id": {"type": "string", "description": "ID du fait contradictoire dans le BeliefState"},
+          "score": {"type": "number", "description": "Score NLI de la contradiction [0,1]"}
+        }
+      },
+      "tags": ["belief-state", "temporal-coherence", "M2", "memory"]
+    },
+    {
+      "id": "add_fact",
+      "name": "Ajout de fait dans le BeliefState",
+      "description": "Enregistre un fait verifie comme correct dans le BeliefState persistant. Le fait sera utilise par check_temporal_coherence pour detecter les contradictions futures. Politique d'eviction : score confiance x recence si max_facts=50 atteint.",
+      "input_schema": {
+        "type": "object",
+        "required": ["fact"],
+        "properties": {
+          "fact": {"type": "string", "description": "Contenu du fait a memoriser"},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.9},
+          "step": {"type": "integer", "description": "Etape du pipeline ou le fait a ete etabli"}
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {"type": "string", "enum": ["added", "evicted_oldest"]},
+          "fact_id": {"type": "string"}
+        }
+      },
+      "tags": ["belief-state", "memory", "persistence"]
+    },
+    {
+      "id": "get_belief_state",
+      "name": "Inspection du BeliefState",
+      "description": "Retourne l'etat complet du BeliefState de la session MCP courante : liste des faits actifs avec leur confiance, leur etape d'origine et leur statut (active/invalidated). Utile pour le debugging et l'audit.",
+      "input_schema": {"type": "object", "properties": {}},
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {"type": "string"},
+          "active_facts": {"type": "integer"},
+          "max_facts": {"type": "integer"},
+          "facts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "fact_id": {"type": "string"},
+                "content": {"type": "string"},
+                "confidence": {"type": "number"},
+                "step": {"type": "integer"},
+                "status": {"type": "string", "enum": ["active", "invalidated"]}
+              }
+            }
+          }
+        }
+      },
+      "tags": ["belief-state", "audit", "debug"]
+    }
+  ],
+  "hallucination_taxonomy": {
+    "T1": {"name": "Perception", "node": "retrieval", "mechanism": "M1", "description": "Retrieval retourne des chunks inexacts ou non pertinents"},
+    "T2": {"name": "Memoire temporelle", "node": "reasoning", "mechanism": "M2", "description": "Inconsistance avec un fait etabli dans une etape precedente"},
+    "T3": {"name": "Planification", "node": "reasoning", "mechanism": "M1", "description": "Raisonnement fallacieux non supporte par les evidences"},
+    "T4": {"name": "Causale", "node": "generation", "mechanism": "M1", "description": "Generation contredisant directement les evidences recuperees"},
+    "T5": {"name": "Delegation", "node": "tool_call", "mechanism": "M1", "description": "Output d'un tool contradictoire avec la requete ou les evidences"}
+  },
+  "detection_thresholds": {
+    "tool_call": 0.0,
+    "generation": 0.0,
+    "reasoning": 0.4,
+    "retrieval": 0.6
+  },
+  "benchmark_results": {
+    "dataset": "HaluEval-Agentic",
+    "n_scenarios": 60,
+    "variant_C_detection_rate_pct": 85.0,
+    "variant_C_pbr1_pct": 85.0,
+    "variant_C_avg_latency_ms": 278.1,
+    "T2_detection_rate_pct": 100.0,
+    "reference": "results/resultats_comparatifs.json"
+  },
+  "integration": {
+    "framework": "LangGraph",
+    "hook": "HalluGuardMiddleware.post_node(node_type, output, state, evidences)",
+    "a2a_delegation": "src/agents/a2a_protocol.py :: delegate_verification(claim, evidences, node_type)",
+    "log_a2a": "results/logs/a2a_exchanges.log",
+    "log_mcp": "results/logs/mcp_calls.log"
+  }
+}

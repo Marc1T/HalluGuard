@@ -1,0 +1,14 @@
+Les hallucinations dans les LLM désignent la génération de contenu factuel incorrect mais présenté avec assurance ; elles sont un problème fondamental de l'architecture générative.
+HaluEval est un benchmark de détection d'hallucinations publié par Li et al. (2023) contenant 35 000 paires (réponse correcte, réponse hallucinée) issues de QA, résumé et dialogue.
+TruthfulQA est un benchmark publié par Lin et al. (2021) avec 817 questions conçues pour tester la véracité factuelle des LLM ; GPT-3 obtient 58% de réponses véridiques.
+Les études empiriques montrent que 15 à 25% des outputs de LLM contiennent des erreurs factuelles selon le domaine et la complexité de la question.
+Le dataset MNLI (Multi-Genre Natural Language Inference) contient 433 000 paires de phrases étiquetées entailment/neutral/contradiction (Williams et al., 2018, NYU).
+Le modèle NLI cross-encoder/nli-MiniLM2-L6-H768 a 117 millions de paramètres et est pré-entraîné sur MNLI ; il classe chaque paire en 3 classes : contradiction, neutral, entailment.
+Pour la détection d'hallucinations via NLI, le label "contradiction" indique que la claim contredit l'evidence ; le label "entailment" indique qu'elle est supportée.
+FActScore (Min et al., 2023) décompose une réponse en affirmations atomiques et mesure quelle proportion est supportée par Wikipedia ; GPT-4 obtient 73% en FActScore.
+La self-consistency (Wang et al., 2022) améliore la factualité en générant n réponses indépendantes et en sélectionnant la plus cohérente par vote majoritaire.
+Le RAG réduit les hallucinations de 30 à 60% selon le domaine en ancrant la génération dans des documents récupérés vérifiables.
+Les hallucinations se classent en deux types principaux : intrinsèques (la réponse contredit le contexte fourni) et extrinsèques (la réponse ajoute des informations non vérifiables).
+La détection NLI inter-sources (claim vs evidence) atteint typiquement une précision de 82 à 88% et un rappel de 68 à 75% sur les benchmarks standards.
+Le mécanisme de propagation des hallucinations dans un pipeline agentique : une erreur au nœud retrieval (T1) se propage aux nœuds reasoning et generation en aval.
+La taxonomie HalluGuard définit 5 types : T1 perception (retrieval), T2 mémoire (temporelle), T3 planification (reasoning), T4 causale (generation), T5 délégation (tool_call).

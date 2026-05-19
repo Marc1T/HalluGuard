@@ -1,0 +1,135 @@
+{
+  "variant": "B",
+  "description": "M1 uniquement — NLI inter-sources, sans BeliefState",
+  "questions": [
+    {
+      "query": "Qu'est-ce qu'un LLM ?",
+      "answer": " Un LLM, dans ce contexte, désigne un modèle de langage performant entraîné mais ne s'actualise pas automatiquement sans ajout de fine-tuning supplémentaire. Les exemples de LLMs modernes efficaces incluent GPT-4, Claude, Gemini et Mistral. Ces modèles sont sensibles à la formulation des requêtes, ce qui rend l'ingénierie de prompts importante pour obtenir des résultats précis. (Source : pas directement identifiée mais les LLMs font référence aux modèles de langage développés par des entreprises telles que Google, Microsoft ou OpenAI.)",
+      "latency_seconds": 353.54,
+      "documents_used": 3,
+      "halluguard_events": [
+        {
+          "event_id": "evt_0001",
+          "timestamp": "2026-05-18T15:45:38",
+          "node_id": "reasoning",
+          "hallucination_type": "T3",
+          "score": 0.698,
+          "claim_preview": " Dans ce contexte, un LLM (Language Learning Model) est une forme moderne de modèle de langage performante qui a été ent",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null
+        }
+      ],
+      "variant": "B",
+      "latency_A_seconds": 333.13,
+      "overhead_pct": 6.1
+    },
+    {
+      "query": "Comment fonctionne le RAG ?",
+      "answer": " Le RAG (Retrieval-Augmented Generation) est un outil qui fonctionne en trois étapes : indexation des documents, récupération par similarité, génération. Il fonctionne pour réduire les hallucinations en ancrant la génération dans des documents récupérés. Cependant, ses limites peuvent être liées à la qualité de la base de connaissances et à la pertinence des chunks récupérés.\n\nCette description provient d'une analyse préliminaire que j'ai fournie en réponse à votre question initiale. Pour plus d'informations sur le RAG, je vous invite de consulter les sources suivantes :\n- Brown et al., 2020, Retrieval augmented language models are stronger than super-sized transformers for question answering on a range of tasks, Advances in Neural Information Processing Systems.\n- Chung et al., 2021, Perceiver: A Universal Text and Image Encoder, arXiv preprint arXiv:2103.10484.",
+      "latency_seconds": 324.99,
+      "documents_used": 3,
+      "halluguard_events": [],
+      "variant": "B",
+      "latency_A_seconds": 281.09,
+      "overhead_pct": 15.6
+    },
+    {
+      "query": "Quelles sont les limites des agents IA ?",
+      "answer": " Les limites des agents IA comprennent le manque de bon sens et la dépendance aux données d'entraînement, ce qui peut les empêcher de fonctionner efficacement en dehors de leur domaine d'apprentissage (source : premier contexte). De plus, les agents IA ont des difficultés à généraliser leurs compétences, ce qui rend difficile leur adaptation à de nouvelles situations (source : deuxième contexte). Les agents IA basés sur des Modèles de Langage Massif peuvent présenter des hallucinations et produire du contenu qui ne correspond pas aux données d'entraînement ou à la réalité (source : troisième contexte). Enfin, en plus de ces limites, les agents IA agentiques peuvent planifier, mémoriser et utiliser des outils externes (source : quatrième contexte).",
+      "latency_seconds": 382.09,
+      "documents_used": 3,
+      "halluguard_events": [
+        {
+          "event_id": "evt_0002",
+          "timestamp": "2026-05-18T15:53:59",
+          "node_id": "retrieval",
+          "hallucination_type": "T1",
+          "score": 0.941,
+          "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null
+        },
+        {
+          "event_id": "evt_0003",
+          "timestamp": "2026-05-18T15:56:47",
+          "node_id": "tool_call",
+          "hallucination_type": "T5",
+          "score": 0.971,
+          "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null
+        },
+        {
+          "event_id": "evt_0004",
+          "timestamp": "2026-05-18T16:00:17",
+          "node_id": "generation",
+          "hallucination_type": "T1",
+          "score": 0.991,
+          "claim_preview": " Les limites des agents IA comprennent le manque de bon sens et la dépendance aux données d'entraînement, ce qui peut le",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null
+        }
+      ],
+      "variant": "B",
+      "latency_A_seconds": 486.86,
+      "overhead_pct": -21.5
+    }
+  ],
+  "avg_latency_seconds": 353.54,
+  "avg_overhead_pct": 0.1,
+  "middleware_stats": {
+    "calls": 12,
+    "avg_ms": 7750.4,
+    "max_ms": 54878.5
+  },
+  "halluguard_log_entries": [
+    {
+      "event_id": "evt_0001",
+      "timestamp": "2026-05-18T15:45:38",
+      "node_id": "reasoning",
+      "hallucination_type": "T3",
+      "score": 0.698,
+      "claim_preview": " Dans ce contexte, un LLM (Language Learning Model) est une forme moderne de modèle de langage performante qui a été ent",
+      "corrected": false,
+      "ttr_seconds": null,
+      "correction_preview": null
+    },
+    {
+      "event_id": "evt_0002",
+      "timestamp": "2026-05-18T15:53:59",
+      "node_id": "retrieval",
+      "hallucination_type": "T1",
+      "score": 0.941,
+      "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+      "corrected": false,
+      "ttr_seconds": null,
+      "correction_preview": null
+    },
+    {
+      "event_id": "evt_0003",
+      "timestamp": "2026-05-18T15:56:47",
+      "node_id": "tool_call",
+      "hallucination_type": "T5",
+      "score": 0.971,
+      "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+      "corrected": false,
+      "ttr_seconds": null,
+      "correction_preview": null
+    },
+    {
+      "event_id": "evt_0004",
+      "timestamp": "2026-05-18T16:00:17",
+      "node_id": "generation",
+      "hallucination_type": "T1",
+      "score": 0.991,
+      "claim_preview": " Les limites des agents IA comprennent le manque de bon sens et la dépendance aux données d'entraînement, ce qui peut le",
+      "corrected": false,
+      "ttr_seconds": null,
+      "correction_preview": null
+    }
+  ]
+}

@@ -1,0 +1,1050 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Encodage et langue ──────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{newunicodechar}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{←}{\ensuremath{\leftarrow}}
+\newunicodechar{⊕}{\ensuremath{\oplus}}
+
+% ── Mise en page ────────────────────────────────────────────────────────────
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.15}
+\usepackage{microtype}
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+% ── Maths et algorithmes ────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage[ruled,vlined]{algorithm2e}
+
+% ── Tableaux ────────────────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\definecolor{rowgray}{gray}{0.93}
+\definecolor{highlight}{rgb}{0.85,0.92,0.85}
+
+% ── Code source ─────────────────────────────────────────────────────────────
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries\color{blue!70!black},
+  commentstyle=\itshape\color{gray},
+  stringstyle=\color{orange!80!black},
+  frame=single,
+  rulecolor=\color{gray!40},
+  backgroundcolor=\color{gray!5},
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  xleftmargin=12pt,
+  language=Python
+}
+
+% ── Figures et graphiques ───────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ── Références et liens ─────────────────────────────────────────────────────
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=green!50!black,
+  urlcolor=cyan!70!black,
+  pdftitle={HalluGuard},
+  pdfauthor={Souleymane Diallo}
+}
+
+% ── Divers ──────────────────────────────────────────────────────────────────
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=small, labelfont=bf}
+\usepackage{footnote}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small HalluGuard --- D\'etection d'hallucinations dans les pipelines RAG agentiques}
+\fancyhead[R]{\small ENSAM Meknès 2025-2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Numérotation des sections ───────────────────────────────────────────────
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% ── Titre ───────────────────────────────────────────────────────────────────
+\title{%
+  \vspace{-1cm}
+  \Large\bfseries HalluGuard : Détection et Mitigation des Hallucinations\\
+  dans les Pipelines RAG Agentiques\\
+  par un Middleware NLI Multi-Couches\\[0.6em]
+  \normalsize\normalfont
+  Projet 15 --- Module Représentation et Résolution de Problèmes en Intelligence Artificielle\\
+  ENSAM Mekn\`es --- 4\textsuperscript{e} Ann\'ee G\'enie Informatique --- 2025-2026
+}
+\author{%
+  Souleymane Diallo \quad \& \quad Marc Thierry Nankouli\\
+  \small\texttt{s.diallo@edu.umi.ac.ma}\\[0.3em]
+  \small Encadrant : Prof.~Hajji Tarik
+}
+\date{Mai 2026}
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+% ════════════════════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{empty}
+
+% ── Résumé ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+Les pipelines RAG agentiques réduisent les hallucinations LLM de 30 à 60~\%, mais les sorties erronées restantes se propagent librement à travers chaque nœud sans mécanisme d'interception natif. Nous présentons \textbf{HalluGuard}, un middleware de détection et mitigation pour pipelines LangGraph à quatre nœuds, combinant un vérificateur NLI inter-sources (M1, 117~M~paramètres, MNLI), un BeliefState temporel persistant (M2), un DependencyDAG, un PolicyEngine et un serveur MCP à quatre outils. Nous proposons une taxonomie originale de cinq types d'hallucinations agentiques (T1--T5) couplée à la topologie du pipeline. Sur 60~scénarios HaluEval-Agentic, HalluGuard atteint \textbf{85,0~\% de taux de détection} (contre 0~\% pour le baseline), \textbf{278~ms} d'overhead CPU et un delta de détection de \textbf{1,03~étape}. M1 porte 90~\% du gain~; M2 couvre entièrement les hallucinations temporelles T2 (83,3~\% $\to$ 100~\%). Le système est déployé en local, sans GPU ni API payante.
+
+\medskip
+\noindent\textbf{Mots-clés :} hallucination LLM, RAG agentique, NLI, LangGraph, MCP, BeliefState, middleware de vérification, HaluEval
+\end{abstract}
+
+\begin{center}
+\rule{0.6\linewidth}{0.4pt}
+\end{center}
+
+\begin{abstract}
+\noindent\textbf{Abstract.}
+Agentic RAG (Retrieval-Augmented Generation) pipelines reduce LLM hallucinations by 30--60\%, yet the remaining 40--70\% of erroneous outputs propagate unchecked through all downstream pipeline nodes. We present \textbf{HalluGuard}, a hallucination detection and mitigation middleware for 4-node LangGraph pipelines. HalluGuard combines five components: a cross-source NLI verifier (M1, 117M parameters, pre-trained on MNLI), a persistent temporal BeliefState (M2), a directed acyclic dependency graph (DependencyDAG), a policy engine, and an MCP server exposing four standardized tools. We also propose an original taxonomy of five agentic hallucination types (T1--T5), two of which (T4 causal, T5 delegation) are absent from standard HaluEval literature. On a 60-scenario benchmark, HalluGuard achieves \textbf{85.0\% detection rate} (vs.\@ 0\% baseline) with 278~ms CPU overhead and a mean detection delta of 1.03 pipeline steps.
+
+\noindent\textbf{Keywords:} LLM hallucination, agentic RAG, NLI, LangGraph, MCP, BeliefState, verification middleware
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Contexte général}
+
+La montée en puissance des grands modèles de langage (LLM) a profondément reconfiguré l'ingénierie des systèmes d'information. Des modèles comme Mistral~7B \cite{jiang2023mistral}, LLaMA-3 ou GPT-4 sont capables de produire des textes d'une fluidité remarquable, d'une cohérence syntaxique quasi-parfaite et d'une plausibilité sémantique élevée. Cette apparence de compétence masque cependant un défaut structurel fondamental : ces modèles génèrent régulièrement des affirmations factuellement incorrectes avec une confiance égale à celle qu'ils manifestent pour des affirmations vraies. Ce phénomène, désigné par le terme \textit{hallucination} dans la littérature NLP \cite{maynez2020faithfulness, ji2023survey}, constitue l'un des obstacles majeurs au déploiement des LLM dans des applications critiques.
+
+L'architecture RAG (\textit{Retrieval-Augmented Generation}) \cite{lewis2020retrieval} a été conçue pour atténuer ce problème. En ancrant la génération du LLM dans un corpus documentaire récupéré dynamiquement, le RAG réduit la dépendance aux paramètres internes du modèle et force une cohérence avec des sources externes vérifiables. Des études récentes estiment que le RAG réduit les hallucinations de 30 à 60~\% selon le domaine et le type de tâche \cite{shuster2021retrieval, zhang2023siren}. Cependant, cette réduction n'est pas totale~: les 40 à 70~\% d'outputs erronés restants continuent de circuler dans le pipeline.
+
+Le problème s'aggrave dans les architectures \textit{agentiques}. Un pipeline RAG agentique, tel que ceux construits avec LangGraph \cite{langgraph2024}, ne produit pas une unique sortie~: il exécute une séquence d'étapes interdépendantes (retrieval, raisonnement, appel d'outils, génération). Une hallucination produite au nœud \texttt{retrieval} --- par exemple, la récupération de chunks inexacts depuis ChromaDB --- se propage à tous les nœuds aval (\texttt{reasoning}, \texttt{tool\_call}, \texttt{generation}) sans que aucun mécanisme natif n'intercepte l'erreur. La réponse finale, linguistiquement fluide et confiante, intègre cette erreur en la présentant comme un fait établi.
+
+\subsection{Problématique}
+
+Cette dynamique de propagation est le cœur du problème que ce travail adresse. Nous l'illustrons par un exemple tiré de nos données expérimentales. Dans le scénario~s019 de notre benchmark, le nœud \texttt{reasoning} de Mistral~7B génère l'affirmation suivante en réponse à la requête \og{}ChromaDB a-t-il une limite de documents~?\fg{}~:
+
+\begin{quote}
+\textit{«~ChromaDB avait une limite stricte de 1\,000~documents avant sa mise à jour récente qui a supprimé cette contrainte arbitraire.~»}
+\end{quote}
+
+Cette affirmation est factuellement fausse~: ChromaDB n'a jamais imposé de limite arbitraire sur le nombre de documents. Le score NLI de contradiction entre cette affirmation et les documents de référence est de \textbf{0,996}~--- quasi-certitude de contradiction. Sans middleware de vérification, cette erreur traverse les nœuds \texttt{tool\_call} et \texttt{generation} et atteint l'utilisateur final habillée d'une formulation plausible et assurée.
+
+La problématique centrale est donc~: \textbf{comment détecter et intercepter les hallucinations en temps réel dans un pipeline RAG agentique multi-nœuds, sans modifier le code du pipeline, sans GPU et sans fine-tuning du modèle de détection~?}
+
+\subsection{Lacunes des approches existantes}
+
+Les méthodes actuelles de détection des hallucinations souffrent de trois limitations structurelles dans un contexte agentique.
+
+\textbf{Limitation~1 --- Post-traitement uniquement.} FActScore \cite{min2023factscore}, SelfCheckGPT \cite{manakul2023selfcheckgpt} et RAGAs \cite{es2023ragas} opèrent sur la sortie finale du LLM, après que l'intégralité du pipeline a été exécutée. Cette approche est incompatible avec une interception au bon nœud~: au moment de la détection, les nœuds aval ont déjà consommé l'hallucination.
+
+\textbf{Limitation~2 --- Absence de temporalité inter-étapes.} Aucune méthode existante ne maintient un état de croyance entre les étapes du pipeline. Si un agent affirmé au nœud~2 que \og{}X est vrai\fg{} et contredit cette affirmation au nœud~6, aucun système actuel ne peut détecter cette incohérence interne --- sauf à mémoriser explicitement les faits établis.
+
+\textbf{Limitation~3 --- Incompatibilité avec les protocoles agentiques modernes.} Les standards MCP \cite{anthropic2024mcp} et A2A \cite{google2024a2a} définissent des interfaces de communication inter-agents qui ne sont pas exploitées par les méthodes existantes. À notre connaissance de la littérature publiée, aucun système ne combine ces deux protocoles conjointement pour la vérification des hallucinations dans des pipelines RAG agentiques.
+
+\subsection{Hypothèse de recherche}
+
+Ce travail teste formellement l'hypothèse suivante~:
+
+\begin{quote}
+\textit{«~Un vérificateur NLI pré-entraîné, combiné à un BeliefState persistant et à un graphe de dépendances, peut détecter plus de 80~\% des hallucinations dans un pipeline RAG agentique à quatre nœuds, sans fine-tuning, sur CPU standard, avec un overhead inférieur à 300~ms.~»}
+\end{quote}
+
+\noindent Variables expérimentales~:
+\begin{itemize}[noitemsep]
+  \item \textbf{Variable indépendante~:} présence et configuration du middleware HalluGuard (variantes A, B, C)
+  \item \textbf{Variable dépendante~:} taux de détection sur 60~scénarios hallucinés contrôlés
+  \item \textbf{Contraintes~:} CPU uniquement, modèle NLI pré-entraîné sans fine-tuning, pas d'API externe
+  \item \textbf{Seuil de validation~:} $>80\%$ de détection à overhead $<300$~ms
+\end{itemize}
+
+\subsection{Contributions}
+
+Ce travail apporte quatre contributions originales~:
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{Taxonomie T1--T5~:} cinq types d'hallucinations agentiques couplés à la topologie du pipeline RAG, dont deux types originaux (T4 causale, T5 délégation) absents de la littérature.
+  \item \textbf{Architecture middleware~:} cinq composants intégrables comme hooks pre/post-nœud dans LangGraph sans modification du code pipeline.
+  \item \textbf{Évaluation expérimentale comparative~:} trois variantes (A/B/C), 60~scénarios, cinq métriques, étude d'ablation M1 vs~M2.
+  \item \textbf{Implémentation conforme MCP et A2A~:} serveur MCP avec quatre outils, AgentCard formelle, 111~appels journalisés, déploiement 100~\% local.
+\end{enumerate}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Travaux Connexes}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Hallucinations dans les LLM : définitions et taxonomies}
+
+Le terme \og{}hallucination\fg{} en NLP désigne la génération d'informations non étayées par le contexte ou factuellement incorrectes \cite{maynez2020faithfulness}. Ji et al.~\cite{ji2023survey} distinguent les \textit{hallucinations intrinsèques} (contradictions avec le contexte fourni) et les \textit{hallucinations extrinsèques} (affirmations invérifiables). Huang et al.~\cite{huang2023survey} proposent une classification par étape de génération. Zhang et al.~\cite{zhang2023siren} analysent les causes profondes~: données d'entraînement bruitées, décalage entre pré-entraînement et fine-tuning, problèmes d'alignement.
+
+Ces taxonomies ciblent les LLM en tant que systèmes isolés. Notre taxonomie T1--T5 étend ces travaux en couplant chaque type d'hallucination à un nœud spécifique d'un pipeline RAG agentique multi-étapes --- une dimension absente de la littérature antérieure.
+
+\subsection{Benchmarks de détection}
+
+TruthfulQA \cite{lin2022truthfulqa} est le benchmark de référence pour mesurer la propension des LLM à produire des affirmations fausses communément crues. Il contient 817~questions dans 38~catégories, mais se limite à l'évaluation de sorties LLM isolées.
+
+HaluEval \cite{li2023halueval} propose 35\,000~paires (question, réponse hallucinée, réponse correcte) dans trois domaines (QA, dialogue, résumé). Il ne couvre pas les architectures agentiques multi-nœuds, ni les types T4 et T5. Notre benchmark HaluEval-Agentic s'inspire de son format mais est construit spécifiquement pour les pipelines RAG à quatre nœuds.
+
+\subsection{Méthodes de détection}
+
+\textbf{FActScore} \cite{min2023factscore} décompose les affirmations en faits atomiques et les vérifie individuellement contre une base de connaissances (Wikipédia). Cette approche atteint de bonnes performances mais requiert un accès à une base externe et opère uniquement en post-traitement.
+
+\textbf{SelfCheckGPT} \cite{manakul2023selfcheckgpt} génère plusieurs sorties du même LLM et mesure leur cohérence interne par NLI ou BERTScore. La méthode est zéro-ressource mais multiplie les appels LLM (overhead $\times$N) et ne s'intègre pas dans un pipeline en temps réel.
+
+\textbf{RAGAS} \cite{es2023ragas} évalue les pipelines RAG a posteriori selon des métriques comme la fidélité (\textit{faithfulness}) et la pertinence de réponse. C'est un outil d'évaluation offline, pas un middleware de détection temps réel.
+
+Notre approche se distingue sur trois dimensions~: intégration temps réel comme middleware, maintien d'un état temporel inter-étapes via BeliefState, et conformité aux protocoles MCP/A2A.
+
+\subsection{Inférence de langage naturel (NLI)}
+
+L'NLI (\textit{Natural Language Inference}) consiste à classifier une paire (prémisse, hypothèse) en trois classes~: contradiction, neutralité, implication. Les cross-encoders \cite{humeau2020polyencoders} traitent les deux séquences conjointement via l'attention croisée, ce qui produit des scores de pertinence supérieurs aux bi-encoders pour les tâches de vérification factuelle.
+
+MNLI \cite{williams2018mnli} (MultiNLI, 433\,000~paires annotées par des humains) est le corpus de référence pour l'entraînement des modèles NLI généraux. Le modèle \texttt{cross-encoder/nli-MiniLM2-L6-H768} \cite{reimers2019sbert} --- 117~M~paramètres, architecture BERT-base compressée --- offre le meilleur compromis précision/vitesse pour une inférence CPU dans notre contexte expérimental.
+
+\subsection{Protocoles MCP et A2A}
+
+Le Model Context Protocol \cite{anthropic2024mcp} est un standard JSON-RPC défini par Anthropic en novembre~2024 pour exposer des outils à des agents LLM via transport stdio ou HTTP/SSE. Il standardise les interfaces de \textit{tool use} et permet à tout agent conforme MCP d'invoquer des services tiers sans intégration spécifique.
+
+Le protocole Agent-to-Agent \cite{google2024a2a}, publié par Google DeepMind en 2024, définit un format d'échange standardisé entre agents autonomes~: AgentCard (déclaration des capacités), TaskObject (machine d'états \texttt{submitted~→~working~→~completed}), et protocole de délégation de tâches. Parmi les approches publiées, aucune ne combine ces deux protocoles conjointement pour la vérification des hallucinations dans un contexte RAG agentique.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Taxonomie des Hallucinations Agentiques}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Motivation et originalité}
+
+Les benchmarks existants évaluent les hallucinations en sortie finale du LLM, sans considérer leur point d'origine dans le pipeline. Cette abstraction rend impossible (1)~l'interception au nœud approprié, (2)~l'analyse de propagation, et (3)~la conception de mécanismes de détection ciblés. Notre taxonomie couple chaque type d'hallucination à un nœud précis du pipeline RAG.
+
+\subsection{Les cinq types}
+
+\begin{table}[H]
+\centering
+\caption{Taxonomie HalluGuard des hallucinations agentiques (T1--T5)}
+\label{tab:taxonomy}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{clllXl}
+\toprule
+\textbf{Type} & \textbf{Nom} & \textbf{Nœud} & \textbf{Mécanisme} & \textbf{Description} & \textbf{Propagation} \\
+\midrule
+\rowcolor{rowgray}
+T1 & Perception & \texttt{retrieval} & NLI (M1) & Chunks ChromaDB inexacts ou hors-sujet & Modérée \\
+T2 & Mémoire & \texttt{reasoning} & BeliefState (M2) & Contradiction avec un fait établi en session & Élevée \\
+\rowcolor{rowgray}
+T3 & Planification & \texttt{reasoning} & NLI + DAG & Raisonnement faux formulé neutralement & Critique \\
+T4 & Causale & \texttt{generation} & NLI (M1) & Affirmation contredisant les documents & Élevée \\
+\rowcolor{rowgray}
+T5 & Délégation & \texttt{tool\_call} & NLI (M1) & Output outil divergeant de la prédiction LLM & Critique \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{T1 --- Hallucination de perception.}
+Au nœud \texttt{retrieval}, ChromaDB retourne des chunks inexacts, tronqués ou sémantiquement proches mais factuellement différents de la requête. Le LLM génère alors une affirmation basée sur ces documents erronés. La détection par M1 compare l'affirmation générée aux documents de référence véritables (ceux qui auraient dû être récupérés). Score NLI > 0,6 déclenche la détection (seuil \texttt{retrieval}).
+
+\textbf{T2 --- Hallucination de mémoire temporelle.}
+Au nœud \texttt{reasoning}, le LLM contredit un fait qu'il a lui-même établi lors d'une étape précédente dans la session (ou une session antérieure). Ce type est \textit{invisible} à M1 car aucun document externe ne capture l'affirmation antérieure --- seul le BeliefState dispose de cette information. Les marqueurs temporels (\og{}avant\fg{}, \og{}récemment\fg{}, \og{}depuis la mise à jour\fg{}) sont caractéristiques de T2.
+
+\textbf{T3 --- Hallucination de planification.}
+Le nœud \texttt{reasoning} produit un enchaînement logique faux~: les prémisses sont correctes mais la conclusion ne suit pas. Ce type est le plus difficile à détecter par NLI généraliste, car le raisonnement est formulé de façon syntaxiquement plausible et sémantiquement neutre par rapport aux documents. Il requiert une compréhension causale que MNLI ne capture qu'imparfaitement.
+
+\textbf{T4 --- Hallucination causale.}
+Au nœud \texttt{generation}, le LLM produit une affirmation qui contredit directement les documents récupérés par \texttt{retrieval}. C'est la forme la plus classique d'hallucination RAG. Le NLI inter-sources est particulièrement efficace ici (83,3~\% en Variante~C).
+
+\textbf{T5 --- Hallucination de délégation.}
+Au nœud \texttt{tool\_call}, la sortie retournée par l'outil diverge de ce que le LLM avait prédit ou était en droit d'attendre. Ce type implique une discordance entre l'agent et son outil, non entre l'agent et ses sources documentaires. T4 et T5 constituent les contributions taxonomiques originales de ce travail.
+
+\subsection{Modélisation formelle de la propagation}
+
+La criticité d'un nœud dans le DependencyDAG est définie comme~:
+\begin{equation}
+\text{criticite}(n) = |\text{descendants}(n)| \times \bigl(1 - \text{confiance}(n)\bigr)
+\label{eq:criticite}
+\end{equation}
+
+Dans le pipeline linéaire \texttt{retrieval~→~reasoning~→~tool\_call~→~generation}~:
+\begin{align}
+\text{criticite}(\texttt{retrieval}) &= 3 \times (1 - c_r) \label{eq:crit_retrieval}\\
+\text{criticite}(\texttt{reasoning}) &= 2 \times (1 - c_{rs}) \label{eq:crit_reasoning}\\
+\text{criticite}(\texttt{tool\_call}) &= 1 \times (1 - c_{tc}) \label{eq:crit_toolcall}\\
+\text{criticite}(\texttt{generation}) &= 0 \times (1 - c_g) = 0 \label{eq:crit_generation}
+\end{align}
+
+où $c_n \in [0,1]$ est la confiance courante du nœud $n$. Le nœud \texttt{retrieval} a la criticité maximale~: une hallucination de type T1 contamine l'intégralité du pipeline aval. Le nœud \texttt{generation} a une criticité nulle (dernier nœud), mais ses hallucinations de type T4 sont les plus visibles par l'utilisateur.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Architecture HalluGuard}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Vue d'ensemble}
+
+HalluGuard s'intègre dans tout pipeline LangGraph via les hooks \texttt{pre\_node} et \texttt{post\_node} de \texttt{HalluGuardMiddleware}, sans modifier le code du pipeline existant. La Figure~\ref{fig:architecture} illustre l'architecture complète.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.7cm and 1.6cm,
+  box/.style={draw, rounded corners=4pt, fill=blue!8, minimum width=2.4cm, minimum height=0.7cm, font=\small, align=center},
+  mbox/.style={draw, rounded corners=4pt, fill=orange!10, minimum width=2.4cm, minimum height=0.7cm, font=\small, align=center},
+  arr/.style={->, >=Stealth, thick},
+  dashedarr/.style={->, >=Stealth, dashed, gray}
+]
+  % Pipeline nodes
+  \node[box] (ret) {\texttt{retrieval}};
+  \node[box, right=of ret] (rea) {\texttt{reasoning}};
+  \node[box, right=of rea] (tc)  {\texttt{tool\_call}};
+  \node[box, right=of tc]  (gen) {\texttt{generation}};
+
+  % Arrows between nodes
+  \draw[arr] (ret) -- (rea);
+  \draw[arr] (rea) -- (tc);
+  \draw[arr] (tc)  -- (gen);
+
+  % ChromaDB
+  \node[mbox, above=of ret, fill=green!10] (chroma) {ChromaDB\\71 chunks};
+  \draw[arr, dashedarr] (ret) -- (chroma);
+  \draw[arr, dashedarr] (chroma) -- (ret);
+
+  % Mistral
+  \node[mbox, above=of rea, fill=purple!10] (mistral) {Mistral 7B\\(Ollama)};
+  \draw[arr, dashedarr] (rea) -- (mistral);
+  \draw[arr, dashedarr] (mistral) -- (rea);
+
+  % HalluGuard middleware box
+  \begin{scope}[on background layer]
+    \node[draw, dashed, rounded corners=6pt, fill=orange!5,
+          fit=(ret)(gen), inner sep=12pt, label={[font=\small\bfseries]above:Pipeline LangGraph}] (pipeline) {};
+  \end{scope}
+
+  % Middleware components below
+  \node[mbox, below=1.4cm of ret, fill=red!8] (dag)  {(1) DependencyDAG};
+  \node[mbox, below=1.4cm of rea, fill=red!8] (m1)   {(2) M1 NLI};
+  \node[mbox, below=1.4cm of tc,  fill=red!8] (m2)   {(3) BeliefState};
+  \node[mbox, below=1.4cm of gen, fill=red!8] (pol)  {(4) PolicyEngine};
+
+  % MCP server
+  \node[mbox, below=0.7cm of m1, fill=yellow!15] (mcp) {\texttt{halluguard\_mcp.py}\\4~tools MCP};
+
+  \draw[arr] (ret.south) -- ++(0,-0.4) -| (dag.north);
+  \draw[arr] (rea.south) -- ++(0,-0.4) -| (m1.north);
+  \draw[arr] (tc.south)  -- ++(0,-0.4) -| (m2.north);
+  \draw[arr] (gen.south) -- ++(0,-0.4) -| (pol.north);
+
+  \draw[arr] (m1.south) -- (mcp.north);
+  \draw[arr] (m2.south) -- (mcp.north);
+
+\end{tikzpicture}
+\caption{Architecture HalluGuard --- le middleware s'intègre sous chaque nœud LangGraph via hooks \texttt{post\_node}}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Composant 1 --- DependencyDAG}
+
+Le DependencyDAG modélise le pipeline comme un graphe acyclique dirigé (DAG) construit automatiquement via \texttt{build\_from\_langgraph(state\_graph)} en parcourant les arêtes du \texttt{StateGraph} compilé. Chaque nœud est associé à une confiance courante $c_n \in [0,1]$ initialisée à 1,0 et mise à jour après chaque vérification.
+
+\begin{lstlisting}[caption={Interface du DependencyDAG}, label={lst:dag}]
+class DependencyDAG:
+    def add_node(self, node_id: str, confidence: float = 1.0) -> None
+    def add_edge(self, from_id: str, to_id: str) -> None
+    def criticite(self, node_id: str) -> float
+        # retourne |descendants(n)| * (1 - confiance(n))
+    def propagate_invalidation(self, node_id: str) -> list[str]
+        # marque descendants comme "suspicious", retourne la liste
+    def descendants(self, node_id: str) -> set[str]
+\end{lstlisting}
+
+Les seuils de détection sont paramétrés par type de nœud, reflétant leur criticité différentielle~:
+
+\begin{table}[H]
+\centering
+\caption{Seuils NLI par type de nœud}
+\label{tab:thresholds}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Nœud} & \textbf{Seuil de détection} & \textbf{Justification} \\
+\midrule
+\texttt{tool\_call} & 0,0 & Tout output outil suspect doit être intercepté \\
+\texttt{generation} & 0,0 & Hallucination directement visible par l'utilisateur \\
+\texttt{reasoning} & 0,4 & Tolérance partielle pour les raisonnements approchés \\
+\texttt{retrieval} & 0,6 & Chunks approximativement pertinents sont acceptables \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Composant 2 --- LightweightVerifier (M1)}
+
+M1 est la pièce centrale du système. Il utilise le modèle \texttt{cross-encoder/nli-MiniLM2-L6-H768} \cite{reimers2019sbert}~:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{Architecture~:} BERT-base (6~couches Transformer, $H=768$, 12~têtes d'attention)
+  \item \textbf{Paramètres~:} 117~millions
+  \item \textbf{Pré-entraînement~:} MNLI \cite{williams2018mnli} --- 433\,000~paires annotées par des humains
+  \item \textbf{Inférence~:} CPU uniquement, chargement en $\approx 5$~s (singleton session)
+  \item \textbf{Classes de sortie~:} contradiction (0) / neutralité (1) / implication (2)
+\end{itemize}
+
+Le score de contradiction (classe~0 du softmax) est agrégé sur les $k \leq 10$ evidences par maximum~:
+\begin{equation}
+\text{score\_final} = \max_{i=1}^{k} \,\text{softmax}\bigl(\text{logits}(\text{claim},\,\text{evidence}_i)\bigr)_{\!\text{contradiction}}
+\label{eq:max_score}
+\end{equation}
+
+\begin{lstlisting}[caption={Mécanisme de vérification M1}, label={lst:verifier}]
+def verify(self, claim: str, evidences: list[str],
+           node_type: str = "generation") -> dict:
+    if not evidences:
+        return {"score": 0.5, "insufficient_evidence": True,
+                "label": "insufficient_evidence"}
+    scores = []
+    for ev in evidences[:10]:  # max 10 evidences par appel MCP
+        logits = self.model.predict([(claim, ev)])  # cross-encoder
+        contradiction_score = float(softmax(logits[0])[0])
+        scores.append(contradiction_score)
+    max_score = max(scores)
+    threshold = THRESHOLDS[node_type]
+    label = "hallucinated" if max_score > threshold else "correct"
+    htype = self._infer_hallucination_type(max_score, node_type)
+    return {"score": max_score, "label": label,
+            "hallucination_type": htype, "confidence": max_score}
+\end{lstlisting}
+
+\subsection{Composant 3 --- BeliefState (M2)}
+
+Le BeliefState est la mémoire temporelle de la session. Il maintient un ensemble de faits établis au fil du pipeline, permettant de détecter les contradictions inter-étapes.
+
+\textbf{Structure de données~:} liste de faits $F = \{f_1, \ldots, f_k\}$ avec $k \leq 50$, chaque fait $f_i$ contenant~: identifiant unique, contenu textuel, confiance $c_i \in [0,1]$, étape d'origine $s_i$, statut (\texttt{active} / \texttt{invalidated}).
+
+\textbf{Politique d'éviction~:} lorsque $|F| = 50$, le fait avec le score composite le plus bas est retiré~:
+\begin{equation}
+\text{score\_eviction}(f_i) = c_i \times \frac{1}{1 + \text{age}(f_i)}
+\label{eq:eviction}
+\end{equation}
+où $\text{age}(f_i)$ est le nombre d'étapes depuis l'enregistrement.
+
+\textbf{Détection de conflit~:} pour un claim $c$, on calcule d'abord la similarité cosinus avec chaque fait actif (via sentence-transformers, top-K=5), puis on applique le NLI sur les candidats~:
+\begin{equation}
+\text{conflit}(c, F) = \exists f \in \text{top}_{5}(F) ~|~ \text{score\_M1}(c, f) > 0.5
+\label{eq:conflict}
+\end{equation}
+
+\textbf{Persistance inter-sessions~:} après chaque session, \texttt{PersistentMemory.save()} sérialise le BeliefState en JSON dans \texttt{data/memory/session\_<id>.json}. Au démarrage, \texttt{load\_or\_create()} recharge le BeliefState si une session existe. La persistence a été vérifiée expérimentalement~: une nouvelle instance Python recharge le même \texttt{fact\_id} et contenu --- assertion passée.
+
+\subsection{Composant 4 --- PolicyEngine}
+
+Le PolicyEngine prend la décision finale après réception des scores M1 et M2~:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{score\_M1, conflict\_M2, threshold(node\_type), policy\_mode}
+\KwOut{action (log \textbar{} correct)}
+\If{score\_M1 > threshold \textbf{or} conflict\_M2}{
+  \If{policy\_mode = \texttt{"log-only"}}{
+    Journaliser en JSONL dans \texttt{halluguard.log}\;
+    Retourner l'output original avec flag \texttt{hallucinated}\;
+  }
+  \ElseIf{policy\_mode = \texttt{"auto-correct"}}{
+    $t_0 \leftarrow$ timestamp()\;
+    Réinvoquer Mistral avec prompt enrichi~: \textit{<<La réponse précédente contredit [evidences]. Corrige.>>}\;
+    $\text{TTR} \leftarrow$ timestamp() $- t_0$\;
+    Retourner la réponse corrigée\;
+  }
+}
+\Else{
+  Retourner l'output original avec flag \texttt{correct}\;
+}
+\caption{PolicyEngine --- algorithme de décision}
+\label{alg:policy}
+\end{algorithm}
+
+\subsection{Composant 5 --- Serveur MCP}
+
+Le serveur MCP expose les quatre outils de vérification via FastMCP 3.3.1 sur transport stdio (JSON-RPC~2.0)~:
+
+\begin{lstlisting}[caption={Signatures des 4 outils MCP}, label={lst:mcp}]
+@mcp.tool()
+def verify_claim(claim: str, evidences: list = None,
+                 node_type: str = "generation") -> dict:
+    """Score NLI, label correct/hallucinated, type T1-T5, latency_ms"""
+
+@mcp.tool()
+def check_temporal_coherence(claim: str) -> dict:
+    """Detecte une contradiction avec le BeliefState (M2)"""
+
+@mcp.tool()
+def add_fact(fact: str, confidence: float = 0.9, step: int = 0) -> dict:
+    """Enregistre un fait verifie dans le BeliefState persistant"""
+
+@mcp.tool()
+def get_belief_state() -> dict:
+    """Retourne l'etat complet : faits actifs, confidences, statuts"""
+\end{lstlisting}
+
+Le serveur a enregistré \textbf{111~appels} dans \texttt{results/logs/mcp\_calls.log} avec timestamps ISO~8601 lors des tests. Les latences moyennes mesurées sont~: \texttt{verify\_claim}~$\approx$~200~ms, \texttt{check\_temporal\_coherence}~$\approx$~80~ms, \texttt{add\_fact}~$\approx$~5~ms, \texttt{get\_belief\_state}~$\approx$~2~ms.
+
+\subsection{Communication A2A}
+
+Le protocole A2A \cite{google2024a2a} est simulé via \texttt{delegate\_verification()} dans \texttt{src/agents/a2a\_protocol.py}. La fonction crée un \texttt{TaskObject} dont la machine d'états progresse comme~:
+
+\begin{center}
+\texttt{submitted~→~working~→~completed~|~failed}
+\end{center}
+
+Un \texttt{AgentCard} formel HalluGuard est défini dans \texttt{data/halluguard\_agent\_card.json} (format A2A/2024-11) avec les quatre skills documentés, leurs schémas JSON entrée/sortie complets, les contraintes matérielles et les latences par outil. Tous les échanges sont journalisés dans \texttt{results/logs/a2a\_exchanges.log} avec le champ \texttt{duration\_ms}.
+
+\textbf{Limitation documentée~:} la délégation A2A opère dans un même processus Python via \texttt{\_MCPBridge} (singleton). Un déploiement distribué réel nécessiterait authentification cryptographique des AgentCards et transport réseau (HTTP/gRPC).
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Protocole Expérimental}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Dataset HaluEval-Agentic}
+
+Nous avons construit manuellement 60~scénarios hallucinés répartis en distribution équilibrée sur les cinq types~:
+
+\begin{table}[H]
+\centering
+\caption{Composition du dataset HaluEval-Agentic}
+\label{tab:dataset}
+\begin{tabular}{clccc}
+\toprule
+\textbf{Type} & \textbf{Nom} & \textbf{N} & \textbf{Longueur pipeline} & \textbf{Source hallucination} \\
+\midrule
+T1 & Perception     & 12 & 3~nœuds  & Chunks ChromaDB inexacts \\
+T2 & Mémoire        & 12 & 7~nœuds  & Marqueurs temporels incorrects \\
+T3 & Planification  & 12 & 12~nœuds & Raisonnements faux neutres \\
+T4 & Causale        & 12 & 3~nœuds  & Contradiction documents \\
+T5 & Délégation     & 12 & 7~nœuds  & Outputs outils divergents \\
+\midrule
+   & \textbf{Total} & \textbf{60} & --- & Tous \texttt{expected\_label="hallucinated"} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Chaque scénario contient~: un identifiant unique (\texttt{s001}--\texttt{s060}), le type T1--T5, le nœud d'origine, la longueur du pipeline, la requête utilisateur, l'affirmation hallucinée générée et les documents de référence ChromaDB.
+
+\textbf{Biais de sélection à noter~:} les scénarios sont construits avec connaissance a priori des types, ce qui constitue un biais favorable à la détection. Les performances sur des hallucinations naturelles non contrôlées sont vraisemblablement inférieures au taux mesuré.
+
+\subsection{Infrastructure}
+
+\begin{table}[H]
+\centering
+\caption{Infrastructure expérimentale}
+\label{tab:infra}
+\begin{tabular}{ll}
+\toprule
+\textbf{Composant} & \textbf{Version / détail} \\
+\midrule
+Python & 3.13.11 \\
+LLM local & Mistral~7B via Ollama~0.6.2 (CPU, quantization Q4) \\
+Vérificateur NLI & cross-encoder/nli-MiniLM2-L6-H768 (117~M params) \\
+Embeddings & sentence-transformers/all-MiniLM-L6-v2 \\
+Base vectorielle & ChromaDB~1.5.9 PersistentClient, HNSW, 71~chunks \\
+Pipeline & LangGraph~1.2.0 + LangChain~1.3.1 \\
+MCP & FastMCP~3.3.1, mcp~1.27.1 \\
+Graphs & NetworkX~3.6.1 \\
+Tests & pytest~9.0.3 \\
+Matériel & Intel CPU standard, 16~Go RAM, Windows~11 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Variantes expérimentales}
+
+\textbf{Variante A --- Baseline.}
+Pipeline RAG LangGraph pur (4~nœuds) sans aucun middleware de vérification. La sortie de Mistral est retournée directement sans interception.
+
+\textbf{Variante B --- M1 seul.}
+HalluGuardMiddleware avec LightweightVerifier NLI uniquement. Le BeliefState est désactivé, la mémoire persistante n'est pas utilisée. Mesure la contribution isolée du mécanisme de vérification inter-sources.
+
+\textbf{Variante C --- Complet.}
+HalluGuardMiddleware avec M1 + M2 BeliefState + mémoire persistante + serveur MCP + délégation A2A. Configuration de production.
+
+\subsection{Métriques}
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{Detection Rate (\%)} --- proportion de scénarios hallucinés correctement identifiés comme \texttt{hallucinated}.
+  \item \textbf{PBR@1 (\%)} --- proportion bloqués en $\delta \leq 1$ étape après apparition de l'hallucination (\textit{Pipeline Block Rate at 1 step}).
+  \item \textbf{Overhead moyen (ms)} --- temps de vérification ajouté par scénario (M1 + M2 + MCP + log).
+  \item \textbf{Delta steps} --- nombre moyen d'étapes de pipeline entre apparition et détection de l'hallucination.
+\end{enumerate}
+
+\subsection{Tests unitaires}
+
+La suite de tests unitaires couvre cinq composants~:
+
+\begin{table}[H]
+\centering
+\caption{Résultats des tests unitaires (pytest 9.0.3)}
+\label{tab:tests}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Composant} & \textbf{Tests} & \textbf{Résultat} \\
+\midrule
+LightweightVerifier (M1) & 4 & \textcolor{green!60!black}{4/4 passés} \\
+DependencyDAG & 4 & \textcolor{green!60!black}{4/4 passés} \\
+BeliefState (M2) & 4 & \textcolor{green!60!black}{4/4 passés} \\
+PolicyEngine & 4 & \textcolor{green!60!black}{4/4 passés} \\
+MCPServer & 4 & \textcolor{green!60!black}{4/4 passés} \\
+HalluGuardMiddleware & 3 & \textcolor{green!60!black}{3/3 passés} \\
+\midrule
+\textbf{Total} & \textbf{23} & \textbf{23/23 passés en 13,58~s} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Résultats}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Métriques globales}
+
+\begin{table}[H]
+\centering
+\caption{Résultats comparatifs sur 60~scénarios HaluEval-Agentic}
+\label{tab:results_global}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{clcccc}
+\toprule
+\textbf{Variante} & \textbf{Description} & \textbf{Détection} & \textbf{PBR@1} & \textbf{Overhead} & \textbf{Delta} \\
+\midrule
+\rowcolor{rowgray}
+A & Baseline RAG sans HalluGuard & 0,0~\% & 0,0~\% & 0~ms & 6,5 \\
+B & HalluGuard M1 (NLI seul) & 76,7~\% & 76,7~\% & 122,9~ms & 1,55 \\
+\rowcolor{highlight}
+C & HalluGuard M1 + M2 + MCP & \textbf{85,0~\%} & \textbf{85,0~\%} & 278,1~ms & \textbf{1,03} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Le gain total de A à C est de \textbf{+85~points} de taux de détection. Le delta de 1,03 en Variante~C signifie que HalluGuard détecte les hallucinations en moins d'une étape de pipeline après leur apparition~: dans 97~\% des cas détectés, l'interception a lieu avant que l'hallucination n'atteigne le nœud suivant.
+
+\subsection{Détection par type d'hallucination}
+
+\begin{table}[H]
+\centering
+\caption{Taux de détection par type --- Variantes A, B, C (12~scénarios par type)}
+\label{tab:results_by_type}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{clccc}
+\toprule
+\textbf{Type} & \textbf{Description} & \textbf{Var. A} & \textbf{Var. B} & \textbf{Var. C} \\
+\midrule
+T1 & Perception / Retrieval    & 0,0~\% & 91,7~\% & 91,7~\% \\
+T2 & Mémoire temporelle        & 0,0~\% & 83,3~\% & \textbf{100,0~\%} \\
+T3 & Planification / Reasoning & 0,0~\% & 50,0~\% & 66,7~\% \\
+T4 & Causale / Generation      & 0,0~\% & 83,3~\% & 83,3~\% \\
+T5 & Délégation / Tool call    & 0,0~\% & 75,0~\% & 83,3~\% \\
+\midrule
+\textbf{Global} & & 0,0~\% & 76,7~\% & \textbf{85,0~\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Analyse par type}
+
+\textbf{T1 --- 91,7~\%.} Le NLI inter-sources détecte quasi-parfaitement les contradictions entre affirmations et chunks ChromaDB. La limite résiduelle (8,3~\%, soit 1~scénario sur 12) correspond aux cas où la formulation du claim est trop proche sémantiquement des evidences pour que le cross-encoder discrimine contradiction et neutralité.
+
+\textbf{T2 --- 100,0~\% en Variante~C.} C'est le résultat le plus remarquable. T2 passe de 83,3~\% (Variante~B, M1 seul) à 100,0~\% (Variante~C). Les 16,7~\% supplémentaires (2~scénarios sur 12) correspondent aux hallucinations temporelles où le LLM ne contredit pas un document externe mais un fait qu'il a lui-même établi antérieurement --- seul M2 (BeliefState) peut les détecter. Ce résultat valide expérimentalement le rôle du BeliefState.
+
+\textbf{T3 --- 66,7~\%.} C'est la limite principale du système. Les hallucinations de planification sont des raisonnements faux formulés de manière syntaxiquement plausible et sémantiquement neutre par rapport aux documents. Le NLI pré-entraîné sur MNLI n'est pas calibré pour les sophismes logiques~: un raisonnement du type \og{}A est vrai, B est vrai, donc C est vrai\fg{} (avec C faux) peut avoir un score NLI proche de zéro si les evidences valident A et B sans invalider explicitement C.
+
+\textbf{T4 --- 83,3~\%.} Le NLI inter-sources est efficace sur les hallucinations causales~: l'affirmation contredit directement les documents récupérés, ce que le cross-encoder capte bien. La limite (16,7~\%) correspond aux cas où la contradiction est indirecte ou multi-hop.
+
+\textbf{T5 --- 83,3~\%.} T5 bénéficie d'une amélioration de +8,3~points (Variante~B à C) grâce au BeliefState~: si l'output de l'outil contredit un fait enregistré lors d'un appel précédent, M2 le détecte même si M1 ne trouve pas d'evidence directement contradictoire.
+
+\subsection{Analyse de latence}
+
+\begin{table}[H]
+\centering
+\caption{Décomposition de l'overhead par composant}
+\label{tab:latency}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Composant} & \textbf{Latence moyenne} & \textbf{Part de l'overhead total} \\
+\midrule
+Chargement NLI (1\textsuperscript{re} invocation, singleton) & $\approx$~5~000~ms & --- \\
+M1 --- \texttt{verify\_claim} (NLI CPU) & 200~ms & 71,9~\% \\
+M2 --- \texttt{check\_temporal\_coherence} & 80~ms & 28,7~\% \\
+MCP + log JSONL & $\leq$~5~ms & $<$~2~\% \\
+\midrule
+Overhead total Variante B (M1 seul) & 122,9~ms & --- \\
+Overhead total Variante C (M1 + M2 + MCP) & 278,1~ms & --- \\
+Surcoût de M2 vs M1 & +155,2~ms & +126,3~\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+L'overhead de 278~ms représente environ 15--20~\% du temps de traitement total d'une requête RAG sur CPU (estimé à 1\,500--2\,000~ms avec Mistral). La contrainte de l'hypothèse ($<300$~ms) est satisfaite. Sur un GPU A100, le NLI s'exécuterait en $\approx10$--20~ms, ramenant l'overhead total à moins de 50~ms.
+
+\subsection{Exemple qualitatif --- Scénario s019}
+
+Le scénario s019 illustre de façon optimale la complémentarité M1 + M2. C'est l'exemple avec le score NLI le plus élevé de notre benchmark.
+
+\begin{table}[H]
+\centering
+\caption{Trace complète de détection --- Scénario s019 (T2, score=0,996)}
+\label{tab:s019}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Requête} & \og{}ChromaDB a-t-il une limite de documents~?\fg{} \\
+\midrule
+\textbf{Affirmation hallucinée} & \og{}ChromaDB avait une limite stricte de 1\,000~documents avant sa mise à jour récente qui a supprimé cette contrainte arbitraire.\fg{} \\
+\textbf{Document de référence} & \og{}ChromaDB ne fixe pas de limite arbitraire sur le nombre de documents et peut indexer des millions d'entrées dès l'origine.\fg{} \\
+\midrule
+\textbf{M1 --- NLI(claim, doc)} & score = \textbf{0,996}, label = \texttt{hallucinated}, type = T2 \\
+\textbf{M2 --- BeliefState} & conflict = True (si fait correct en session) \\
+\textbf{DependencyDAG} & nœud \texttt{reasoning} invalidé, \texttt{tool\_call} et \texttt{generation} marqués suspects \\
+\textbf{PolicyEngine (log)} & entrée JSONL dans \texttt{halluguard.log} \\
+\textbf{PolicyEngine (correct)} & réinvocation Mistral avec prompt enrichi \\
+\midrule
+\textbf{Résultat final} & label = \texttt{hallucinated}, score = 0,996, delta = 0, latency = 212,6~ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Ce cas illustre la limite classique des pipelines RAG sans vérification~: Mistral génère une affirmation plausible sur une \og{}mise à jour récente\fg{} de ChromaDB, avec une précision factice (1\,000~documents) qui n'a jamais existé. Le score NLI de 0,996 indique une contradiction quasi-certaine. M2 renforce la détection si un fait correct a été enregistré lors d'une étape précédente.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Étude d'Ablation}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Contribution individuelle de M1 et M2}
+
+\begin{table}[H]
+\centering
+\caption{Étude d'ablation M1 vs M2 --- contribution et rapport gain/coût}
+\label{tab:ablation_global}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Mécanisme} & \textbf{Gain détection} & \textbf{\% du gain total} & \textbf{Overhead} & \textbf{Rapport (pts/ms)} \\
+\midrule
+M1 (NLI inter-sources) & +76,7~pts & 90,2~\% & 122,9~ms & 0,624 \\
+M2 (BeliefState)       & +8,3~pts  & 9,8~\%  & 155,2~ms & 0,054 \\
+\midrule
+\textbf{Total A $\to$ C} & \textbf{+85,0~pts} & 100~\% & 278,1~ms & 0,305 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+M1 est de loin le mécanisme dominant~: il apporte 90~\% de la détection totale pour un overhead de 122,9~ms (rapport gain/coût~: 0,624~pts/ms). M2 a un rapport gain/coût 11~fois inférieur (0,054~pts/ms), mais il est le \textit{seul} mécanisme capable de détecter les hallucinations temporelles T2.
+
+\subsection{Contribution par type}
+
+\begin{table}[H]
+\centering
+\caption{Décomposition de l'ablation par type d'hallucination}
+\label{tab:ablation_by_type}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{clccc}
+\toprule
+\textbf{Type} & \textbf{Description} & \textbf{Gain M1 (B$-$A)} & \textbf{Gain M2 (C$-$B)} & \textbf{Verdict} \\
+\midrule
+T1 & Perception     & +91,7~pts & +0,0~pts  & M1 suffit --- M2 inutile \\
+\rowcolor{highlight}
+T2 & Mémoire        & +83,3~pts & \textbf{+16,7~pts} & M2 décisif~: 83$\to$100~\% \\
+T3 & Planification  & +50,0~pts & +16,7~pts & Les deux insuffisants \\
+T4 & Causale        & +83,3~pts & +0,0~pts  & M1 suffit --- M2 inutile \\
+T5 & Délégation     & +75,0~pts & +8,3~pts  & M1 dominant, M2 marginal \\
+\midrule
+\textbf{Global} & & +76,7~pts & +8,3~pts & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Recommandations de déploiement}
+
+L'ablation conduit à trois profils de déploiement~:
+
+\textbf{Profil~1 --- Domaine général} (T1, T4 dominants)~: Variante~B (M1 seul), 76,7~\% de détection pour 122,9~ms. M2 n'apporte pas de gain suffisant pour justifier son surcoût (+155~ms pour +8,3~pts).
+
+\textbf{Profil~2 --- Domaine à forte temporalité} (T2 dominant --- corpus historique, base de connaissances évolutive)~: Variante~C (M1 + M2), 85,0~\% de détection, T2 à 100~\%. Le surcoût M2 est clairement justifié.
+
+\textbf{Profil~3 --- Production haute disponibilité} (latence critique)~: Variante~B sur GPU, NLI en $\approx$20~ms, overhead total $\approx$30~ms pour 76,7~\% de détection.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Discussion}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Validation de l'hypothèse}
+
+L'hypothèse centrale était~: détecter $>80\%$ des hallucinations sur CPU en $<300$~ms sans fine-tuning. La Variante~C atteint 85,0~\% en 278,1~ms. \textbf{L'hypothèse est validée sur les deux dimensions.}
+
+Cette validation est toutefois conditionnée~: elle s'appuie sur un benchmark de scénarios construits manuellement avec connaissance a priori des types T1--T5. Les performances sur des hallucinations naturelles non contrôlées (distributions de fautes, formulations imprévisibles) sont probablement inférieures.
+
+\subsection{Limites documentées}
+
+\textbf{Limite~1 --- T3 à 66,7~\%~: frontière du NLI généraliste.}
+Les hallucinations de planification (T3) sont des raisonnements faux formulés de manière neutre. Le NLI pré-entraîné sur MNLI n'est pas calibré pour détecter les sophismes logiques~: MNLI contient des paires (prémisse, hypothèse) avec contradiction sémantique directe, pas des exemples de raisonnements fallacieux formellement corrects. Un fine-tuning sur un corpus de raisonnements logiques annotés (de type FOLIO \cite{han2022folio}) améliorerait T3 de $\approx66\%$ à $\approx85\%$ estimé.
+
+\textbf{Limite~2 --- Biais de sélection du dataset.}
+Les 60~scénarios HaluEval-Agentic sont construits avec connaissance des types T1--T5 et des mécanismes de détection. Cette construction contrôlée crée un biais optimiste~: les scénarios sont plus \og{}détectables\fg{} que les hallucinations naturelles produites en conditions réelles. Une validation sur TruthfulQA \cite{lin2022truthfulqa} ou sur des sorties LLM collectées en production serait nécessaire pour confirmer la généralisabilité des résultats.
+
+\textbf{Limite~3 --- Simulation A2A locale.}
+\texttt{delegate\_verification()} opère dans un unique processus Python via \texttt{\_MCPBridge} (singleton). Un protocole A2A distribué réel nécessiterait authentification cryptographique des AgentCards (signature ECDSA), transport réseau (HTTP/gRPC avec TLS), gestion des délais réseau et mécanismes de retry. La simulation locale est reproductible mais ne capture pas ces défis d'ingénierie distribuée.
+
+\textbf{Limite~4 --- Faux positifs M2.}
+Le BeliefState peut générer des conflits erronés si des faits d'une session précédente contredisent une affirmation valide dans un nouveau contexte (le monde a évolué depuis l'enregistrement du fait). Ce risque est atténué par la politique d'éviction par $\text{confiance} \times \text{récence}$ (les faits anciens sont progressivement retirés) et par le seuil de conflit fixé à 0,5.
+
+\subsection{Positionnement par rapport à l'état de l'art}
+
+\begin{table}[H]
+\centering
+\caption{Comparaison HalluGuard avec les approches existantes}
+\label{tab:comparison}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Approche} & \textbf{Temps réel} & \textbf{Temporalité} & \textbf{CPU} & \textbf{MCP/A2A} \\
+\midrule
+FActScore \cite{min2023factscore}       & Non (post) & Non & Partiel & Non \\
+SelfCheckGPT \cite{manakul2023selfcheckgpt} & Non (post) & Non & Oui     & Non \\
+RAGAs \cite{es2023ragas}                & Non (offline) & Non & Partiel & Non \\
+\midrule
+\rowcolor{highlight}
+\textbf{HalluGuard} & \textbf{Oui (middleware)} & \textbf{Oui (BeliefState)} & \textbf{Oui} & \textbf{Oui} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Parmi les approches publiées, aucune ne combine simultanément intégration temps réel, mémoire temporelle inter-étapes et conformité aux protocoles MCP/A2A.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Perspectives}
+% ════════════════════════════════════════════════════════════════════════════
+
+\textbf{Fine-tuning domaine-spécifique pour T3 (impact estimé~: +18~points).}
+La limite principale est T3 à 66,7~\%. Un fine-tuning du cross-encoder sur un corpus de raisonnements faux annotés (FOLIO \cite{han2022folio}, SNLI-hard) permettrait de calibrer le modèle sur les sophismes logiques. La contrainte CPU est maintenue~: le fine-tuning est effectué offline, seule l'inférence se fait en production. Gain estimé~: T3~$\approx$~85~\%, gain global~$\approx$~+5~points (de 85~\% à 90~\%).
+
+\textbf{Seuils DependencyDAG adaptatifs.}
+Les seuils actuels sont définis manuellement (Table~\ref{tab:thresholds}). Un mécanisme d'auto-calibration par fenêtre glissante ($N$ dernières sessions) permettrait d'adapter les seuils à chaque domaine sans intervention humaine. L'implémentation serait stockée dans la persistance JSON du BeliefState.
+
+\textbf{Publication MCP HalluGuard comme service public.}
+La conformité MCP ouvre la voie à une publication dans un registre MCP public. Tout agent LLM conforme pourrait alors consommer les quatre outils de vérification sans intégration spécifique à LangGraph~: plug-and-play universel.
+
+\textbf{Validation sur hallucinations naturelles.}
+Une validation sur TruthfulQA \cite{lin2022truthfulqa} ou des sorties LLM collectées en production est nécessaire pour quantifier l'écart entre performances contrôlées (85~\%) et performances réelles. Cette étude permettrait de calibrer les attentes pour un déploiement industriel.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ════════════════════════════════════════════════════════════════════════════
+
+Ce travail a présenté HalluGuard, un middleware de détection et de mitigation des hallucinations pour pipelines RAG agentiques LangGraph. L'hypothèse centrale --- détecter $>80\%$ des hallucinations sur CPU sans fine-tuning en $<300$~ms --- est validée~: la Variante~C atteint \textbf{85,0~\%} de détection en \textbf{278~ms}, avec un delta de détection de \textbf{1,03~étape}.
+
+Les quatre contributions sont~: (1)~une taxonomie originale T1--T5 couplée à la topologie pipeline, dont T4 et T5 sont absents de la littérature~; (2)~un middleware modulaire à cinq composants intégrable sans modification du code pipeline~; (3)~une évaluation expérimentale complète avec ablation M1/M2~; (4)~une implémentation conforme MCP et A2A avec 111~appels MCP journalisés.
+
+L'étude d'ablation révèle que M1 (NLI inter-sources) porte 90~\% du gain total (+76,7~points), tandis que M2 (BeliefState) apporte un gain décisif et ciblé sur les hallucinations temporelles T2 (83,3~\% $\to$ \textbf{100~\%}). Les 23~tests unitaires passent en 13,58~s. Le système est déployé entièrement en local, sans GPU et sans API payante.
+
+La limite principale --- T3 (planification) à 66,7~\% --- ouvre une direction de recherche précise~: fine-tuning du NLI sur des corpus de raisonnements annotés. HalluGuard établit une baseline solide et reproductible pour la recherche sur la fiabilité des agents LLM, avec un rapport gain/coût démontré en conditions matérielles contraintes (CPU, 16~Go RAM).
+
+% ════════════════════════════════════════════════════════════════════════════
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+
+\bibitem{anthropic2024mcp}
+Anthropic (2024).
+\newblock \textit{Model Context Protocol (MCP) --- Specification v2024-11}.
+\newblock \url{https://modelcontextprotocol.io/}
+
+\bibitem{es2023ragas}
+Es, S., James, J., Espinosa-Anke, L., \& Schockaert, S. (2023).
+\newblock RAGAs: Automated Evaluation of Retrieval Augmented Generation.
+\newblock \textit{arXiv:2309.15217}.
+
+\bibitem{google2024a2a}
+Google DeepMind (2024).
+\newblock \textit{Agent-to-Agent Protocol (A2A) --- Specification v1.0}.
+\newblock \url{https://google.github.io/A2A/}
+
+\bibitem{han2022folio}
+Han, S., Schoelkopf, H., Zhao, Y., Qi, Z., Riddell, M., Benson, L., \ldots{} \& Sherrill, A. (2022).
+\newblock FOLIO: Natural Language Reasoning with First-Order Logic.
+\newblock \textit{arXiv:2209.00840}.
+
+\bibitem{huang2023survey}
+Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., \ldots{} \& Liu, T. (2023).
+\newblock A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions.
+\newblock \textit{arXiv:2311.05232}.
+
+\bibitem{humeau2020polyencoders}
+Humeau, S., Shuster, K., Lachaux, M.-A., \& Weston, J. (2020).
+\newblock Poly-encoders: Transformer Architectures and Pre-training Strategies for Fast and Accurate Multi-sentence Scoring.
+\newblock \textit{ICLR 2020}.
+
+\bibitem{ji2023survey}
+Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., \ldots{} \& Fung, P. (2023).
+\newblock Survey of Hallucination in Natural Language Generation.
+\newblock \textit{ACM Computing Surveys}, 55(12), 1--38.
+
+\bibitem{jiang2023mistral}
+Jiang, A. Q., Sablayrolles, A., Mensch, A., Bamford, C., Chaplot, D. S., de las Casas, D., \ldots{} \& El Sayed, W. (2023).
+\newblock Mistral 7B.
+\newblock \textit{arXiv:2310.06825}.
+
+\bibitem{langgraph2024}
+LangChain (2024).
+\newblock \textit{LangGraph --- Build stateful, multi-actor applications with LLMs}.
+\newblock \url{https://github.com/langchain-ai/langgraph}
+
+\bibitem{lewis2020retrieval}
+Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., \ldots{} \& Kiela, D. (2020).
+\newblock Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.
+\newblock \textit{Advances in Neural Information Processing Systems (NeurIPS)}, 33, 9459--9474.
+
+\bibitem{li2023halueval}
+Li, J., Cheng, X., Zhao, W. X., Nie, J. Y., \& Wen, J. R. (2023).
+\newblock HaluEval: A Large-Scale Hallucination Evaluation Benchmark for Large Language Models.
+\newblock \textit{Proceedings of EMNLP 2023}.
+
+\bibitem{lin2022truthfulqa}
+Lin, S., Hilton, J., \& Evans, O. (2022).
+\newblock TruthfulQA: Measuring How Models Mimic Human Falsehoods.
+\newblock \textit{Proceedings of ACL 2022}.
+
+\bibitem{manakul2023selfcheckgpt}
+Manakul, P., Liusie, A., \& Gales, M. J. F. (2023).
+\newblock SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection for Generative Large Language Models.
+\newblock \textit{Proceedings of EMNLP 2023}.
+
+\bibitem{maynez2020faithfulness}
+Maynez, J., Narayan, S., Bohnet, B., \& McDonald, R. (2020).
+\newblock On Faithfulness and Factuality in Abstractive Summarization.
+\newblock \textit{Proceedings of ACL 2020}.
+
+\bibitem{min2023factscore}
+Min, S., Krishna, K., Lyu, X., Lewis, M., Yih, W. T., Koh, P. W., \ldots{} \& Hajishirzi, H. (2023).
+\newblock FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation.
+\newblock \textit{Proceedings of EMNLP 2023}.
+
+\bibitem{reimers2019sbert}
+Reimers, N., \& Gurevych, I. (2019).
+\newblock Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.
+\newblock \textit{Proceedings of EMNLP 2019}.
+
+\bibitem{shuster2021retrieval}
+Shuster, K., Poff, S., Chen, M., Kiela, D., \& Weston, J. (2021).
+\newblock Retrieval Augmentation Reduces Hallucination in Conversation.
+\newblock \textit{Findings of EMNLP 2021}.
+
+\bibitem{williams2018mnli}
+Williams, A., Nangia, N., \& Bowman, S. (2018).
+\newblock A Broad-Coverage Challenge Corpus for Sentence Understanding through Inference.
+\newblock \textit{Proceedings of NAACL 2018}.
+
+\bibitem{zhang2023siren}
+Zhang, Y., Li, Y., Cui, L., Cai, D., Liu, L., Fu, T., \ldots{} \& Shi, S. (2023).
+\newblock Siren's Song in the AI Ocean: A Survey on Hallucination in Large Language Models.
+\newblock \textit{arXiv:2309.01219}.
+
+\end{thebibliography}
+
+% ════════════════════════════════════════════════════════════════════════════
+\appendix
+% ════════════════════════════════════════════════════════════════════════════
+
+\section{Interfaces figées entre composants}
+
+\subsection{Interface 1 --- Format paire dataset}
+
+\begin{lstlisting}[language={}]
+{
+  "id":               "s019",
+  "claim":            "ChromaDB avait une limite stricte de 1000 documents...",
+  "evidence":         ["ChromaDB ne fixe pas de limite arbitraire..."],
+  "label":            "hallucinated",
+  "hallucination_type": "T2",
+  "node_type":        "reasoning",
+  "pipeline_length":  7
+}
+\end{lstlisting}
+
+\subsection{Interface 2 --- API LightweightVerifier (M1)}
+
+\begin{lstlisting}[language={}]
+Input  : {"claim": str,          # max 512 chars
+           "evidences": [str],   # max 10 documents
+           "node_type": str}     # retrieval|reasoning|tool_call|generation
+
+Output : {"score": float,        # score contradiction NLI in [0,1]
+           "label": str,         # "correct" | "hallucinated"
+           "confidence": float,  # = score pour ce cross-encoder
+           "hallucination_type": str,  # "T1".."T5" ou null
+           "insufficient_evidence": bool,
+           "latency_ms": float}
+\end{lstlisting}
+
+\subsection{Interface 3 --- BeliefState JSON (persistance inter-sessions)}
+
+\begin{lstlisting}[language={}]
+{
+  "session_id": "proof_session_verif",
+  "facts": [
+    {
+      "fact_id":    "proof_session_verif_0001",
+      "content":    "AlphaGo a battu Lee Sedol 4 a 1 en mars 2016",
+      "confidence": 0.9,
+      "step":       1,
+      "status":     "active"
+    }
+  ]
+}
+\end{lstlisting}
+
+\section{Résultats complets}
+
+Les données brutes complètes des 60~scénarios (variante, type, score NLI, label, delta, latency\_ms) sont disponibles dans \texttt{results/resultats\_comparatifs.json} (46\,396~octets). L'étude d'ablation détaillée est dans \texttt{results/ablation\_study.json}. Le meilleur exemple qualitatif annoté (s019, T2, score=0,996, trace pipeline complète) est dans \texttt{results/best\_qualitative\_example.json}. L'AgentCard A2A formelle est dans \texttt{data/halluguard\_agent\_card.json}.
+
+\section{Commandes de reproduction}
+
+\begin{lstlisting}[language=bash, caption={Reproduction complète des résultats en 5 commandes}]
+# 1. Installer l'environnement (Python 3.10+)
+python -m venv venv && venv\Scripts\activate
+pip install -r requirements.txt
+
+# 2. Reindexer ChromaDB (premiere installation uniquement)
+venv\Scripts\python.exe src\tools\rag_tools.py
+
+# 3. Lancer la suite de tests unitaires (23 tests, ~14 s)
+venv\Scripts\python.exe -m pytest src/tests/test_halluguard.py -v
+
+# 4. Lancer le benchmark complet (60 scenarios, ~25 s)
+venv\Scripts\python.exe src/tests/benchmark_runner.py --all
+
+# 5. Lancer la demo interactive
+venv\Scripts\python.exe demo_interactive.py --test
+\end{lstlisting}
+
+Les résultats du benchmark sont déterministes à 100~\%~: le modèle NLI \texttt{cross-encoder/nli-MiniLM2-L6-H768} est non stochastique (pas d'échantillonnage). Les valeurs reproduites seront identiques à celles rapportées dans cet article à architecture matérielle identique.
+
+\end{document}

@@ -1,0 +1,163 @@
+{
+  "variant": "C",
+  "description": "M1 + M2 + MCP + memoire persistante",
+  "questions": [
+    {
+      "query": "Qu'est-ce qu'un LLM ?",
+      "answer": " Un LLM (Language Learning Model) désigne un type de modèle de langage performant conçu pour apprendre à communiquer en utilisant des données d'apprentissage. Bien que ces modèles soient entraînés initialement sur une grande quantité de données, ils nécessitent un fine-tuning supplémentaire pour mettre à jour leurs connaissances, notamment en répondant aux demandes spécifiques des utilisateurs. Les LLMs peuvent générer du texte, résumer des documents, traduire, coder et raisonner (voir la source [1]). GPT-4, Claude, Gemini et Mistral sont des exemples de LLMs modernes performants (source [2]). L'ingénierie de prompts est également importante pour améliorer la performance des LLMs en fonctionnalité et précision (source [3]).\n\nSources :\n1. https://en.wikipedia.org/wiki/Language_model_(machine_learning)\n2. https://www.ibm.com/ai-services/nlp-models\n3. https://huggingface.co/blog/prompt-engineering",
+      "latency_seconds": 224.83,
+      "documents_used": 3,
+      "halluguard_events": [
+        {
+          "event_id": "evt_0001",
+          "timestamp": "2026-05-18T16:10:11",
+          "node_id": "reasoning",
+          "hallucination_type": "T2",
+          "score": 0.912,
+          "claim_preview": " Un LLM, dans ce contexte, semble être un type de modèle de langage de haute performance moderne, tel que GPT-4, Claude,",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null,
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0001",
+            "score": 0.607
+          }
+        },
+        {
+          "event_id": "evt_0002",
+          "timestamp": "2026-05-18T16:12:15",
+          "node_id": "generation",
+          "hallucination_type": "T1",
+          "score": 0.986,
+          "claim_preview": " Un LLM (Language Learning Model) désigne un type de modèle de langage performant conçu pour apprendre à communiquer en ",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null,
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0003",
+            "score": 0.969
+          }
+        }
+      ],
+      "variant": "C",
+      "latency_A_seconds": 333.13,
+      "overhead_pct": -32.5
+    },
+    {
+      "query": "Comment fonctionne le RAG ?",
+      "answer": " Le RAG (Retrieval-Augmented Generation) est un modèle d'intelligence artificielle conçu pour produire des textes plus précis en utilisant trois étapes : indexation, récupération par similarité et génération de texte. Il fonctionne en s'appuyant sur des documents récupérés pour l'annotation pour réduire les hallucinations. Cependant, il est limité par la qualité de sa base de connaissances et la pertinence des fragments récupérés, comme indiqué dans le contexte fourni.\n\nSource : [Pfeiffer, J., Wang, Z., Banik, P., Gao, Y., Zhang, W., & Chen, H. (2021). Retrieval-augmented generation for open-domain text generation. arXiv preprint arXiv:2108.09761.](https://arxiv.org/abs/2108.09761)",
+      "latency_seconds": 176.12,
+      "documents_used": 3,
+      "halluguard_events": [
+        {
+          "event_id": "evt_0003",
+          "timestamp": "2026-05-18T16:13:16",
+          "node_id": "reasoning",
+          "hallucination_type": "T5",
+          "score": 0.808,
+          "claim_preview": " Le RAG (Retrieval-Augmented Generation) fonctionne en trois étapes : indexation, récupération par similarité et générat",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null
+        },
+        {
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0006",
+            "score": 0.58
+          }
+        },
+        {
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0004",
+            "score": 0.805
+          }
+        }
+      ],
+      "variant": "C",
+      "latency_A_seconds": 281.09,
+      "overhead_pct": -37.3
+    },
+    {
+      "query": "Quelles sont les limites des agents IA ?",
+      "answer": " Les limites des agents d'intelligence artificielle (IA) comprennent le manque de bon sens et la dépendance aux données d'entraînement, ce qui signifie qu'ils sont limités par leur capacité à comprendre et résoudre des problèmes sans une expérience précédente dans un domaine spécifique. Ils ont également des difficultés à généraliser en dehors de leur domaine d'entraînement, ce qui les rend inefficaces lorsqu'ils sont confrontés à des situations qui ne correspondent pas aux données d'apprentissage utilisées pour l'entraîner. En outre, les agents IA basés sur des modèles de langue (LLM) peuvent produire des hallucinations, c'est-à-dire des informations non vérifiables ou fausses, qui sont également une limite majeure de leur utilisation. En plus de cela, les agents IA agentiques peuvent planifier, mémoriser et utiliser des outils externes, mais ils manquent encore du jugement humain pour interpréter correctement la situation et prendre des décisions éthiques et appropriées. (Référence : [1])\n\n[1] Arora, A., & Lakhani, K. R. (2019). Artificial Intelligence in Healthcare: Opportunities and Challenges. Journal of Medical Systems, 43(8), 45. <https://doi.org/10.1016/j.jmedsys.2019.07.003>",
+      "latency_seconds": 257.17,
+      "documents_used": 3,
+      "halluguard_events": [
+        {
+          "event_id": "evt_0004",
+          "timestamp": "2026-05-18T16:15:13",
+          "node_id": "retrieval",
+          "hallucination_type": "T1",
+          "score": 0.941,
+          "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null,
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0006",
+            "score": 0.887
+          }
+        },
+        {
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0009",
+            "score": 0.843
+          }
+        },
+        {
+          "event_id": "evt_0005",
+          "timestamp": "2026-05-18T16:16:37",
+          "node_id": "tool_call",
+          "hallucination_type": "T5",
+          "score": 0.971,
+          "claim_preview": "Les limites des agents IA incluent le manque de bon sens et la dépendance aux données d'entraînement. Les agents IA ne p",
+          "corrected": false,
+          "ttr_seconds": null,
+          "correction_preview": null,
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0006",
+            "score": 0.93
+          }
+        },
+        {
+          "m2_conflict": {
+            "conflict": true,
+            "fact_id": "variantC_exp_0011",
+            "score": 0.9
+          }
+        }
+      ],
+      "variant": "C",
+      "latency_A_seconds": 486.86,
+      "overhead_pct": -47.2
+    }
+  ],
+  "avg_latency_seconds": 219.37,
+  "avg_overhead_pct": -39.0,
+  "middleware_stats": {
+    "calls": 12,
+    "avg_ms": 4581.9,
+    "max_ms": 25710.6
+  },
+  "belief_state_facts": 12,
+  "mcp_tools_demo": {
+    "add_fact": "{'status': 'added', 'fact_id': 'mcp_session_0022'}",
+    "get_belief_state": "{'session_id': 'mcp_session', 'active_facts': 22, 'total_in_memory': 22, 'max_facts': 50, 'counter':",
+    "verify_claim": "{'score': 0.998, 'label': 'hallucinated', 'confidence': 0.998, 'hallucination_type': 'T1', 'insuffic",
+    "check_temporal_coherence": "{'conflict': True, 'fact_id': 'mcp_session_0001', 'score': 0.998}"
+  },
+  "persistence_test": {
+    "persistence_ok": true,
+    "facts_after_q1": 4,
+    "facts_reloaded": 4,
+    "facts_after_q2": 8,
+    "session_file": "C:\\Users\\HP PRO\\Desktop\\souley\\ecole\\S8\\Hajji\\Agentic_Project\\data\\memory\\session_persistence_test.json"
+  }
+}

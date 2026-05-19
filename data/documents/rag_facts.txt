@@ -1,0 +1,14 @@
+Le RAG (Retrieval-Augmented Generation) est introduit par Lewis et al. (Facebook AI Research) dans un article de 2020 publié à NeurIPS.
+Dans un pipeline RAG, la récupération des documents précède toujours la génération de la réponse ; l'ordre est : indexation → récupération → génération.
+ChromaDB est une base de données vectorielle open-source écrite en Python ; elle utilise HNSW (Hierarchical Navigable Small World) pour la recherche approximative.
+L'algorithme HNSW offre une complexité de recherche sub-linéaire en O(log n) avec un rappel typique supérieur à 95% pour les embeddings denses.
+La Dense Passage Retrieval (DPR) est introduite par Karpukhin et al. (Facebook AI, 2020) pour encoder requêtes et passages séparément avec des bi-encodeurs BERT.
+LangChain est fondé en 2022 par Harrison Chase ; il fournit des abstractions pour chaîner des appels LLM, des retrievers et des tools.
+LangGraph est une extension de LangChain publiée en 2024 ; elle modélise le pipeline comme un graphe orienté (StateGraph) avec transitions conditionnelles.
+La taille de chunk optimale pour le RAG est généralement entre 256 et 512 tokens, avec un chevauchement (overlap) de 10 à 20%.
+Le top-k retrieval récupère typiquement k=3 à 5 documents ; augmenter k au-delà de 10 dilue le contexte et dégrade les performances.
+La similarité cosinus mesure l'angle entre deux vecteurs ; elle vaut 1 pour des vecteurs identiques, 0 pour des vecteurs orthogonaux, et -1 pour des vecteurs opposés.
+Le RAG réduit le taux d'hallucinations de 30 à 60% selon le domaine en ancrant la génération dans des documents récupérés.
+Un pipeline RAG de qualité nécessite un découpage (chunking) approprié ; un chunking trop grossier noie le signal, trop fin fragmente le contexte.
+Les embeddings all-MiniLM-L6-v2 produisent des vecteurs de 384 dimensions normalisés ; la similarité cosinus est ainsi équivalente au produit scalaire pour ces vecteurs.
+Le modèle cross-encoder/nli-MiniLM2-L6-H768 possède 117 millions de paramètres et est pré-entraîné sur MNLI pour la classification NLI en 3 classes.

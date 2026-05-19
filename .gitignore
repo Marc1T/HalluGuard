@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/memory/*.json
+data/chromadb/
+results/logs/*.log
+*.pkl
+*.egg-info/
+.pytest_cache/
+CONTEXT.md
+docs/article_content.md
+docs/slides_content.md

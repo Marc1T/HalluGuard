@@ -1,0 +1,67 @@
+{
+  "title": "Ablation Study -- HalluGuard M1 vs M2 vs Complet",
+  "benchmark": "HaluEval-Agentic",
+  "n_scenarios": 60,
+  "methodology": "Comparaison differentielle : A (baseline) -> B (M1) -> C (M1+M2+MCP)",
+  "mechanisms": {
+    "M1": {
+      "description": "NLI inter-sources : claim vs evidences (cross-encoder/nli-MiniLM2-L6-H768)",
+      "contribution_global": {
+        "detection_rate_gain_pct": 76.7,
+        "pbr1_gain_pct": 76.7,
+        "latency_overhead_ms": 122.9,
+        "delta_steps_reduction": 5.0
+      },
+      "contribution_by_type": {
+        "T1": 91.7,
+        "T2": 83.3,
+        "T3": 50.0,
+        "T4": 83.3,
+        "T5": 75.0
+      },
+      "best_type": "T1 (retrieval) — +91.7 pts",
+      "weakest_type": "T3 (reasoning) — +50.0 pts",
+      "interpretation": "M1 capte efficacement les hallucinations inter-sources (T1, T4) mais peine sur T3 (raisonnement abstrait sans evidence directement opposable)"
+    },
+    "M2": {
+      "description": "BeliefState temporel : coherence inter-sessions via NLI contre faits stockes",
+      "contribution_global": {
+        "detection_rate_gain_pct": 8.3,
+        "pbr1_gain_pct": 8.3,
+        "additional_latency_ms": 155.2,
+        "delta_steps_reduction": 0.5
+      },
+      "contribution_by_type": {
+        "T1": 0.0,
+        "T2": 16.7,
+        "T3": 16.7,
+        "T4": 0.0,
+        "T5": 8.3
+      },
+      "best_type": "T2 (memoire temporelle) — +16.7 pts (83.3 -> 100%)",
+      "interpretation": "M2 apporte un gain decisif uniquement sur T2 : les hallucinations temporelles echappent a M1 (pas d evidence directe) mais sont capturees par le BeliefState qui a vu un fait contraire en session precedente"
+    },
+    "MCP_overhead": {
+      "description": "Protocole MCP/stdio via _MCPBridge : surcoût architectural du protocole A2A",
+      "total_overhead_ms": 278.1,
+      "m1_ms": 122.9,
+      "m2_ms": 155.2,
+      "pct_overhead_vs_no_halluguard": "infini (baseline=0ms)",
+      "pct_overhead_m2_vs_m1": 126.3
+    }
+  },
+  "key_findings": [
+    "M1 (NLI inter-sources) est responsable de 76.7 points de gain, soit 90% du gain total (76.7/85.0)",
+    "M2 (BeliefState) ajoute 8.3 points de gain supplementaires, concentres sur T2 (+16.7 pts)",
+    "T2 (memoire temporelle) passe de 83.3% a 100% grace a M2 : couverture complete sur ce type",
+    "T3 (reasoning) reste le type le plus difficile : 66.7% meme avec M1+M2 -- les hallucinations de raisonnement abstrait necess- itent un verbe NLI plus fin-tune",
+    "M2 ajoute 155.2ms (126% surcoût vs M1 seul) pour +8.3 pts de detection : compromis acceptable selon le domaine",
+    "Le systeme ne detecte pas 15% des hallucinations : 9 scenarios sur 60 echappent a M1+M2, principalement des T3 (6/9)"
+  ],
+  "false_positive_analysis": {
+    "M1_false_positives": "Observes sur les affirmations correctes proches semantiquement des evidences negatives (score NLI proche de 0.5)",
+    "M2_false_positives": "Observes quand le BeliefState contient des faits issus de sessions precedentes qui contredisent une affirmation valide dans un nouveau contexte",
+    "mitigation": "Seuil configurable par type de noeud (tool_call=0.0, generation=0.0, reasoning=0.4, retrieval=0.6)"
+  },
+  "conclusion": "M1+M2 (Variante C) offre le meilleur compromis detection/latence. M2 seul ne vaut pas le surcoût sauf pour les domaines ou T2 est dominant (ex : corpus historique, base de connaissances evolutive)."
+}

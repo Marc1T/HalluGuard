@@ -1,0 +1,1750 @@
+{
+  "benchmark": "HaluEval-Agentic",
+  "n_scenarios": 60,
+  "scenarios_file": "C:\\Users\\HP PRO\\Desktop\\souley\\ecole\\S8\\Hajji\\Agentic_Project\\data\\halueval\\scenarios.jsonl",
+  "variants": {
+    "A": {
+      "description": "Baseline RAG sans HalluGuard",
+      "metrics": {
+        "total_scenarios": 60,
+        "hallucinated_scenarios": 60,
+        "detected": 0,
+        "detection_rate_pct": 0.0,
+        "pbr1_pct": 0.0,
+        "avg_latency_ms": 0.0,
+        "avg_delta_steps": 6.5
+      },
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 0,
+          "detection_rate_pct": 0.0
+        },
+        "T2": {
+          "total": 12,
+          "detected": 0,
+          "detection_rate_pct": 0.0
+        },
+        "T3": {
+          "total": 12,
+          "detected": 0,
+          "detection_rate_pct": 0.0
+        },
+        "T4": {
+          "total": 12,
+          "detected": 0,
+          "detection_rate_pct": 0.0
+        },
+        "T5": {
+          "total": 12,
+          "detected": 0,
+          "detection_rate_pct": 0.0
+        }
+      },
+      "results": [
+        {
+          "id": "s001",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s002",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s003",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s004",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s005",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s006",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s007",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s008",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s009",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s010",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s011",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s012",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s013",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s014",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s015",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s016",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s017",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s018",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s019",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s020",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s021",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s022",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s023",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s024",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s025",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s026",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s027",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s028",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s029",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s030",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s031",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s032",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s033",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s034",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s035",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s036",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s037",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s038",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s039",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s040",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s041",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s042",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s043",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s044",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s045",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s046",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s047",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s048",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s049",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s050",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s051",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s052",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s053",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s054",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s055",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s056",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s057",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s058",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s059",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s060",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        }
+      ]
+    },
+    "B": {
+      "description": "HalluGuard M1 uniquement — NLI inter-sources",
+      "metrics": {
+        "total_scenarios": 60,
+        "hallucinated_scenarios": 60,
+        "detected": 46,
+        "detection_rate_pct": 76.7,
+        "pbr1_pct": 76.7,
+        "avg_latency_ms": 122.9,
+        "avg_delta_steps": 1.55
+      },
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 11,
+          "detection_rate_pct": 91.7
+        },
+        "T2": {
+          "total": 12,
+          "detected": 10,
+          "detection_rate_pct": 83.3
+        },
+        "T3": {
+          "total": 12,
+          "detected": 6,
+          "detection_rate_pct": 50.0
+        },
+        "T4": {
+          "total": 12,
+          "detected": 10,
+          "detection_rate_pct": 83.3
+        },
+        "T5": {
+          "total": 12,
+          "detected": 9,
+          "detection_rate_pct": 75.0
+        }
+      },
+      "results": [
+        {
+          "id": "s001",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 81.1,
+          "label": "hallucinated",
+          "score": 0.959,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s002",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 95.1,
+          "label": "hallucinated",
+          "score": 0.947,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s003",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 105.9,
+          "label": "hallucinated",
+          "score": 0.664,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s004",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 106.9,
+          "label": "correct",
+          "score": 0.496,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s005",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 82.6,
+          "label": "hallucinated",
+          "score": 0.899,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s006",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 101.3,
+          "label": "hallucinated",
+          "score": 0.408,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s007",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 87.1,
+          "label": "hallucinated",
+          "score": 0.161,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s008",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 102.7,
+          "label": "hallucinated",
+          "score": 0.986,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s009",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 104.2,
+          "label": "hallucinated",
+          "score": 0.947,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s010",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 112.9,
+          "label": "hallucinated",
+          "score": 0.475,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s011",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 126.2,
+          "label": "hallucinated",
+          "score": 0.645,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s012",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 130.9,
+          "label": "hallucinated",
+          "score": 0.721,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s013",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 101.0,
+          "label": "hallucinated",
+          "score": 0.093,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s014",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 130.6,
+          "label": "hallucinated",
+          "score": 0.1,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s015",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 109.0,
+          "label": "correct",
+          "score": 0.625,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s016",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 139.4,
+          "label": "hallucinated",
+          "score": 0.975,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s017",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 108.6,
+          "label": "hallucinated",
+          "score": 0.145,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s018",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 128.7,
+          "label": "hallucinated",
+          "score": 0.877,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s019",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 122.9,
+          "label": "hallucinated",
+          "score": 0.996,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s020",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 124.8,
+          "label": "hallucinated",
+          "score": 0.114,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s021",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 122.1,
+          "label": "hallucinated",
+          "score": 0.382,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s022",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 111.1,
+          "label": "correct",
+          "score": 0.042,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s023",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 117.0,
+          "label": "hallucinated",
+          "score": 0.993,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s024",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 129.8,
+          "label": "hallucinated",
+          "score": 0.066,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s025",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 132.1,
+          "label": "hallucinated",
+          "score": 0.399,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s026",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 130.5,
+          "label": "hallucinated",
+          "score": 0.892,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s027",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 136.8,
+          "label": "hallucinated",
+          "score": 0.651,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s028",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 106.8,
+          "label": "correct",
+          "score": 0.539,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s029",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 110.5,
+          "label": "correct",
+          "score": 0.651,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s030",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 126.6,
+          "label": "correct",
+          "score": 0.186,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s031",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 140.3,
+          "label": "correct",
+          "score": 0.323,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s032",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 140.2,
+          "label": "hallucinated",
+          "score": 0.908,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s033",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 161.5,
+          "label": "hallucinated",
+          "score": 0.201,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s034",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 173.7,
+          "label": "hallucinated",
+          "score": 0.911,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s035",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 177.7,
+          "label": "correct",
+          "score": 0.388,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s036",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 157.6,
+          "label": "correct",
+          "score": 0.44,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s037",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 158.7,
+          "label": "correct",
+          "score": 0.241,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s038",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 141.7,
+          "label": "hallucinated",
+          "score": 0.524,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s039",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 132.5,
+          "label": "hallucinated",
+          "score": 0.988,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s040",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 115.2,
+          "label": "correct",
+          "score": 0.776,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s041",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 118.8,
+          "label": "hallucinated",
+          "score": 0.591,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s042",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 122.7,
+          "label": "hallucinated",
+          "score": 0.473,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s043",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 123.8,
+          "label": "hallucinated",
+          "score": 0.96,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s044",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 128.4,
+          "label": "hallucinated",
+          "score": 0.992,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s045",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 117.1,
+          "label": "hallucinated",
+          "score": 0.938,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s046",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 124.5,
+          "label": "hallucinated",
+          "score": 0.409,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s047",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 129.1,
+          "label": "hallucinated",
+          "score": 0.708,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s048",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 144.2,
+          "label": "hallucinated",
+          "score": 0.632,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s049",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 115.4,
+          "label": "hallucinated",
+          "score": 0.406,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s050",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 114.5,
+          "label": "hallucinated",
+          "score": 0.967,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s051",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 114.0,
+          "label": "hallucinated",
+          "score": 0.99,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s052",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 110.8,
+          "label": "hallucinated",
+          "score": 0.972,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s053",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 128.9,
+          "label": "correct",
+          "score": 0.182,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s054",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 125.1,
+          "label": "hallucinated",
+          "score": 0.967,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s055",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 137.8,
+          "label": "hallucinated",
+          "score": 0.985,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s056",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 117.3,
+          "label": "hallucinated",
+          "score": 0.994,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s057",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 116.1,
+          "label": "correct",
+          "score": 0.444,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s058",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 114.7,
+          "label": "hallucinated",
+          "score": 0.525,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s059",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 136.6,
+          "label": "correct",
+          "score": 0.7,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s060",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 110.4,
+          "label": "hallucinated",
+          "score": 0.972,
+          "hallucination_type_detected": "T5"
+        }
+      ]
+    },
+    "C": {
+      "description": "HalluGuard complet — M1 + M2 BeliefState + MCP",
+      "metrics": {
+        "total_scenarios": 60,
+        "hallucinated_scenarios": 60,
+        "detected": 51,
+        "detection_rate_pct": 85.0,
+        "pbr1_pct": 85.0,
+        "avg_latency_ms": 278.1,
+        "avg_delta_steps": 1.03
+      },
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 11,
+          "detection_rate_pct": 91.7
+        },
+        "T2": {
+          "total": 12,
+          "detected": 12,
+          "detection_rate_pct": 100.0
+        },
+        "T3": {
+          "total": 12,
+          "detected": 8,
+          "detection_rate_pct": 66.7
+        },
+        "T4": {
+          "total": 12,
+          "detected": 10,
+          "detection_rate_pct": 83.3
+        },
+        "T5": {
+          "total": 12,
+          "detected": 10,
+          "detection_rate_pct": 83.3
+        }
+      },
+      "results": [
+        {
+          "id": "s001",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 380.7,
+          "label": "hallucinated",
+          "score": 0.959,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s002",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 176.5,
+          "label": "hallucinated",
+          "score": 0.947,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s003",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 660.2,
+          "label": "hallucinated",
+          "score": 0.664,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s004",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 104.7,
+          "label": "correct",
+          "score": 0.496,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s005",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 246.0,
+          "label": "hallucinated",
+          "score": 0.899,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s006",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 178.4,
+          "label": "hallucinated",
+          "score": 0.408,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s007",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 328.4,
+          "label": "hallucinated",
+          "score": 0.161,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s008",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 387.6,
+          "label": "hallucinated",
+          "score": 0.986,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s009",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 295.7,
+          "label": "hallucinated",
+          "score": 0.947,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s010",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 221.2,
+          "label": "hallucinated",
+          "score": 0.475,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s011",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 423.9,
+          "label": "hallucinated",
+          "score": 0.645,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s012",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 317.5,
+          "label": "hallucinated",
+          "score": 0.721,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s013",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 94.7,
+          "label": "hallucinated",
+          "score": 0.093,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s014",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 228.9,
+          "label": "hallucinated",
+          "score": 0.1,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s015",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 183.3,
+          "label": "correct",
+          "score": 0.625,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s016",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 219.9,
+          "label": "hallucinated",
+          "score": 0.975,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s017",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 176.0,
+          "label": "hallucinated",
+          "score": 0.145,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s018",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 211.4,
+          "label": "hallucinated",
+          "score": 0.877,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s019",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 212.6,
+          "label": "hallucinated",
+          "score": 0.996,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s020",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 115.0,
+          "label": "hallucinated",
+          "score": 0.114,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s021",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 113.4,
+          "label": "hallucinated",
+          "score": 0.382,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s022",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 291.9,
+          "label": "correct",
+          "score": 0.042,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s023",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 407.7,
+          "label": "hallucinated",
+          "score": 0.993,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s024",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 220.7,
+          "label": "hallucinated",
+          "score": 0.066,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T2"
+        },
+        {
+          "id": "s025",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 524.8,
+          "label": "hallucinated",
+          "score": 0.399,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s026",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 116.0,
+          "label": "hallucinated",
+          "score": 0.892,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s027",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 405.1,
+          "label": "hallucinated",
+          "score": 0.651,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s028",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 184.1,
+          "label": "correct",
+          "score": 0.539,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s029",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 208.7,
+          "label": "correct",
+          "score": 0.651,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s030",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 127.0,
+          "label": "correct",
+          "score": 0.186,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s031",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 466.5,
+          "label": "correct",
+          "score": 0.323,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s032",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 120.8,
+          "label": "hallucinated",
+          "score": 0.908,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s033",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 488.5,
+          "label": "hallucinated",
+          "score": 0.201,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s034",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 228.7,
+          "label": "hallucinated",
+          "score": 0.911,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s035",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 336.1,
+          "label": "correct",
+          "score": 0.388,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s036",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 122.5,
+          "label": "correct",
+          "score": 0.44,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s037",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 326.4,
+          "label": "correct",
+          "score": 0.241,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s038",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 456.8,
+          "label": "hallucinated",
+          "score": 0.524,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s039",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 250.7,
+          "label": "hallucinated",
+          "score": 0.988,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s040",
+          "detected": false,
+          "delta_steps": 3,
+          "latency_ms": 332.8,
+          "label": "correct",
+          "score": 0.776,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s041",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 317.1,
+          "label": "hallucinated",
+          "score": 0.591,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s042",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 565.7,
+          "label": "hallucinated",
+          "score": 0.473,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s043",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 133.5,
+          "label": "hallucinated",
+          "score": 0.96,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s044",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 229.9,
+          "label": "hallucinated",
+          "score": 0.992,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s045",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 114.7,
+          "label": "hallucinated",
+          "score": 0.938,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s046",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 235.1,
+          "label": "hallucinated",
+          "score": 0.409,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s047",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 392.0,
+          "label": "hallucinated",
+          "score": 0.708,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s048",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 475.8,
+          "label": "hallucinated",
+          "score": 0.632,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T4"
+        },
+        {
+          "id": "s049",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 442.5,
+          "label": "hallucinated",
+          "score": 0.406,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s050",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 222.4,
+          "label": "hallucinated",
+          "score": 0.967,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s051",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 114.1,
+          "label": "hallucinated",
+          "score": 0.99,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s052",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 223.2,
+          "label": "hallucinated",
+          "score": 0.972,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s053",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 349.4,
+          "label": "correct",
+          "score": 0.182,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s054",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 129.7,
+          "label": "hallucinated",
+          "score": 0.967,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s055",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 471.2,
+          "label": "hallucinated",
+          "score": 0.985,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s056",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 350.4,
+          "label": "hallucinated",
+          "score": 0.994,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s057",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 336.8,
+          "label": "correct",
+          "score": 0.444,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s058",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 327.7,
+          "label": "hallucinated",
+          "score": 0.525,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s059",
+          "detected": false,
+          "delta_steps": 12,
+          "latency_ms": 150.5,
+          "label": "correct",
+          "score": 0.7,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s060",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 213.9,
+          "label": "hallucinated",
+          "score": 0.972,
+          "m2_conflict": false,
+          "hallucination_type_detected": "T5"
+        }
+      ]
+    }
+  }
+}

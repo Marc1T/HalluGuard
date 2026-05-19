@@ -1,0 +1,15 @@
+Alan Turing propose le test de Turing en 1950 dans son article "Computing Machinery and Intelligence".
+Le terme "intelligence artificielle" est coined par John McCarthy lors du workshop de Dartmouth en 1956.
+Le premier hiver de l'IA survient entre 1974 et 1980 suite aux critiques du rapport Lighthill et aux réductions de financement.
+L'algorithme de rétropropagation est popularisé en 1986 par Rumelhart, Hinton et Williams dans Nature.
+IBM Deep Blue bat le champion du monde d'échecs Garry Kasparov en mai 1997 sur un match de 6 parties (score 3.5–2.5).
+Le réseau AlexNet remporte ImageNet en 2012 avec un taux d'erreur de 15.3%, contre 26.1% pour le second (réduction de 41%).
+AlphaGo de DeepMind bat le champion du monde de go Lee Sedol en mars 2016 avec un score de 4 victoires contre 1.
+L'article "Attention is All You Need" de Vaswani et al. (Google Brain) introduit le Transformer en juin 2017.
+GPT-1 est publié par OpenAI en 2018 avec 117 millions de paramètres entraînés sur le corpus BooksCorpus.
+GPT-2 est publié par OpenAI en février 2019 avec 1.5 milliard de paramètres ; sa publication est initialement retenue pour risque d'abus.
+GPT-3 est publié par OpenAI en mai 2020 avec 175 milliards de paramètres, entraîné sur 570 GB de texte (Common Crawl, WebText, Books, Wikipedia).
+ChatGPT est lancé par OpenAI le 30 novembre 2022 et atteint 100 millions d'utilisateurs en 2 mois.
+GPT-4 est publié par OpenAI le 14 mars 2023 ; il est multimodal et dépasse GPT-3.5 sur la plupart des benchmarks.
+Mistral AI est fondé en mai 2023 par des anciens de DeepMind et Meta AI (Arthur Mensch, Guillaume Lample, Timothée Lacroix).
+LLaMA 2 est publié par Meta en juillet 2023 dans des versions 7B, 13B et 70B paramètres sous licence commerciale permissive.
