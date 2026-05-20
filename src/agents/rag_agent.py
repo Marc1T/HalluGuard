@@ -124,8 +124,13 @@ def build_rag_pipeline(variant: str = "A", session_id: str = "default", policy_m
         supplementary = _retrieve_documents(f"{query} détails supplémentaires")
         tool_output = " ".join(supplementary) if supplementary else ""
 
-        if middleware and tool_output:
-            result = middleware.post_node("tool_call", tool_output, state, evidences=supplementary)
+        # post_node toujours appelé pour tool_call, même si output vide :
+        # un outil silencieux (output="") peut indiquer une T5 non interceptée.
+        if middleware:
+            tc_output = tool_output or ""
+            result = middleware.post_node(
+                "tool_call", tc_output, state, evidences=supplementary or []
+            )
             tool_output = result["output"] or tool_output
             if result["event"]:
                 state["halluguard_events"].append(result["event"])

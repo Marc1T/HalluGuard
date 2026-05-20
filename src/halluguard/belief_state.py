@@ -175,7 +175,12 @@ class BeliefState:
             if sim == 0.0 and self._jaccard(claim, fact.content) < 0.1:
                 continue
 
-            result = verifier.nli(claim, fact.content)
+            try:
+                result = verifier.nli(claim, fact.content)
+            except Exception:
+                # Verifier indisponible : on ignore ce candidat sans crasher
+                continue
+
             if result["label"] == "contradiction" and result["score"] > max_score:
                 max_score = result["score"]
                 conflict_fact = fact
@@ -199,8 +204,10 @@ class BeliefState:
             "it", "its", "by", "for", "with", "as", "do", "does",
             "have", "has", "had", "will", "can", "may", "all",
         }
-        sa = set(a.lower().split()) - _SW
-        sb = set(b.lower().split()) - _SW
+        import re as _re
+        _tok = lambda s: set(_re.findall(r"\b[a-záàâéèêîïôùûç]+\b", s.lower())) - _SW
+        sa = _tok(a)
+        sb = _tok(b)
         if not sa or not sb:
             return 0.0
         return len(sa & sb) / len(sa | sb)

@@ -2,15 +2,18 @@
 Benchmark HaluEval-Agentic — compare les 3 variantes (A, B, C) sur les scénarios JSONL.
 
 Métriques par variante :
-  - detection_rate_pct : % hallucinations détectées
-  - pbr1_pct          : % bloquées en delta_steps <= 1 (PBR@1)
-  - avg_latency_ms    : latence moyenne HalluGuard par scénario
-  - avg_delta_steps   : nb étapes moyen de propagation avant détection
+  - TP, FP, TN, FN     : matrice de confusion complète
+  - precision_pct      : TP / (TP + FP) * 100
+  - recall_pct         : TP / (TP + FN) * 100  [= detection_rate]
+  - f1_pct             : 2 * P * R / (P + R) * 100
+  - pbr1_pct           : % hallucinations bloquées en delta_steps <= 1 (PBR@1)
+  - avg_latency_ms     : latence moyenne HalluGuard par scénario
+  - avg_delta_steps    : nb étapes moyen de propagation avant détection
 
 Usage :
   python src/tests/benchmark_runner.py           # 10 scénarios (test rapide)
-  python src/tests/benchmark_runner.py --n 60    # 60 scénarios (benchmark complet)
-  python src/tests/benchmark_runner.py --all     # alias --n 60
+  python src/tests/benchmark_runner.py --n 90    # 90 scénarios (benchmark complet)
+  python src/tests/benchmark_runner.py --all     # alias --n 90
 """
 
 from __future__ import annotations
@@ -157,28 +160,49 @@ def run_variant_c(scenarios: List[dict], verifier) -> List[dict]:
 
 def compute_metrics(results: List[dict], scenarios: List[dict]) -> dict:
     hallucinated_ids = {s["id"] for s in scenarios if s["expected_label"] == "hallucinated"}
-    h_results = [r for r in results if r["id"] in hallucinated_ids]
+    correct_ids      = {s["id"] for s in scenarios if s["expected_label"] == "correct"}
 
-    detected_count = sum(1 for r in h_results if r["detected"])
-    detection_rate = round(detected_count / len(h_results) * 100, 1) if h_results else 0.0
+    h_results = [r for r in results if r["id"] in hallucinated_ids]
+    c_results = [r for r in results if r["id"] in correct_ids]
+
+    # Confusion matrix
+    tp = sum(1 for r in h_results if r["detected"])      # hallucinated, correctly flagged
+    fn = sum(1 for r in h_results if not r["detected"])  # hallucinated, missed
+    fp = sum(1 for r in c_results if r["detected"])      # correct, wrongly flagged
+    tn = sum(1 for r in c_results if not r["detected"])  # correct, correctly passed
+
+    # Rates
+    recall    = round(tp / (tp + fn) * 100, 1) if (tp + fn) > 0 else 0.0
+    precision = round(tp / (tp + fp) * 100, 1) if (tp + fp) > 0 else None
+    if precision is not None and recall > 0:
+        f1 = round(2 * precision * recall / (precision + recall), 1)
+    else:
+        f1 = 0.0
 
     pbr1_count = sum(1 for r in h_results if r["detected"] and r["delta_steps"] <= 1)
-    pbr1_rate = round(pbr1_count / len(h_results) * 100, 1) if h_results else 0.0
+    pbr1_rate  = round(pbr1_count / len(h_results) * 100, 1) if h_results else 0.0
 
     latencies = [r["latency_ms"] for r in results]
-    avg_lat = round(sum(latencies) / len(latencies), 1) if latencies else 0.0
+    avg_lat   = round(sum(latencies) / len(latencies), 1) if latencies else 0.0
 
-    deltas = [r["delta_steps"] for r in h_results]
+    deltas    = [r["delta_steps"] for r in h_results]
     avg_delta = round(sum(deltas) / len(deltas), 2) if deltas else 0.0
 
     return {
-        "total_scenarios": len(scenarios),
+        "total_scenarios":        len(scenarios),
         "hallucinated_scenarios": len(h_results),
-        "detected": detected_count,
-        "detection_rate_pct": detection_rate,
-        "pbr1_pct": pbr1_rate,
-        "avg_latency_ms": avg_lat,
-        "avg_delta_steps": avg_delta,
+        "correct_scenarios":      len(c_results),
+        "TP": tp,
+        "FP": fp,
+        "TN": tn,
+        "FN": fn,
+        "recall_pct":             recall,
+        "precision_pct":          precision,
+        "f1_pct":                 f1,
+        "detection_rate_pct":     recall,   # backward-compat alias
+        "pbr1_pct":               pbr1_rate,
+        "avg_latency_ms":         avg_lat,
+        "avg_delta_steps":        avg_delta,
     }
 
 
@@ -192,7 +216,7 @@ def metrics_by_type(results: List[dict], scenarios: List[dict]) -> dict:
         by_type.setdefault(htype, []).append(r)
 
     out = {}
-    for htype, rs in sorted(by_type.items()):
+    for htype, rs in sorted(by_type.items(), key=lambda x: (x[0] is None, x[0])):
         detected = sum(1 for r in rs if r["detected"])
         out[htype] = {
             "total": len(rs),
@@ -207,14 +231,18 @@ def metrics_by_type(results: List[dict], scenarios: List[dict]) -> dict:
 # ------------------------------------------------------------------ #
 
 def print_summary(variant: str, metrics: dict, by_type: dict) -> None:
+    prec_str = f"{metrics['precision_pct']}%" if metrics["precision_pct"] is not None else "N/A"
     print(f"\n  Variante {variant} :")
-    print(f"    Detection rate  : {metrics['detection_rate_pct']}%")
-    print(f"    PBR@1           : {metrics['pbr1_pct']}%")
-    print(f"    Avg latency     : {metrics['avg_latency_ms']} ms")
-    print(f"    Avg delta steps : {metrics['avg_delta_steps']}")
+    print(f"    TP={metrics['TP']}  FP={metrics['FP']}  TN={metrics['TN']}  FN={metrics['FN']}")
+    print(f"    Recall (Detection rate) : {metrics['recall_pct']}%")
+    print(f"    Precision               : {prec_str}")
+    print(f"    F1                      : {metrics['f1_pct']}%")
+    print(f"    PBR@1                   : {metrics['pbr1_pct']}%")
+    print(f"    Avg latency             : {metrics['avg_latency_ms']} ms")
+    print(f"    Avg delta steps         : {metrics['avg_delta_steps']}")
     if by_type:
         print(f"    Par type        : ", end="")
-        parts = [f"{t}={v['detection_rate_pct']}%" for t, v in sorted(by_type.items())]
+        parts = [f"{t}={v['detection_rate_pct']}%" for t, v in sorted(by_type.items(), key=lambda x: (x[0] is None, x[0]))]
         print(" | ".join(parts))
 
 
@@ -225,10 +253,10 @@ def print_summary(variant: str, metrics: dict, by_type: dict) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HaluEval-Agentic benchmark runner")
     parser.add_argument("--n", type=int, default=10, help="Nombre de scénarios (défaut: 10)")
-    parser.add_argument("--all", action="store_true", help="Lance sur les 60 scénarios complets")
+    parser.add_argument("--all", action="store_true", help="Lance sur les 90 scénarios complets (60 hallucinated + 30 correct)")
     args = parser.parse_args()
 
-    n_scenarios = 60 if args.all else args.n
+    n_scenarios = 90 if args.all else args.n
 
     print("=" * 60)
     print("  HalluGuard — Benchmark HaluEval-Agentic")
@@ -239,13 +267,17 @@ if __name__ == "__main__":
     print(f"\n  {len(scenarios)} scénarios chargés depuis {SCENARIOS_FILE.name}")
 
     # ---- Distribution ----
+    n_hall = sum(1 for s in scenarios if s["expected_label"] == "hallucinated")
+    n_corr = sum(1 for s in scenarios if s["expected_label"] == "correct")
     by_type = {}
-    by_len = {}
+    by_len  = {}
     for s in scenarios:
-        by_type[s["hallucination_type"]] = by_type.get(s["hallucination_type"], 0) + 1
+        key = s["hallucination_type"] if s["hallucination_type"] else "correct"
+        by_type[key] = by_type.get(key, 0) + 1
         by_len[s["length"]] = by_len.get(s["length"], 0) + 1
     type_str = " ".join(f"{k}:{v}" for k, v in sorted(by_type.items()))
     len_str  = " ".join(f"len={k}:{v}" for k, v in sorted(by_len.items()))
+    print(f"  Hallucinated : {n_hall} | Correct : {n_corr}")
     print(f"  Types   : {type_str}")
     print(f"  Lengths : {len_str}")
 
@@ -293,13 +325,23 @@ if __name__ == "__main__":
     # ============================================================== #
     # Tableau comparatif                                               #
     # ============================================================== #
+    def _fmt(v):
+        return f"{v}%" if v is not None else "N/A"
+
     print(f"\n{'='*60}")
     print("  RÉSUMÉ COMPARATIF")
     print(f"{'='*60}")
     print(f"  {'Métrique':<28} {'A':>8} {'B':>8} {'C':>8}")
     print(f"  {'-'*52}")
-    print(f"  {'Detection Rate (%)':<28} {metrics_a['detection_rate_pct']:>8} {metrics_b['detection_rate_pct']:>8} {metrics_c['detection_rate_pct']:>8}")
-    print(f"  {'PBR@1 (%)':<28} {metrics_a['pbr1_pct']:>8} {metrics_b['pbr1_pct']:>8} {metrics_c['pbr1_pct']:>8}")
+    print(f"  {'TP':<28} {metrics_a['TP']:>8} {metrics_b['TP']:>8} {metrics_c['TP']:>8}")
+    print(f"  {'FP':<28} {metrics_a['FP']:>8} {metrics_b['FP']:>8} {metrics_c['FP']:>8}")
+    print(f"  {'TN':<28} {metrics_a['TN']:>8} {metrics_b['TN']:>8} {metrics_c['TN']:>8}")
+    print(f"  {'FN':<28} {metrics_a['FN']:>8} {metrics_b['FN']:>8} {metrics_c['FN']:>8}")
+    print(f"  {'-'*52}")
+    print(f"  {'Recall / Detection Rate (%)':<28} {_fmt(metrics_a['recall_pct']):>8} {_fmt(metrics_b['recall_pct']):>8} {_fmt(metrics_c['recall_pct']):>8}")
+    print(f"  {'Precision (%)':<28} {_fmt(metrics_a['precision_pct']):>8} {_fmt(metrics_b['precision_pct']):>8} {_fmt(metrics_c['precision_pct']):>8}")
+    print(f"  {'F1 (%)':<28} {_fmt(metrics_a['f1_pct']):>8} {_fmt(metrics_b['f1_pct']):>8} {_fmt(metrics_c['f1_pct']):>8}")
+    print(f"  {'PBR@1 (%)':<28} {_fmt(metrics_a['pbr1_pct']):>8} {_fmt(metrics_b['pbr1_pct']):>8} {_fmt(metrics_c['pbr1_pct']):>8}")
     print(f"  {'Avg Latency (ms)':<28} {metrics_a['avg_latency_ms']:>8} {metrics_b['avg_latency_ms']:>8} {metrics_c['avg_latency_ms']:>8}")
     print(f"  {'Avg Delta Steps':<28} {metrics_a['avg_delta_steps']:>8} {metrics_b['avg_delta_steps']:>8} {metrics_c['avg_delta_steps']:>8}")
     print(f"{'='*60}")

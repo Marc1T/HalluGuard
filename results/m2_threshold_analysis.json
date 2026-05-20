@@ -1,0 +1,133 @@
+{
+  "benchmark": "m2_threshold_sweep",
+  "n_scenarios": 90,
+  "n_hallucinated": 60,
+  "n_correct": 30,
+  "variant_b_reference": {
+    "TP": 46,
+    "FP": 5,
+    "TN": 25,
+    "FN": 14,
+    "recall": 76.7,
+    "precision": 90.2,
+    "f1": 82.9
+  },
+  "thresholds": {
+    "0.5": {
+      "TP": 52,
+      "FP": 24,
+      "TN": 6,
+      "FN": 8,
+      "recall": 86.7,
+      "precision": 68.4,
+      "f1": 76.5
+    },
+    "0.6": {
+      "TP": 51,
+      "FP": 21,
+      "TN": 9,
+      "FN": 9,
+      "recall": 85.0,
+      "precision": 70.8,
+      "f1": 77.3
+    },
+    "0.65": {
+      "TP": 50,
+      "FP": 20,
+      "TN": 10,
+      "FN": 10,
+      "recall": 83.3,
+      "precision": 71.4,
+      "f1": 76.9
+    },
+    "0.7": {
+      "TP": 49,
+      "FP": 19,
+      "TN": 11,
+      "FN": 11,
+      "recall": 81.7,
+      "precision": 72.1,
+      "f1": 76.6
+    },
+    "0.75": {
+      "TP": 49,
+      "FP": 18,
+      "TN": 12,
+      "FN": 11,
+      "recall": 81.7,
+      "precision": 73.1,
+      "f1": 77.2
+    },
+    "0.8": {
+      "TP": 48,
+      "FP": 17,
+      "TN": 13,
+      "FN": 12,
+      "recall": 80.0,
+      "precision": 73.8,
+      "f1": 76.8
+    },
+    "0.85": {
+      "TP": 47,
+      "FP": 12,
+      "TN": 18,
+      "FN": 13,
+      "recall": 78.3,
+      "precision": 79.7,
+      "f1": 79.0
+    },
+    "0.9": {
+      "TP": 46,
+      "FP": 10,
+      "TN": 20,
+      "FN": 14,
+      "recall": 76.7,
+      "precision": 82.1,
+      "f1": 79.3
+    }
+  },
+  "optimal_threshold": 0.9,
+  "optimal_f1": 79.3,
+  "raw_scores_sample": [
+    {
+      "id": "s001",
+      "expected_label": "hallucinated",
+      "node_type": "retrieval",
+      "m1_detected": true,
+      "m1_score": 0.959,
+      "m2_raw_score": 0.978
+    },
+    {
+      "id": "s002",
+      "expected_label": "hallucinated",
+      "node_type": "retrieval",
+      "m1_detected": true,
+      "m1_score": 0.947,
+      "m2_raw_score": 0.903
+    },
+    {
+      "id": "s003",
+      "expected_label": "hallucinated",
+      "node_type": "retrieval",
+      "m1_detected": true,
+      "m1_score": 0.664,
+      "m2_raw_score": 0.795
+    },
+    {
+      "id": "s004",
+      "expected_label": "hallucinated",
+      "node_type": "retrieval",
+      "m1_detected": false,
+      "m1_score": 0.496,
+      "m2_raw_score": 0.0
+    },
+    {
+      "id": "s005",
+      "expected_label": "hallucinated",
+      "node_type": "retrieval",
+      "m1_detected": true,
+      "m1_score": 0.899,
+      "m2_raw_score": 0.974
+    }
+  ]
+}

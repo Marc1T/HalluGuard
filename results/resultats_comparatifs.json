@@ -1,14 +1,21 @@
 {
   "benchmark": "HaluEval-Agentic",
-  "n_scenarios": 60,
+  "n_scenarios": 90,
   "scenarios_file": "C:\\Users\\HP PRO\\Desktop\\souley\\ecole\\S8\\Hajji\\Agentic_Project\\data\\halueval\\scenarios.jsonl",
   "variants": {
     "A": {
       "description": "Baseline RAG sans HalluGuard",
       "metrics": {
-        "total_scenarios": 60,
+        "total_scenarios": 90,
         "hallucinated_scenarios": 60,
-        "detected": 0,
+        "correct_scenarios": 30,
+        "TP": 0,
+        "FP": 0,
+        "TN": 30,
+        "FN": 60,
+        "recall_pct": 0.0,
+        "precision_pct": null,
+        "f1_pct": 0.0,
         "detection_rate_pct": 0.0,
         "pbr1_pct": 0.0,
         "avg_latency_ms": 0.0,
@@ -39,6 +46,11 @@
           "total": 12,
           "detected": 0,
           "detection_rate_pct": 0.0
+        },
+        "null": {
+          "total": 30,
+          "detected": 0,
+          "detection_rate_pct": 0.0
         }
       },
       "results": [
@@ -521,18 +533,265 @@
           "latency_ms": 0.0,
           "label": "no_check",
           "score": null
+        },
+        {
+          "id": "s061",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s062",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s063",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s064",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s065",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s066",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s067",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s068",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s069",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s070",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s071",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s072",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s073",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s074",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s075",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s076",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s077",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s078",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s079",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s080",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s081",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s082",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s083",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s084",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s085",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s086",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s087",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s088",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s089",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
+        },
+        {
+          "id": "s090",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 0.0,
+          "label": "no_check",
+          "score": null
         }
       ]
     },
     "B": {
       "description": "HalluGuard M1 uniquement — NLI inter-sources",
       "metrics": {
-        "total_scenarios": 60,
+        "total_scenarios": 90,
         "hallucinated_scenarios": 60,
-        "detected": 46,
+        "correct_scenarios": 30,
+        "TP": 46,
+        "FP": 5,
+        "TN": 25,
+        "FN": 14,
+        "recall_pct": 76.7,
+        "precision_pct": 90.2,
+        "f1_pct": 82.9,
         "detection_rate_pct": 76.7,
         "pbr1_pct": 76.7,
-        "avg_latency_ms": 122.9,
+        "avg_latency_ms": 588.8,
         "avg_delta_steps": 1.55
       },
       "by_type": {
@@ -560,6 +819,11 @@
           "total": 12,
           "detected": 9,
           "detection_rate_pct": 75.0
+        },
+        "null": {
+          "total": 30,
+          "detected": 5,
+          "detection_rate_pct": 16.7
         }
       },
       "results": [
@@ -567,7 +831,7 @@
           "id": "s001",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 81.1,
+          "latency_ms": 258.6,
           "label": "hallucinated",
           "score": 0.959,
           "hallucination_type_detected": "T1"
@@ -576,7 +840,7 @@
           "id": "s002",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 95.1,
+          "latency_ms": 554.9,
           "label": "hallucinated",
           "score": 0.947,
           "hallucination_type_detected": "T1"
@@ -585,7 +849,7 @@
           "id": "s003",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 105.9,
+          "latency_ms": 382.1,
           "label": "hallucinated",
           "score": 0.664,
           "hallucination_type_detected": "T1"
@@ -594,7 +858,7 @@
           "id": "s004",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 106.9,
+          "latency_ms": 333.2,
           "label": "correct",
           "score": 0.496,
           "hallucination_type_detected": null
@@ -603,7 +867,7 @@
           "id": "s005",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 82.6,
+          "latency_ms": 468.4,
           "label": "hallucinated",
           "score": 0.899,
           "hallucination_type_detected": "T1"
@@ -612,7 +876,7 @@
           "id": "s006",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 101.3,
+          "latency_ms": 344.4,
           "label": "hallucinated",
           "score": 0.408,
           "hallucination_type_detected": "T1"
@@ -621,7 +885,7 @@
           "id": "s007",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 87.1,
+          "latency_ms": 539.3,
           "label": "hallucinated",
           "score": 0.161,
           "hallucination_type_detected": "T1"
@@ -630,7 +894,7 @@
           "id": "s008",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 102.7,
+          "latency_ms": 360.8,
           "label": "hallucinated",
           "score": 0.986,
           "hallucination_type_detected": "T1"
@@ -639,7 +903,7 @@
           "id": "s009",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 104.2,
+          "latency_ms": 263.2,
           "label": "hallucinated",
           "score": 0.947,
           "hallucination_type_detected": "T1"
@@ -648,7 +912,7 @@
           "id": "s010",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 112.9,
+          "latency_ms": 303.1,
           "label": "hallucinated",
           "score": 0.475,
           "hallucination_type_detected": "T1"
@@ -657,7 +921,7 @@
           "id": "s011",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 126.2,
+          "latency_ms": 448.7,
           "label": "hallucinated",
           "score": 0.645,
           "hallucination_type_detected": "T1"
@@ -666,7 +930,7 @@
           "id": "s012",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 130.9,
+          "latency_ms": 361.7,
           "label": "hallucinated",
           "score": 0.721,
           "hallucination_type_detected": "T1"
@@ -675,7 +939,7 @@
           "id": "s013",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 101.0,
+          "latency_ms": 473.6,
           "label": "hallucinated",
           "score": 0.093,
           "hallucination_type_detected": "T2"
@@ -684,7 +948,7 @@
           "id": "s014",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 130.6,
+          "latency_ms": 720.0,
           "label": "hallucinated",
           "score": 0.1,
           "hallucination_type_detected": "T2"
@@ -693,7 +957,7 @@
           "id": "s015",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 109.0,
+          "latency_ms": 470.8,
           "label": "correct",
           "score": 0.625,
           "hallucination_type_detected": null
@@ -702,7 +966,7 @@
           "id": "s016",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 139.4,
+          "latency_ms": 417.6,
           "label": "hallucinated",
           "score": 0.975,
           "hallucination_type_detected": "T2"
@@ -711,7 +975,7 @@
           "id": "s017",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 108.6,
+          "latency_ms": 356.4,
           "label": "hallucinated",
           "score": 0.145,
           "hallucination_type_detected": "T2"
@@ -720,7 +984,7 @@
           "id": "s018",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 128.7,
+          "latency_ms": 724.9,
           "label": "hallucinated",
           "score": 0.877,
           "hallucination_type_detected": "T2"
@@ -729,7 +993,7 @@
           "id": "s019",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 122.9,
+          "latency_ms": 657.4,
           "label": "hallucinated",
           "score": 0.996,
           "hallucination_type_detected": "T2"
@@ -738,7 +1002,7 @@
           "id": "s020",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 124.8,
+          "latency_ms": 662.9,
           "label": "hallucinated",
           "score": 0.114,
           "hallucination_type_detected": "T2"
@@ -747,7 +1011,7 @@
           "id": "s021",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 122.1,
+          "latency_ms": 656.9,
           "label": "hallucinated",
           "score": 0.382,
           "hallucination_type_detected": "T2"
@@ -756,7 +1020,7 @@
           "id": "s022",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 111.1,
+          "latency_ms": 616.6,
           "label": "correct",
           "score": 0.042,
           "hallucination_type_detected": null
@@ -765,7 +1029,7 @@
           "id": "s023",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 117.0,
+          "latency_ms": 556.1,
           "label": "hallucinated",
           "score": 0.993,
           "hallucination_type_detected": "T2"
@@ -774,7 +1038,7 @@
           "id": "s024",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 129.8,
+          "latency_ms": 478.1,
           "label": "hallucinated",
           "score": 0.066,
           "hallucination_type_detected": "T2"
@@ -783,7 +1047,7 @@
           "id": "s025",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 132.1,
+          "latency_ms": 639.2,
           "label": "hallucinated",
           "score": 0.399,
           "hallucination_type_detected": "T3"
@@ -792,7 +1056,7 @@
           "id": "s026",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 130.5,
+          "latency_ms": 807.8,
           "label": "hallucinated",
           "score": 0.892,
           "hallucination_type_detected": "T3"
@@ -801,7 +1065,7 @@
           "id": "s027",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 136.8,
+          "latency_ms": 703.9,
           "label": "hallucinated",
           "score": 0.651,
           "hallucination_type_detected": "T3"
@@ -810,7 +1074,7 @@
           "id": "s028",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 106.8,
+          "latency_ms": 585.7,
           "label": "correct",
           "score": 0.539,
           "hallucination_type_detected": null
@@ -819,7 +1083,7 @@
           "id": "s029",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 110.5,
+          "latency_ms": 645.1,
           "label": "correct",
           "score": 0.651,
           "hallucination_type_detected": null
@@ -828,7 +1092,7 @@
           "id": "s030",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 126.6,
+          "latency_ms": 691.4,
           "label": "correct",
           "score": 0.186,
           "hallucination_type_detected": null
@@ -837,7 +1101,7 @@
           "id": "s031",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 140.3,
+          "latency_ms": 752.4,
           "label": "correct",
           "score": 0.323,
           "hallucination_type_detected": null
@@ -846,7 +1110,7 @@
           "id": "s032",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 140.2,
+          "latency_ms": 655.9,
           "label": "hallucinated",
           "score": 0.908,
           "hallucination_type_detected": "T3"
@@ -855,7 +1119,7 @@
           "id": "s033",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 161.5,
+          "latency_ms": 672.0,
           "label": "hallucinated",
           "score": 0.201,
           "hallucination_type_detected": "T3"
@@ -864,7 +1128,7 @@
           "id": "s034",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 173.7,
+          "latency_ms": 647.1,
           "label": "hallucinated",
           "score": 0.911,
           "hallucination_type_detected": "T3"
@@ -873,7 +1137,7 @@
           "id": "s035",
           "detected": false,
           "delta_steps": 12,
-          "latency_ms": 177.7,
+          "latency_ms": 638.2,
           "label": "correct",
           "score": 0.388,
           "hallucination_type_detected": null
@@ -882,7 +1146,7 @@
           "id": "s036",
           "detected": false,
           "delta_steps": 12,
-          "latency_ms": 157.6,
+          "latency_ms": 529.0,
           "label": "correct",
           "score": 0.44,
           "hallucination_type_detected": null
@@ -891,7 +1155,7 @@
           "id": "s037",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 158.7,
+          "latency_ms": 668.2,
           "label": "correct",
           "score": 0.241,
           "hallucination_type_detected": null
@@ -900,7 +1164,7 @@
           "id": "s038",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 141.7,
+          "latency_ms": 346.8,
           "label": "hallucinated",
           "score": 0.524,
           "hallucination_type_detected": "T4"
@@ -909,7 +1173,7 @@
           "id": "s039",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 132.5,
+          "latency_ms": 439.9,
           "label": "hallucinated",
           "score": 0.988,
           "hallucination_type_detected": "T4"
@@ -918,7 +1182,7 @@
           "id": "s040",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 115.2,
+          "latency_ms": 498.0,
           "label": "correct",
           "score": 0.776,
           "hallucination_type_detected": null
@@ -927,7 +1191,7 @@
           "id": "s041",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 118.8,
+          "latency_ms": 355.6,
           "label": "hallucinated",
           "score": 0.591,
           "hallucination_type_detected": "T5"
@@ -936,7 +1200,7 @@
           "id": "s042",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 122.7,
+          "latency_ms": 690.8,
           "label": "hallucinated",
           "score": 0.473,
           "hallucination_type_detected": "T4"
@@ -945,7 +1209,7 @@
           "id": "s043",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 123.8,
+          "latency_ms": 653.9,
           "label": "hallucinated",
           "score": 0.96,
           "hallucination_type_detected": "T4"
@@ -954,7 +1218,7 @@
           "id": "s044",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 128.4,
+          "latency_ms": 647.5,
           "label": "hallucinated",
           "score": 0.992,
           "hallucination_type_detected": "T4"
@@ -963,7 +1227,7 @@
           "id": "s045",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 117.1,
+          "latency_ms": 574.6,
           "label": "hallucinated",
           "score": 0.938,
           "hallucination_type_detected": "T4"
@@ -972,7 +1236,7 @@
           "id": "s046",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 124.5,
+          "latency_ms": 673.2,
           "label": "hallucinated",
           "score": 0.409,
           "hallucination_type_detected": "T4"
@@ -981,7 +1245,7 @@
           "id": "s047",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 129.1,
+          "latency_ms": 721.9,
           "label": "hallucinated",
           "score": 0.708,
           "hallucination_type_detected": "T4"
@@ -990,7 +1254,7 @@
           "id": "s048",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 144.2,
+          "latency_ms": 822.1,
           "label": "hallucinated",
           "score": 0.632,
           "hallucination_type_detected": "T4"
@@ -999,7 +1263,7 @@
           "id": "s049",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 115.4,
+          "latency_ms": 635.0,
           "label": "hallucinated",
           "score": 0.406,
           "hallucination_type_detected": "T5"
@@ -1008,7 +1272,7 @@
           "id": "s050",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 114.5,
+          "latency_ms": 671.3,
           "label": "hallucinated",
           "score": 0.967,
           "hallucination_type_detected": "T5"
@@ -1017,7 +1281,7 @@
           "id": "s051",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 114.0,
+          "latency_ms": 685.4,
           "label": "hallucinated",
           "score": 0.99,
           "hallucination_type_detected": "T5"
@@ -1026,7 +1290,7 @@
           "id": "s052",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 110.8,
+          "latency_ms": 559.5,
           "label": "hallucinated",
           "score": 0.972,
           "hallucination_type_detected": "T5"
@@ -1035,7 +1299,7 @@
           "id": "s053",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 128.9,
+          "latency_ms": 642.6,
           "label": "correct",
           "score": 0.182,
           "hallucination_type_detected": null
@@ -1044,7 +1308,7 @@
           "id": "s054",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 125.1,
+          "latency_ms": 608.2,
           "label": "hallucinated",
           "score": 0.967,
           "hallucination_type_detected": "T5"
@@ -1053,7 +1317,7 @@
           "id": "s055",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 137.8,
+          "latency_ms": 687.5,
           "label": "hallucinated",
           "score": 0.985,
           "hallucination_type_detected": "T5"
@@ -1062,7 +1326,7 @@
           "id": "s056",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 117.3,
+          "latency_ms": 696.8,
           "label": "hallucinated",
           "score": 0.994,
           "hallucination_type_detected": "T5"
@@ -1071,7 +1335,7 @@
           "id": "s057",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 116.1,
+          "latency_ms": 614.5,
           "label": "correct",
           "score": 0.444,
           "hallucination_type_detected": null
@@ -1080,7 +1344,7 @@
           "id": "s058",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 114.7,
+          "latency_ms": 296.0,
           "label": "hallucinated",
           "score": 0.525,
           "hallucination_type_detected": "T5"
@@ -1089,7 +1353,7 @@
           "id": "s059",
           "detected": false,
           "delta_steps": 12,
-          "latency_ms": 136.6,
+          "latency_ms": 369.3,
           "label": "correct",
           "score": 0.7,
           "hallucination_type_detected": null
@@ -1098,23 +1362,300 @@
           "id": "s060",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 110.4,
+          "latency_ms": 349.1,
           "label": "hallucinated",
           "score": 0.972,
           "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s061",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 538.9,
+          "label": "correct",
+          "score": 0.641,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s062",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 533.1,
+          "label": "correct",
+          "score": 0.027,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s063",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 447.3,
+          "label": "correct",
+          "score": 0.953,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s064",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 379.1,
+          "label": "correct",
+          "score": 0.014,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s065",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 593.9,
+          "label": "correct",
+          "score": 0.052,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s066",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 666.0,
+          "label": "correct",
+          "score": 0.005,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s067",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 748.5,
+          "label": "correct",
+          "score": 0.738,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s068",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 693.0,
+          "label": "hallucinated",
+          "score": 0.603,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s069",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 604.0,
+          "label": "correct",
+          "score": 0.312,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s070",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 727.2,
+          "label": "correct",
+          "score": 0.694,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s071",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 723.2,
+          "label": "hallucinated",
+          "score": 0.554,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s072",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 613.7,
+          "label": "correct",
+          "score": 0.191,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s073",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 663.6,
+          "label": "correct",
+          "score": 0.553,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s074",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 669.1,
+          "label": "correct",
+          "score": 0.622,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s075",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 712.3,
+          "label": "correct",
+          "score": 0.054,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s076",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 704.9,
+          "label": "correct",
+          "score": 0.096,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s077",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 686.9,
+          "label": "correct",
+          "score": 0.254,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s078",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 661.7,
+          "label": "hallucinated",
+          "score": 0.733,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s079",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 654.6,
+          "label": "correct",
+          "score": 0.48,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s080",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 635.2,
+          "label": "correct",
+          "score": 0.92,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s081",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 713.6,
+          "label": "correct",
+          "score": 0.846,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s082",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 693.9,
+          "label": "hallucinated",
+          "score": 0.684,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s083",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 744.3,
+          "label": "hallucinated",
+          "score": 0.045,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s084",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 666.1,
+          "label": "correct",
+          "score": 0.13,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s085",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 713.6,
+          "label": "correct",
+          "score": 0.648,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s086",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 644.3,
+          "label": "correct",
+          "score": 0.662,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s087",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 696.5,
+          "label": "correct",
+          "score": 0.827,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s088",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 774.7,
+          "label": "correct",
+          "score": 0.508,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s089",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 709.9,
+          "label": "correct",
+          "score": 0.473,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s090",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 690.2,
+          "label": "correct",
+          "score": 0.194,
+          "hallucination_type_detected": null
         }
       ]
     },
     "C": {
       "description": "HalluGuard complet — M1 + M2 BeliefState + MCP",
       "metrics": {
-        "total_scenarios": 60,
+        "total_scenarios": 90,
         "hallucinated_scenarios": 60,
-        "detected": 51,
-        "detection_rate_pct": 85.0,
-        "pbr1_pct": 85.0,
-        "avg_latency_ms": 278.1,
-        "avg_delta_steps": 1.03
+        "correct_scenarios": 30,
+        "TP": 52,
+        "FP": 24,
+        "TN": 6,
+        "FN": 8,
+        "recall_pct": 86.7,
+        "precision_pct": 68.4,
+        "f1_pct": 76.5,
+        "detection_rate_pct": 86.7,
+        "pbr1_pct": 86.7,
+        "avg_latency_ms": 1412.3,
+        "avg_delta_steps": 0.83
       },
       "by_type": {
         "T1": {
@@ -1139,8 +1680,13 @@
         },
         "T5": {
           "total": 12,
-          "detected": 10,
-          "detection_rate_pct": 83.3
+          "detected": 11,
+          "detection_rate_pct": 91.7
+        },
+        "null": {
+          "total": 30,
+          "detected": 24,
+          "detection_rate_pct": 80.0
         }
       },
       "results": [
@@ -1148,7 +1694,7 @@
           "id": "s001",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 380.7,
+          "latency_ms": 1950.2,
           "label": "hallucinated",
           "score": 0.959,
           "m2_conflict": true,
@@ -1158,7 +1704,7 @@
           "id": "s002",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 176.5,
+          "latency_ms": 911.7,
           "label": "hallucinated",
           "score": 0.947,
           "m2_conflict": true,
@@ -1168,7 +1714,7 @@
           "id": "s003",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 660.2,
+          "latency_ms": 3566.3,
           "label": "hallucinated",
           "score": 0.664,
           "m2_conflict": true,
@@ -1178,7 +1724,7 @@
           "id": "s004",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 104.7,
+          "latency_ms": 1017.9,
           "label": "correct",
           "score": 0.496,
           "m2_conflict": false,
@@ -1188,7 +1734,7 @@
           "id": "s005",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 246.0,
+          "latency_ms": 1249.5,
           "label": "hallucinated",
           "score": 0.899,
           "m2_conflict": true,
@@ -1198,7 +1744,7 @@
           "id": "s006",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 178.4,
+          "latency_ms": 1706.6,
           "label": "hallucinated",
           "score": 0.408,
           "m2_conflict": false,
@@ -1208,7 +1754,7 @@
           "id": "s007",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 328.4,
+          "latency_ms": 1410.9,
           "label": "hallucinated",
           "score": 0.161,
           "m2_conflict": false,
@@ -1218,7 +1764,7 @@
           "id": "s008",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 387.6,
+          "latency_ms": 2256.1,
           "label": "hallucinated",
           "score": 0.986,
           "m2_conflict": true,
@@ -1228,7 +1774,7 @@
           "id": "s009",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 295.7,
+          "latency_ms": 971.3,
           "label": "hallucinated",
           "score": 0.947,
           "m2_conflict": true,
@@ -1238,7 +1784,7 @@
           "id": "s010",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 221.2,
+          "latency_ms": 659.7,
           "label": "hallucinated",
           "score": 0.475,
           "m2_conflict": true,
@@ -1248,7 +1794,7 @@
           "id": "s011",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 423.9,
+          "latency_ms": 1383.2,
           "label": "hallucinated",
           "score": 0.645,
           "m2_conflict": true,
@@ -1258,7 +1804,7 @@
           "id": "s012",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 317.5,
+          "latency_ms": 1495.3,
           "label": "hallucinated",
           "score": 0.721,
           "m2_conflict": true,
@@ -1268,27 +1814,27 @@
           "id": "s013",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 94.7,
+          "latency_ms": 1773.2,
           "label": "hallucinated",
           "score": 0.093,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T2"
         },
         {
           "id": "s014",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 228.9,
+          "latency_ms": 2013.1,
           "label": "hallucinated",
           "score": 0.1,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T2"
         },
         {
           "id": "s015",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 183.3,
+          "latency_ms": 1101.1,
           "label": "correct",
           "score": 0.625,
           "m2_conflict": true,
@@ -1298,7 +1844,7 @@
           "id": "s016",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 219.9,
+          "latency_ms": 1243.9,
           "label": "hallucinated",
           "score": 0.975,
           "m2_conflict": true,
@@ -1308,7 +1854,7 @@
           "id": "s017",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 176.0,
+          "latency_ms": 1081.4,
           "label": "hallucinated",
           "score": 0.145,
           "m2_conflict": false,
@@ -1318,7 +1864,7 @@
           "id": "s018",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 211.4,
+          "latency_ms": 2520.8,
           "label": "hallucinated",
           "score": 0.877,
           "m2_conflict": false,
@@ -1328,7 +1874,7 @@
           "id": "s019",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 212.6,
+          "latency_ms": 1184.1,
           "label": "hallucinated",
           "score": 0.996,
           "m2_conflict": true,
@@ -1338,17 +1884,17 @@
           "id": "s020",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 115.0,
+          "latency_ms": 1183.5,
           "label": "hallucinated",
           "score": 0.114,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T2"
         },
         {
           "id": "s021",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 113.4,
+          "latency_ms": 1059.9,
           "label": "hallucinated",
           "score": 0.382,
           "m2_conflict": false,
@@ -1358,7 +1904,7 @@
           "id": "s022",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 291.9,
+          "latency_ms": 1519.2,
           "label": "correct",
           "score": 0.042,
           "m2_conflict": true,
@@ -1368,7 +1914,7 @@
           "id": "s023",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 407.7,
+          "latency_ms": 1963.7,
           "label": "hallucinated",
           "score": 0.993,
           "m2_conflict": true,
@@ -1378,7 +1924,7 @@
           "id": "s024",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 220.7,
+          "latency_ms": 928.5,
           "label": "hallucinated",
           "score": 0.066,
           "m2_conflict": true,
@@ -1388,7 +1934,7 @@
           "id": "s025",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 524.8,
+          "latency_ms": 2548.3,
           "label": "hallucinated",
           "score": 0.399,
           "m2_conflict": true,
@@ -1398,7 +1944,7 @@
           "id": "s026",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 116.0,
+          "latency_ms": 645.9,
           "label": "hallucinated",
           "score": 0.892,
           "m2_conflict": false,
@@ -1408,7 +1954,7 @@
           "id": "s027",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 405.1,
+          "latency_ms": 3191.2,
           "label": "hallucinated",
           "score": 0.651,
           "m2_conflict": true,
@@ -1418,7 +1964,7 @@
           "id": "s028",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 184.1,
+          "latency_ms": 606.9,
           "label": "correct",
           "score": 0.539,
           "m2_conflict": false,
@@ -1428,7 +1974,7 @@
           "id": "s029",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 208.7,
+          "latency_ms": 516.1,
           "label": "correct",
           "score": 0.651,
           "m2_conflict": true,
@@ -1438,7 +1984,7 @@
           "id": "s030",
           "detected": false,
           "delta_steps": 7,
-          "latency_ms": 127.0,
+          "latency_ms": 609.1,
           "label": "correct",
           "score": 0.186,
           "m2_conflict": false,
@@ -1448,7 +1994,7 @@
           "id": "s031",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 466.5,
+          "latency_ms": 1151.9,
           "label": "correct",
           "score": 0.323,
           "m2_conflict": true,
@@ -1458,7 +2004,7 @@
           "id": "s032",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 120.8,
+          "latency_ms": 375.5,
           "label": "hallucinated",
           "score": 0.908,
           "m2_conflict": false,
@@ -1468,7 +2014,7 @@
           "id": "s033",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 488.5,
+          "latency_ms": 1648.4,
           "label": "hallucinated",
           "score": 0.201,
           "m2_conflict": true,
@@ -1478,7 +2024,7 @@
           "id": "s034",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 228.7,
+          "latency_ms": 818.2,
           "label": "hallucinated",
           "score": 0.911,
           "m2_conflict": false,
@@ -1488,7 +2034,7 @@
           "id": "s035",
           "detected": false,
           "delta_steps": 12,
-          "latency_ms": 336.1,
+          "latency_ms": 1836.8,
           "label": "correct",
           "score": 0.388,
           "m2_conflict": false,
@@ -1498,7 +2044,7 @@
           "id": "s036",
           "detected": false,
           "delta_steps": 12,
-          "latency_ms": 122.5,
+          "latency_ms": 607.0,
           "label": "correct",
           "score": 0.44,
           "m2_conflict": false,
@@ -1508,7 +2054,7 @@
           "id": "s037",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 326.4,
+          "latency_ms": 1115.4,
           "label": "correct",
           "score": 0.241,
           "m2_conflict": false,
@@ -1518,7 +2064,7 @@
           "id": "s038",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 456.8,
+          "latency_ms": 1636.7,
           "label": "hallucinated",
           "score": 0.524,
           "m2_conflict": false,
@@ -1528,7 +2074,7 @@
           "id": "s039",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 250.7,
+          "latency_ms": 1217.6,
           "label": "hallucinated",
           "score": 0.988,
           "m2_conflict": false,
@@ -1538,7 +2084,7 @@
           "id": "s040",
           "detected": false,
           "delta_steps": 3,
-          "latency_ms": 332.8,
+          "latency_ms": 1070.3,
           "label": "correct",
           "score": 0.776,
           "m2_conflict": false,
@@ -1548,17 +2094,17 @@
           "id": "s041",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 317.1,
+          "latency_ms": 2023.3,
           "label": "hallucinated",
           "score": 0.591,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T5"
         },
         {
           "id": "s042",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 565.7,
+          "latency_ms": 2561.9,
           "label": "hallucinated",
           "score": 0.473,
           "m2_conflict": true,
@@ -1568,7 +2114,7 @@
           "id": "s043",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 133.5,
+          "latency_ms": 434.9,
           "label": "hallucinated",
           "score": 0.96,
           "m2_conflict": false,
@@ -1578,7 +2124,7 @@
           "id": "s044",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 229.9,
+          "latency_ms": 718.9,
           "label": "hallucinated",
           "score": 0.992,
           "m2_conflict": false,
@@ -1588,7 +2134,7 @@
           "id": "s045",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 114.7,
+          "latency_ms": 343.4,
           "label": "hallucinated",
           "score": 0.938,
           "m2_conflict": false,
@@ -1598,7 +2144,7 @@
           "id": "s046",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 235.1,
+          "latency_ms": 694.8,
           "label": "hallucinated",
           "score": 0.409,
           "m2_conflict": false,
@@ -1608,7 +2154,7 @@
           "id": "s047",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 392.0,
+          "latency_ms": 1578.1,
           "label": "hallucinated",
           "score": 0.708,
           "m2_conflict": true,
@@ -1618,17 +2164,17 @@
           "id": "s048",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 475.8,
+          "latency_ms": 1512.4,
           "label": "hallucinated",
           "score": 0.632,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T4"
         },
         {
           "id": "s049",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 442.5,
+          "latency_ms": 1508.8,
           "label": "hallucinated",
           "score": 0.406,
           "m2_conflict": true,
@@ -1638,7 +2184,7 @@
           "id": "s050",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 222.4,
+          "latency_ms": 529.1,
           "label": "hallucinated",
           "score": 0.967,
           "m2_conflict": true,
@@ -1648,17 +2194,17 @@
           "id": "s051",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 114.1,
+          "latency_ms": 675.2,
           "label": "hallucinated",
           "score": 0.99,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T5"
         },
         {
           "id": "s052",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 223.2,
+          "latency_ms": 1356.6,
           "label": "hallucinated",
           "score": 0.972,
           "m2_conflict": true,
@@ -1666,19 +2212,19 @@
         },
         {
           "id": "s053",
-          "detected": false,
-          "delta_steps": 7,
-          "latency_ms": 349.4,
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2495.1,
           "label": "correct",
           "score": 0.182,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": null
         },
         {
           "id": "s054",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 129.7,
+          "latency_ms": 298.7,
           "label": "hallucinated",
           "score": 0.967,
           "m2_conflict": false,
@@ -1688,7 +2234,7 @@
           "id": "s055",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 471.2,
+          "latency_ms": 1601.9,
           "label": "hallucinated",
           "score": 0.985,
           "m2_conflict": true,
@@ -1698,7 +2244,7 @@
           "id": "s056",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 350.4,
+          "latency_ms": 1517.9,
           "label": "hallucinated",
           "score": 0.994,
           "m2_conflict": true,
@@ -1706,19 +2252,19 @@
         },
         {
           "id": "s057",
-          "detected": true,
-          "delta_steps": 0,
-          "latency_ms": 336.8,
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 702.9,
           "label": "correct",
           "score": 0.444,
-          "m2_conflict": true,
+          "m2_conflict": false,
           "hallucination_type_detected": null
         },
         {
           "id": "s058",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 327.7,
+          "latency_ms": 701.5,
           "label": "hallucinated",
           "score": 0.525,
           "m2_conflict": false,
@@ -1726,23 +2272,323 @@
         },
         {
           "id": "s059",
-          "detected": false,
-          "delta_steps": 12,
-          "latency_ms": 150.5,
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 969.5,
           "label": "correct",
           "score": 0.7,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": null
         },
         {
           "id": "s060",
           "detected": true,
           "delta_steps": 0,
-          "latency_ms": 213.9,
+          "latency_ms": 909.1,
           "label": "hallucinated",
           "score": 0.972,
-          "m2_conflict": false,
+          "m2_conflict": true,
           "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s061",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1580.8,
+          "label": "correct",
+          "score": 0.641,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s062",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1345.5,
+          "label": "correct",
+          "score": 0.027,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s063",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2542.3,
+          "label": "correct",
+          "score": 0.953,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s064",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 629.2,
+          "label": "correct",
+          "score": 0.014,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s065",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1385.2,
+          "label": "correct",
+          "score": 0.052,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s066",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1541.6,
+          "label": "correct",
+          "score": 0.005,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s067",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1193.3,
+          "label": "correct",
+          "score": 0.738,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s068",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1288.2,
+          "label": "hallucinated",
+          "score": 0.603,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s069",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 470.5,
+          "label": "correct",
+          "score": 0.312,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s070",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 1254.2,
+          "label": "correct",
+          "score": 0.694,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s071",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1329.0,
+          "label": "hallucinated",
+          "score": 0.554,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T3"
+        },
+        {
+          "id": "s072",
+          "detected": false,
+          "delta_steps": 8,
+          "latency_ms": 841.5,
+          "label": "correct",
+          "score": 0.191,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s073",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1506.8,
+          "label": "correct",
+          "score": 0.553,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s074",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2422.4,
+          "label": "correct",
+          "score": 0.622,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s075",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 516.7,
+          "label": "correct",
+          "score": 0.054,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s076",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2423.6,
+          "label": "correct",
+          "score": 0.096,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s077",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 3032.1,
+          "label": "correct",
+          "score": 0.254,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s078",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1061.7,
+          "label": "hallucinated",
+          "score": 0.733,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T1"
+        },
+        {
+          "id": "s079",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1423.2,
+          "label": "correct",
+          "score": 0.48,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s080",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1063.4,
+          "label": "correct",
+          "score": 0.92,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s081",
+          "detected": false,
+          "delta_steps": 6,
+          "latency_ms": 1178.3,
+          "label": "correct",
+          "score": 0.846,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s082",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1116.4,
+          "label": "hallucinated",
+          "score": 0.684,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s083",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2273.4,
+          "label": "hallucinated",
+          "score": 0.045,
+          "m2_conflict": true,
+          "hallucination_type_detected": "T5"
+        },
+        {
+          "id": "s084",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1555.9,
+          "label": "correct",
+          "score": 0.13,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s085",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 3296.9,
+          "label": "correct",
+          "score": 0.648,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s086",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2646.8,
+          "label": "correct",
+          "score": 0.662,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s087",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 1451.0,
+          "label": "correct",
+          "score": 0.827,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s088",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 2861.9,
+          "label": "correct",
+          "score": 0.508,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s089",
+          "detected": false,
+          "delta_steps": 7,
+          "latency_ms": 1600.3,
+          "label": "correct",
+          "score": 0.473,
+          "m2_conflict": false,
+          "hallucination_type_detected": null
+        },
+        {
+          "id": "s090",
+          "detected": true,
+          "delta_steps": 0,
+          "latency_ms": 1393.5,
+          "label": "correct",
+          "score": 0.194,
+          "m2_conflict": true,
+          "hallucination_type_detected": null
         }
       ]
     }

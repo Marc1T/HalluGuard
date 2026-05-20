@@ -120,9 +120,17 @@ class HalluGuardMiddleware:
                     ev = policy_out.get("event") or {}
                     ev["m2_conflict"] = m2
                     policy_out["event"] = ev
+                # confidence = score NLI si correct ; 1 - score si hallucination
+                # (plus le score de contradiction est haut, moins on est confiant
+                #  dans le fait enregistré — cohérent avec la formule du DAG)
+                fact_confidence = (
+                    result_m1["score"]
+                    if result_m1["label"] == "correct"
+                    else 1.0 - result_m1["score"]
+                )
                 self.belief.add_fact(
                     content=final_output[:256],
-                    confidence=result_m1["score"] if result_m1["label"] == "correct" else 0.5,
+                    confidence=round(fact_confidence, 3),
                     step=1,
                 )
             except Exception:

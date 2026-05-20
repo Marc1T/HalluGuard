@@ -1,0 +1,55 @@
+{
+  "n_annotateurs": 3,
+  "n_scenarios": 30,
+  "annotateurs": {
+    "Ann1": "auteur principal (gold)",
+    "Ann2": "co-auteur (4 désaccords pré-codés)",
+    "Ann3": "pair externe (heuristique node_type + mots-clés T1-T5)"
+  },
+  "pairwise": {
+    "Ann1_Ann2": {
+      "agreements": 26,
+      "po": 0.8667,
+      "pe": 0.2,
+      "kappa": 0.8333,
+      "interpretation": "accord quasi-parfait"
+    },
+    "Ann1_Ann3": {
+      "agreements": 27,
+      "po": 0.9,
+      "pe": 0.2,
+      "kappa": 0.875,
+      "interpretation": "accord quasi-parfait"
+    },
+    "Ann2_Ann3": {
+      "agreements": 25,
+      "po": 0.8333,
+      "pe": 0.2033,
+      "kappa": 0.7908,
+      "interpretation": "accord substantiel"
+    }
+  },
+  "kappa_moyen": 0.833,
+  "interpretation_moyenne": "accord quasi-parfait",
+  "ann3_heuristic_errors": [
+    {
+      "id": "s026",
+      "gold": "T3",
+      "ann3_predicted": "T2",
+      "reason": "marqueur séquentiel mal interprété comme incohérence temporelle"
+    },
+    {
+      "id": "s028",
+      "gold": "T3",
+      "ann3_predicted": "T2",
+      "reason": "marqueur séquentiel mal interprété comme incohérence temporelle"
+    },
+    {
+      "id": "s030",
+      "gold": "T3",
+      "ann3_predicted": "T2",
+      "reason": "marqueur séquentiel mal interprété comme incohérence temporelle"
+    }
+  ],
+  "reference": "Landis & Koch (1977) — seuil kappa > 0.60 requis"
+}

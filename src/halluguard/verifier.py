@@ -71,9 +71,12 @@ class LightweightVerifier:
             latency_ms         : temps d'inférence en ms
         """
         if not evidences:
+            # Pas d'evidence → impossible de conclure : on renvoie "insufficient_evidence"
+            # (non détecté, score neutre 0.5) — distinct de "correct" pour ne pas masquer
+            # les cas où aucun document n'a été récupéré (T1 silencieux).
             return {
                 "score": 0.5,
-                "label": "correct",
+                "label": "insufficient_evidence",
                 "confidence": 0.5,
                 "hallucination_type": None,
                 "insufficient_evidence": True,

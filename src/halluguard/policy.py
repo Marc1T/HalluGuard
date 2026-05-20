@@ -143,15 +143,15 @@ class PolicyEngine:
         Retourne (texte_corrige, ttr_secondes).
         """
         evidence_block = (
-            "\n".join(f"- {e}" for e in evidences[:3])
+            "\n".join(f"- {e}" for e in evidences[:5])
             if evidences else "(aucune source disponible)"
         )
         prompt = (
-            f"The following answer was flagged as potentially incorrect.\n\n"
-            f"Original answer: {claim}\n\n"
-            f"Available sources:\n{evidence_block}\n\n"
-            f"Provide a corrected, factual answer based strictly on the sources above. "
-            f"Be concise."
+            f"La réponse suivante a été signalée comme potentiellement incorrecte.\n\n"
+            f"Réponse originale : {claim}\n\n"
+            f"Sources disponibles :\n{evidence_block}\n\n"
+            f"Fournis une réponse corrigée, factuelle et strictement basée sur les sources "
+            f"ci-dessus. Sois concis et précis."
         )
         t0 = time.time()
         try:
