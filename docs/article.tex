@@ -56,6 +56,7 @@
 
 % ── Figures et graphiques ───────────────────────────────────────────────────
 \usepackage{graphicx}
+\graphicspath{{./}{docs/}}
 \usepackage{float}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
@@ -70,7 +71,7 @@
   citecolor=green!50!black,
   urlcolor=cyan!70!black,
   pdftitle={HalluGuard},
-  pdfauthor={Souleymane Diallo}
+  pdfauthor={Souleymane Diallo et Marc Thierry Nankouli}
 }
 
 % ── Divers ──────────────────────────────────────────────────────────────────
@@ -103,7 +104,7 @@
 }
 \author{%
   Souleymane Diallo \quad \& \quad Marc Thierry Nankouli\\
-  \small\texttt{s.diallo@edu.umi.ac.ma}\\[0.3em]
+  \small\texttt{s.diallo@edu.umi.ac.ma} \quad\textbar\quad \texttt{m.nankouli@edu.umi.ac.ma}\\[0.3em]
   \small Encadrant : Prof.~Hajji Tarik
 }
 \date{Mai 2026}
@@ -111,6 +112,67 @@
 % ════════════════════════════════════════════════════════════════════════════
 \begin{document}
 % ════════════════════════════════════════════════════════════════════════════
+
+% ── Page de garde académique ────────────────────────────────────────────────
+\begin{titlepage}
+\centering
+\thispagestyle{empty}
+
+% En-tête institutionnel
+\begin{minipage}[t]{0.60\textwidth}
+  \raggedright\small
+  \textbf{Royaume du Maroc}\\
+  Université Moulay Ismaïl\\
+  École Nationale Supérieure d'Arts et Métiers --- Meknès
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\textwidth}
+  \raggedleft\small
+  Année universitaire\\
+  \textbf{2025--2026}
+\end{minipage}
+
+\vspace{0.8cm}
+\includegraphics[width=0.40\textwidth]{LOGO_ENSAM.png}
+
+\vspace{1.0cm}
+{\large Filière Génie Intelligence Artificielle et Technologies des Données --- 4\textsuperscript{e} Année\par}
+\vspace{0.25cm}
+{\large Module : Représentation et Résolution de Problèmes en Intelligence Artificielle\par}
+\vspace{0.25cm}
+{\large\bfseries Projet 15 --- Rapport de recherche\par}
+
+\vspace{1.4cm}
+\rule{\linewidth}{0.6pt}
+\vspace{0.7cm}
+
+{\Huge\bfseries HalluGuard\par}
+\vspace{0.5cm}
+{\LARGE\bfseries Détection et Mitigation des Hallucinations\\[0.2em]
+dans les Pipelines RAG Agentiques\par}
+\vspace{0.45cm}
+{\large\itshape par un Middleware NLI Multi-Couches\par}
+
+\vspace{0.7cm}
+\rule{\linewidth}{0.6pt}
+
+\vfill
+
+\begin{minipage}[t]{0.48\textwidth}
+  \raggedright
+  \textbf{Réalisé par :}\\[0.4em]
+  Souleymane Diallo\\
+  Marc Thierry Nankouli
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+  \raggedleft
+  \textbf{Encadré par :}\\[0.4em]
+  Prof. Hajji Tarik
+\end{minipage}
+
+\vspace{1.6cm}
+{\small Meknès --- Mai 2026\par}
+
+\end{titlepage}
 
 \maketitle
 \thispagestyle{empty}

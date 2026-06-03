@@ -1,6 +1,6 @@
 # HalluGuard — Détection et Mitigation des Hallucinations dans les Pipelines Agentiques RAG
 
-Projet 15 — ENSAM Meknès 4ème Année — Prof. Hajji Tarik — 2025-2026 — Étudiant : Souleymane Diallo
+Projet 15 — ENSAM Meknès 4ème Année — Prof. Hajji Tarik — 2025-2026 — Étudiants : Souleymane Diallo & Marc Thierry Nankouli
 
 HalluGuard est un middleware de détection d'hallucinations pour pipelines RAG agentiques (LangGraph). Il combine un vérificateur NLI inter-sources (M1, cross-encoder 117 M params), un BeliefState temporel (M2, 50 faits max), un graphe de dépendances (DependencyDAG), une politique de correction (PolicyEngine) et un serveur MCP exposant 4 outils. Sur 60 scénarios HaluEval-Agentic, HalluGuard détecte 85 % des hallucinations (contre 0 % pour le baseline) avec un overhead de 278 ms.
 
@@ -9,8 +9,8 @@ HalluGuard est un middleware de détection d'hallucinations pour pipelines RAG a
 ## Installation (5 commandes)
 
 ```powershell
-git clone <url-du-repo>
-cd Agentic_Project
+git clone https://github.com/Marc1T/HalluGuard.git
+cd HalluGuard
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt

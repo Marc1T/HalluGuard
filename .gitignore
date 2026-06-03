@@ -12,3 +12,9 @@ results/logs/*.log
 CONTEXT.md
 docs/article_content.md
 docs/slides_content.md
+docs/article.aux
+docs/article.log
+docs/article.out
+docs/article.toc
+docs/article.tex
+docs/.gitkeep

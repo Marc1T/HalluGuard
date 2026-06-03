@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "provider": {
     "organization": "ENSAM Meknes — Projet 15",
-    "contact": "s.diallo@edu.umi.ac.ma",
+    "contact": "s.diallo@edu.umi.ac.ma, m.nankouli@edu.umi.ac.ma",
     "url": "https://github.com/ensam-meknes/halluguard"
   },
   "url": "mcp://halluguard/stdio",
