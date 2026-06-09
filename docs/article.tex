@@ -33,6 +33,13 @@
 \usepackage{colortbl}
 \definecolor{rowgray}{gray}{0.93}
 \definecolor{highlight}{rgb}{0.85,0.92,0.85}
+% ── Shim de compatibilité array/colortbl ────────────────────────────────────
+% Sur les MiKTeX où `colortbl` (récent) appelle \insert@pcolumn pour les colonnes
+% paragraphe p{} mais où `array` (ancien) ne fournit que \insert@column, on
+% aliase les deux. Inerte sur une distribution à jour (TeX Live, Overleaf).
+\makeatletter
+\@ifundefined{insert@pcolumn}{\let\insert@pcolumn\insert@column}{}
+\makeatother
 
 % ── Code source ─────────────────────────────────────────────────────────────
 \usepackage{listings}
@@ -51,7 +58,15 @@
   numberstyle=\tiny\color{gray},
   numbersep=8pt,
   xleftmargin=12pt,
-  language=Python
+  language=Python,
+  extendedchars=true,
+  literate=%
+    {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+    {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+    {î}{{\^i}}1 {ï}{{\"i}}1 {ô}{{\^o}}1 {ö}{{\"o}}1
+    {û}{{\^u}}1 {ù}{{\`u}}1 {ü}{{\"u}}1 {ç}{{\c c}}1
+    {É}{{\'E}}1 {È}{{\`E}}1 {À}{{\`A}}1 {Ç}{{\c C}}1
+    {œ}{{\oe}}1 {î}{{\^\i}}1
 }
 
 % ── Figures et graphiques ───────────────────────────────────────────────────
@@ -180,7 +195,7 @@ dans les Pipelines RAG Agentiques\par}
 % ── Résumé ──────────────────────────────────────────────────────────────────
 \begin{abstract}
 \noindent
-Les pipelines RAG agentiques réduisent les hallucinations LLM de 30 à 60~\%, mais les sorties erronées restantes se propagent librement à travers chaque nœud sans mécanisme d'interception natif. Nous présentons \textbf{HalluGuard}, un middleware de détection et mitigation pour pipelines LangGraph à quatre nœuds, combinant un vérificateur NLI inter-sources (M1, 117~M~paramètres, MNLI), un BeliefState temporel persistant (M2), un DependencyDAG, un PolicyEngine et un serveur MCP à quatre outils. Nous proposons une taxonomie originale de cinq types d'hallucinations agentiques (T1--T5) couplée à la topologie du pipeline. Sur un benchmark de 90~scénarios HaluEval-Agentic (60~hallucinés, 30~corrects), \textbf{Variante~B} (M1, NLI seul) atteint~: \textbf{F1~=~82,9~\%}, rappel~76,7~\%, précision~90,2~\%, overhead~588,8~ms sur CPU ($p<0{,}001$ vs baseline, $\approx$30~ms estimé sur GPU)~--- configuration recommandée. M2 (BeliefState) est une contribution architecturale pour les sessions multi-tours dont la quantification requiert un benchmark conversationnel~; sa valeur est validée qualitativement sur le scénario s019 (T2, score~NLI~=~0,996). La taxonomie T1--T5 est validée par accord inter-annotateurs ($\kappa_{\text{moy}}=0{,}833$, quasi-parfait ; $\kappa_{\min}=0{,}791$). Une validation externe partielle sur 20~exemples TruthfulQA confirme le fonctionnement sur des hallucinations naturelles (95,0~\%). Le système est déployé en local, sans GPU ni API payante.
+Les pipelines RAG agentiques réduisent les hallucinations LLM de 30 à 60~\%, mais les sorties erronées restantes se propagent librement à travers chaque nœud sans mécanisme d'interception natif. Nous présentons \textbf{HalluGuard}, un middleware de détection et mitigation pour pipelines LangGraph à quatre nœuds, combinant un vérificateur NLI inter-sources (M1, 117~M~paramètres, MNLI), un BeliefState temporel persistant (M2), un DependencyDAG, un PolicyEngine et un serveur MCP à quatre outils. Nous proposons une taxonomie originale de cinq types d'hallucinations agentiques (T1--T5) couplée à la topologie du pipeline, validée par accord inter-annotateurs entre deux annotateurs indépendants ($\kappa=0{,}94$, quasi-parfait~; $\kappa=1{,}0$ sur les types déterminés par la topologie, $\kappa=0{,}75$ sur la distinction réellement ambiguë T2/T3). Sur un benchmark de 90~scénarios HaluEval-Agentic (60~hallucinés, 30~corrects), \textbf{Variante~B} (M1, NLI seul) atteint~: \textbf{F1~=~82,9~\%}, rappel~76,7~\%, précision~90,2~\%, pour un overhead médian de \textbf{$\approx$~40~ms} sur CPU ($p<0{,}001$ vs baseline)~--- configuration recommandée, sous la contrainte de 300~ms. L'ajout du BeliefState (Variante~C) augmente le rappel à 86,7~\% mais \emph{dégrade fortement la précision} (68,4~\%, FPR~80~\%)~: M2 accroît la couverture au prix de nombreux faux positifs sur un benchmark mono-tour. Nous montrons en outre que le score NLI brut est mal calibré (ECE~$=0{,}24$), calibrons le seuil de détection par \emph{conformal prediction} avec une garantie de couverture empiriquement vérifiée, et évaluons la \emph{self-consistency} comme signal d'incertitude complémentaire (AUC~$=0{,}88$ pour séparer questions fiables et piégées). Une validation externe partielle sur 20~exemples TruthfulQA confirme le fonctionnement sur des hallucinations naturelles (95,0~\%). Le cœur du système (détection M1, mémoire M2, serveur MCP) est déployé en local, sans GPU ni API payante.
 
 \medskip
 \noindent\textbf{Mots-clés :} hallucination LLM, RAG agentique, NLI, LangGraph, MCP, BeliefState, middleware de vérification, HaluEval
@@ -192,7 +207,7 @@ Les pipelines RAG agentiques réduisent les hallucinations LLM de 30 à 60~\%, m
 
 \begin{abstract}
 \noindent\textbf{Abstract.}
-Agentic RAG (Retrieval-Augmented Generation) pipelines reduce LLM hallucinations by 30--60\%, yet the remaining 40--70\% of erroneous outputs propagate unchecked through all downstream pipeline nodes. We present \textbf{HalluGuard}, a hallucination detection and mitigation middleware for 4-node LangGraph pipelines. HalluGuard combines five components: a cross-source NLI verifier (M1, 117M parameters, pre-trained on MNLI), a persistent temporal BeliefState (M2), a directed acyclic dependency graph (DependencyDAG), a policy engine, and an MCP server exposing four standardized tools. We also propose an original taxonomy of five agentic hallucination types (T1--T5), two of which (T4 causal, T5 delegation) are absent from standard HaluEval literature. On a 90-scenario benchmark (60 hallucinated + 30 correct), \textbf{Variant~B} (M1 NLI only) achieves \textbf{F1~=~82.9\%} (recall 76.7\%, precision 90.2\%, CPU overhead 588.8~ms measured / $\approx$30~ms estimated on GPU; McNemar $p<0.001$ vs baseline) --- recommended configuration. M2 (BeliefState) is an architectural contribution designed for multi-turn sessions; its quantification requires a conversational benchmark and is qualitatively validated by scenario s019 (T2, NLI score=0.996). Inter-annotator agreement on the T1--T5 taxonomy reaches $\kappa_{\text{avg}}=0.833$ (near-perfect, 3 annotators; $\kappa_{\min}=0.791$). Partial external validation on 20 TruthfulQA examples confirms generalization (95.0\% detection rate).
+Agentic RAG (Retrieval-Augmented Generation) pipelines reduce LLM hallucinations by 30--60\%, yet the remaining 40--70\% of erroneous outputs propagate unchecked through all downstream pipeline nodes. We present \textbf{HalluGuard}, a hallucination detection and mitigation middleware for 4-node LangGraph pipelines. HalluGuard combines five components: a cross-source NLI verifier (M1, 117M parameters, pre-trained on MNLI), a persistent temporal BeliefState (M2), a directed acyclic dependency graph (DependencyDAG), a policy engine, and an MCP server exposing four standardized tools. We propose an original taxonomy of five agentic hallucination types (T1--T5) coupled to pipeline topology, validated by inter-annotator agreement between two independent annotators ($\kappa=0.94$ overall; $\kappa=1.0$ on topology-determined types, $\kappa=0.75$ on the genuinely ambiguous T2/T3 distinction). On a 90-scenario benchmark (60 hallucinated + 30 correct), \textbf{Variant~B} (M1 NLI only) achieves \textbf{F1~=~82.9\%} (recall 76.7\%, precision 90.2\%) at a median CPU overhead of \textbf{$\approx$40~ms} (McNemar $p<0.001$ vs baseline) --- recommended configuration, within the 300~ms budget. Adding the BeliefState (Variant~C) raises recall to 86.7\% but \emph{sharply degrades precision} (68.4\%, 80\% FPR): M2 increases coverage at the cost of many false positives on a single-turn benchmark. We further show the raw NLI score is poorly calibrated (ECE~$=0.24$), calibrate the detection threshold via \emph{conformal prediction} with an empirically verified coverage guarantee, and evaluate \emph{self-consistency} as a complementary uncertainty signal (AUC~$=0.88$ separating reliable from adversarial questions). Partial external validation on 20 TruthfulQA examples confirms generalization (95.0\% detection rate). The system core (M1 detection, M2 memory, MCP server) runs locally, without GPU or paid API.
 
 \noindent\textbf{Keywords:} LLM hallucination, agentic RAG, NLI, LangGraph, MCP, BeliefState, verification middleware
 \end{abstract}
@@ -256,10 +271,10 @@ Ce travail teste formellement l'hypothèse suivante~:
 Ce travail apporte quatre contributions originales~:
 
 \begin{enumerate}[noitemsep]
-  \item \textbf{Taxonomie T1--T5~:} cinq types d'hallucinations agentiques couplés à la topologie du pipeline RAG, dont deux types originaux (T4 causale, T5 délégation) absents de la littérature.
+  \item \textbf{Taxonomie T1--T5~:} cinq types d'hallucinations agentiques couplés à la topologie du pipeline RAG, étendant les taxonomies existantes aux types liés aux outils (T5 délégation) et à la génération causale (T4)~; \textbf{validée par accord inter-annotateurs} entre deux annotateurs indépendants ($\kappa=0{,}94$).
   \item \textbf{Architecture middleware~:} cinq composants intégrables comme hooks pre/post-nœud dans LangGraph sans modification du code pipeline.
-  \item \textbf{Évaluation expérimentale comparative~:} trois variantes (A/B/C), 90~scénarios (60~hallucinés + 30~corrects), métriques P/R/F1 complètes, étude d'ablation M1 vs~M2.
-  \item \textbf{Implémentation MCP et preuve de concept A2A~:} serveur MCP avec quatre outils, AgentCard formelle, 111~appels journalisés~; délégation A2A simulée en processus comme preuve de concept architecturale validant les interfaces du protocole.
+  \item \textbf{Évaluation expérimentale et quantification d'incertitude~:} trois variantes (A/B/C), 90~scénarios, métriques P/R/F1, ablation M1/M2 (montrant que M2 améliore le rappel mais dégrade la précision en mono-tour), \textbf{analyse de calibration} (ECE), \textbf{calibration du seuil par conformal prediction} avec garantie de couverture, et \textbf{self-consistency} comme signal d'incertitude complémentaire --- couvrant les trois axes méthodologiques du sujet (calibration, conformal, self-consistency).
+  \item \textbf{Implémentation MCP et preuve de concept A2A~:} serveur MCP avec quatre outils, AgentCard formelle, appels journalisés~; délégation A2A simulée en processus comme preuve de concept architecturale validant les interfaces du protocole.
 \end{enumerate}
 
 % ════════════════════════════════════════════════════════════════════════════
@@ -270,13 +285,13 @@ Ce travail apporte quatre contributions originales~:
 
 Le terme \og{}hallucination\fg{} en NLP désigne la génération d'informations non étayées par le contexte ou factuellement incorrectes \cite{maynez2020faithfulness}. Ji et al.~\cite{ji2023survey} distinguent les \textit{hallucinations intrinsèques} (contradictions avec le contexte fourni) et les \textit{hallucinations extrinsèques} (affirmations invérifiables). Huang et al.~\cite{huang2023survey} proposent une classification par étape de génération. Zhang et al.~\cite{zhang2023siren} analysent les causes profondes~: données d'entraînement bruitées, décalage entre pré-entraînement et fine-tuning, problèmes d'alignement.
 
-Ces taxonomies ciblent les LLM en tant que systèmes isolés. Notre taxonomie T1--T5 étend ces travaux en couplant chaque type d'hallucination à un nœud spécifique d'un pipeline RAG agentique multi-étapes --- une dimension absente de la littérature antérieure.
+Ces taxonomies ciblent les LLM en tant que systèmes isolés. Notre taxonomie T1--T5 étend ces travaux en couplant chaque type d'hallucination à un nœud spécifique d'un pipeline RAG agentique multi-étapes --- une dimension peu explorée dans la littérature antérieure.
 
 \subsection{Benchmarks de détection}
 
 TruthfulQA \cite{lin2022truthfulqa} est le benchmark de référence pour mesurer la propension des LLM à produire des affirmations fausses communément crues. Il contient 817~questions dans 38~catégories, mais se limite à l'évaluation de sorties LLM isolées.
 
-HaluEval \cite{li2023halueval} propose 35\,000~paires (question, réponse hallucinée, réponse correcte) dans trois domaines (QA, dialogue, résumé). Il ne couvre pas les architectures agentiques multi-nœuds, ni les types T4 et T5. Notre benchmark HaluEval-Agentic s'inspire de son format mais est construit spécifiquement pour les pipelines RAG à quatre nœuds.
+HaluEval \cite{li2023halueval} propose 35\,000~paires (question, réponse hallucinée, réponse correcte) dans trois domaines (QA, dialogue, résumé). Il ne couvre pas les architectures agentiques multi-nœuds et n'associe pas les hallucinations à leur point d'origine dans le pipeline (notamment les types liés à la génération T4 et aux outils T5). Notre benchmark HaluEval-Agentic s'inspire de son format mais est construit spécifiquement pour les pipelines RAG à quatre nœuds.
 
 \subsection{Méthodes de détection}
 
@@ -287,6 +302,10 @@ HaluEval \cite{li2023halueval} propose 35\,000~paires (question, réponse halluc
 \textbf{RAGAS} \cite{es2023ragas} évalue les pipelines RAG a posteriori selon des métriques comme la fidélité (\textit{faithfulness}) et la pertinence de réponse. C'est un outil d'évaluation offline, pas un middleware de détection temps réel.
 
 Notre approche se distingue sur trois dimensions~: intégration temps réel comme middleware, maintien d'un état temporel inter-étapes via BeliefState, et implémentation du protocole MCP (avec preuve de concept A2A).
+
+\subsection{Calibration, conformal prediction et quantification d'incertitude}
+
+Au-delà de la détection binaire, la fiabilité des LLM mobilise des outils de quantification d'incertitude. La \textbf{self-consistency} \cite{wang2022selfconsistency} échantillonne plusieurs sorties d'un même modèle et exploite leur (dés)accord comme signal de confiance~--- principe que SelfCheckGPT \cite{manakul2023selfcheckgpt} applique à la détection d'hallucinations. La \textbf{calibration} des scores de confiance, mesurée par l'\textit{Expected Calibration Error} \cite{guo2017calibration}, conditionne leur interprétation probabiliste~: les réseaux profonds modernes sont fréquemment mal calibrés. La \textbf{conformal prediction} \cite{angelopoulos2023conformal} fournit, sous hypothèse d'échangeabilité, des garanties de couverture \textit{distribution-free} applicables au choix d'un seuil de décision. Ces trois outils ont été conçus pour des appels d'inférence isolés~; nous les adaptons au vérificateur d'un pipeline agentique~--- analyse de calibration du score NLI (§\ref{sec:calibration}) et seuil conformal à rappel garanti (§\ref{sec:conformal}).
 
 \subsection{Inférence de langage naturel (NLI)}
 
@@ -315,20 +334,18 @@ Les benchmarks existants évaluent les hallucinations en sortie finale du LLM, s
 \caption{Taxonomie HalluGuard des hallucinations agentiques (T1--T5)}
 \label{tab:taxonomy}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\textwidth}{clllXl}
+\begin{tabular}{c l l l p{3.6cm} l}
+
 \toprule
 \textbf{Type} & \textbf{Nom} & \textbf{Nœud} & \textbf{Mécanisme} & \textbf{Description} & \textbf{Propagation} \\
 \midrule
-\rowcolor{rowgray}
 T1 & Perception & \texttt{retrieval} & NLI (M1) & Chunks ChromaDB inexacts ou hors-sujet & Modérée \\
 T2 & Mémoire & \texttt{reasoning} & BeliefState (M2) & Contradiction avec un fait établi en session & Élevée \\
-\rowcolor{rowgray}
 T3 & Planification & \texttt{reasoning} & NLI + DAG & Raisonnement faux formulé neutralement & Critique \\
 T4 & Causale & \texttt{generation} & NLI (M1) & Affirmation contredisant les documents & Élevée \\
-\rowcolor{rowgray}
 T5 & Délégation & \texttt{tool\_call} & NLI (M1) & Output outil divergeant de la prédiction LLM & Critique \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
 \textbf{T1 --- Hallucination de perception.}
@@ -344,30 +361,29 @@ Le nœud \texttt{reasoning} produit un enchaînement logique faux~: les prémiss
 Au nœud \texttt{generation}, le LLM produit une affirmation qui contredit directement les documents récupérés par \texttt{retrieval}. C'est la forme la plus classique d'hallucination RAG. Le NLI inter-sources est particulièrement efficace ici (83,3~\% en Variante~B).
 
 \textbf{T5 --- Hallucination de délégation.}
-Au nœud \texttt{tool\_call}, la sortie retournée par l'outil diverge de ce que le LLM avait prédit ou était en droit d'attendre. Ce type implique une discordance entre l'agent et son outil, non entre l'agent et ses sources documentaires. T4 et T5 constituent les contributions taxonomiques originales de ce travail.
+Au nœud \texttt{tool\_call}, la sortie retournée par l'outil diverge de ce que le LLM avait prédit ou était en droit d'attendre. Ce type implique une discordance entre l'agent et son outil, non entre l'agent et ses sources documentaires. T4 (génération causale) et T5 (délégation outil) sont les types les moins couverts par les benchmarks d'hallucination standard, qui se concentrent sur la sortie finale.
 
 \subsection{Validation inter-annotateurs de la taxonomie}
 
-La taxonomie a été validée par annotation manuelle de \textbf{30~exemples} (6 par type T1--T5, échantillon stratifié tiré de HaluEval-Agentic) par trois annotateurs indépendants~: l'auteur principal (Ann1), le co-auteur (Ann2) et un pair externe au projet (Ann3). Le $\kappa$ de Cohen (Landis \& Koch, 1977) a été calculé pour chaque paire. Le script de validation est disponible dans \texttt{src/tests/inter\_annotator.py}~; les annotations complètes dans \texttt{data/taxonomy\_annotations.json}.
+La taxonomie a été validée par annotation manuelle des \textbf{60~scénarios hallucinés} (12 par type T1--T5) par \textbf{deux annotateurs indépendants}~--- les deux auteurs --- procédant \textbf{à l'aveugle} (sans accès aux étiquettes de référence ni à l'annotation de l'autre) selon un guide de codage fixé \textit{a priori} (\texttt{docs/GUIDE\_ANNOTATION.md}). Chaque annotateur a renseigné son propre fichier (\texttt{data/annotation/taxonomy\_marc.csv}, \texttt{taxonomy\_souleymane.csv})~; le $\kappa$ de Cohen est calculé par \texttt{src/experiments/cohen\_kappa.py}. Aucune annotation n'est générée automatiquement.
 
 \begin{table}[H]
 \centering
-\caption{Accord inter-annotateurs pairwise --- taxonomie T1--T5 (30~exemples, 3~annotateurs)}
+\caption{Accord inter-annotateurs (Cohen) --- taxonomie T1--T5 (60~scénarios, 2~annotateurs)}
 \label{tab:kappa}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Paire} & \textbf{Accord observé} & \textbf{$\kappa$} & \textbf{Interprétation} \\
+\textbf{Sous-ensemble} & \textbf{$n$} & \textbf{Accord observé} & \textbf{$\kappa$} \\
 \midrule
-Ann1 -- Ann2 (co-auteur)    & 86,7~\% (26/30) & \textbf{0,833} & Quasi-parfait \\
-Ann1 -- Ann3 (pair externe) & 90,0~\% (27/30) & \textbf{0,875} & Quasi-parfait \\
-Ann2 -- Ann3                & 83,3~\% (25/30) & \textbf{0,791} & Substantiel \\
-\midrule
-\textbf{$\kappa$ moyen}     & ---             & \textbf{0,833} & Quasi-parfait \\
+\rowcolor{highlight}
+Global (T1--T5)                 & 60 & 95,0~\% & \textbf{0,94} \\
+T1, T4, T5 (déterminés par la topologie) & 36 & 100,0~\% & \textbf{1,00} \\
+T2 vs T3 (nœud \texttt{reasoning}, ambigu) & 24 & 87,5~\% & \textbf{0,75} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Les trois $\kappa$ pairwise dépassent le seuil $\kappa > 0{,}60$ requis pour valider une taxonomie en NLP (Landis \& Koch 1977). Le $\kappa$ moyen de \textbf{0,833} correspond à un accord quasi-parfait. Les 3~désaccords résiduels (scénarios s026, s028, s030) concernent exclusivement la frontière T2/T3~: les marqueurs séquentiels (\og{}à chaque\fg{}, \og{}d'abord\ldots{}ensuite\ldots{}puis\fg{}) sont interprétés comme une incohérence temporelle (T2) par les heuristiques automatiques, alors qu'ils relèvent du raisonnement en étapes (T3). Ce cas limite est documenté dans nos critères de classification. Aucun désaccord n'est observé sur T1 (retrieval), T4 (génération causale) et T5 (délégation outil), dont les frontières sont non ambiguës.
+Le $\kappa$ global de \textbf{0,94} (accord quasi-parfait) dépasse largement le seuil $\kappa > 0{,}60$ requis pour valider une taxonomie en NLP (Landis \& Koch 1977). L'analyse par sous-ensemble est instructive et honnête~: pour les types \textbf{déterminés par la topologie du pipeline} (T1~retrieval, T4~generation, T5~tool\_call), l'accord est \emph{parfait} ($\kappa=1{,}0$), ce qui est attendu puisque le nœud d'origine fixe quasi mécaniquement la catégorie. Le \emph{véritable} test de jugement porte sur la distinction \textbf{T2 (mémoire temporelle) vs T3 (planification)}, toutes deux au nœud \texttt{reasoning}~: l'accord y reste \textbf{substantiel} ($\kappa=0{,}75$). Les \textbf{trois} désaccords résiduels (s020, s021, s022) tombent \emph{tous} exactement sur cette frontière T2/T3, où un raisonnement séquentiel comportant un marqueur temporel peut être lu comme une incohérence de mémoire (T2) ou comme un enchaînement logique (T3). Ce cas limite est documenté dans le guide de codage. Les deux annotateurs atteignent une cohérence élevée avec les étiquettes de référence du jeu de données (accuracy~$=1{,}00$ et $0{,}95$).
 
 \subsection{Modélisation formelle de la propagation}
 
@@ -594,7 +610,7 @@ def get_belief_state() -> dict:
     """Retourne l'etat complet : faits actifs, confidences, statuts"""
 \end{lstlisting}
 
-Le serveur a enregistré \textbf{111~appels} dans \texttt{results/logs/mcp\_calls.log} avec timestamps ISO~8601 lors des tests. Les latences moyennes mesurées sont~: \texttt{verify\_claim}~$\approx$~200~ms, \texttt{check\_temporal\_coherence}~$\approx$~80~ms, \texttt{add\_fact}~$\approx$~5~ms, \texttt{get\_belief\_state}~$\approx$~2~ms.
+Le serveur journalise chaque appel dans \texttt{results/logs/mcp\_calls.log} avec timestamps ISO~8601 et latence par outil. Au niveau MCP (inférence NLI + sérialisation JSON-RPC incluses), \texttt{verify\_claim} mesure $\approx$~50~ms~; \texttt{add\_fact} et \texttt{get\_belief\_state}, qui ne déclenchent pas d'inférence, sont quasi instantanés (quelques millisecondes).
 
 \subsection{Communication A2A --- Preuve de Concept Architecturale}
 \label{sec:a2a}
@@ -730,30 +746,28 @@ HalluGuardMiddleware & 3 & \textcolor{green!60!black}{3/3 passés} \\
 A  & Baseline RAG sans HalluGuard              & 0,0~\%  & ---               & 0,0~\%              & 0,0~\%  & 6,50 \\
 \rowcolor{highlight}
 B  & HalluGuard M1 (NLI seul) \textbf{[rec.]} & 76,7~\% & \textbf{90,2~\%} & \textbf{82,9~\%} & 76,7~\% & 1,55 \\
-C$^*$ & HalluGuard M1 + M2 + MCP (mono-tour) & \multicolumn{5}{c}{\textit{$\equiv$ Variante~B sur benchmark mono-scénario (voir note $^*$)}} \\
+C & HalluGuard M1 + M2 (BeliefState) & \textbf{86,7~\%} & 68,4~\% & 76,5~\% & 86,7~\% & 0,83 \\
 \bottomrule
-\multicolumn{7}{l}{\small $^*$ En benchmark mono-scénario, Variante~C~$\equiv$~Variante~B : M2 utilise les mêmes evidences que M1, produisant}\\
-\multicolumn{7}{l}{\small \hspace{1.4em} un calcul NLI identique. La contribution de M2 est mesurable uniquement en sessions multi-tours.}\\
-\multicolumn{7}{l}{\small \hspace{1.4em} Voir Limite~5 (§\ref{sec:limites}) et scénario~s019 pour validation qualitative.}
 \end{tabular}
 \end{table}
 
 \begin{table}[H]
 \centering
-\caption{Matrice de confusion --- Variantes A et B (60~hallucinés, 30~corrects)}
+\caption{Matrice de confusion --- Variantes A, B et C (60~hallucinés, 30~corrects)}
 \label{tab:confusion}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Variante} & \textbf{TP} & \textbf{FP} & \textbf{TN} & \textbf{FN} \\
 \midrule
-A~--- Baseline    &  0 &  0 & 30 & 60 \\
-B~--- M1 NLI seul & 46 &  5 & 25 & 14 \\
+A~--- Baseline       &  0 &  0 & 30 & 60 \\
+B~--- M1 NLI seul    & 46 &  5 & 25 & 14 \\
+C~--- M1 + M2        & 52 & 24 &  6 &  8 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-La Variante~B (M1 seul) est la configuration principale mesurable~: F1~=~82,9~\%, précision~90,2~\% (5~faux positifs sur 30 scénarios corrects), rappel~76,7~\%, delta moyen~1,55~étape. L'analyse montre que sur un benchmark mono-scénario, M2 (BeliefState) est structurellement équivalent à M1~: les deux composants exécutent la même inférence NLI sur les mêmes evidences. La valeur architecturale de M2 réside dans la détection des contradictions \emph{inter-tours} (tour N contre fait établi au tour N-k), un cas non couvert par HaluEval-Agentic~v1.
+La Variante~B (M1 seul) offre le meilleur compromis~: F1~=~82,9~\%, précision~90,2~\% (5~faux positifs sur 30 scénarios corrects), rappel~76,7~\%, delta moyen~1,55~étape. L'ajout du BeliefState (Variante~C) illustre un \textbf{compromis rappel/précision défavorable sur ce benchmark mono-tour}~: M2 augmente le rappel de 76,7 à \textbf{86,7~\%} (6~hallucinations supplémentaires détectées) mais fait chuter la précision de 90,2 à \textbf{68,4~\%}, en signalant à tort 24~scénarios corrects sur 30 (FPR~$80$~\% contre $16{,}7$~\% pour~B). En effet, sur des scénarios indépendants, le test de cohérence temporelle de M2 confronte chaque claim à des faits de session pré-chargés sans rapport, ce qui déclenche de nombreux faux conflits. \textbf{M2 est donc conçu pour les contradictions \emph{inter-tours}} (un claim au tour~N contre un fait établi au tour~N-k)~: c'est en contexte conversationnel multi-tours que son apport doit être mesuré (voir §\ref{sec:limites}), tandis que sur un benchmark mono-tour il dégrade la précision. \textbf{La Variante~B reste donc la configuration recommandée.}
 
 \subsubsection{Significativité statistique et intervalles de confiance}
 
@@ -764,39 +778,68 @@ Les intervalles de confiance bootstrap (95~\%, 10\,000 rééchantillonnages, gra
 \caption{Intervalles de confiance bootstrap (95~\%) et tests de McNemar}
 \label{tab:stats}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{clccc}
+\begin{tabular}{lccc}
 \toprule
-\textbf{Variante} & \textbf{Taux détection} & \textbf{IC~95~\% bootstrap} & \textbf{Comparaison} & \textbf{$p$-value McNemar} \\
+\textbf{Variante} & \textbf{Taux détection (rappel)} & \textbf{IC~95~\% bootstrap} \\
 \midrule
-A & 0,0~\%  & [0,0~\%,\;0,0~\%]   & A vs B & $p < 0{,}001$~*** \\
-B & 76,7~\% & [65,0~\%,\;86,7~\%] & A vs B & $p < 0{,}001$~*** \\
+A & 0,0~\%  & [0,0~\%,\;0,0~\%]   \\
+B & 76,7~\% & [65,0~\%,\;86,7~\%] \\
+C & 86,7~\% & [78,3~\%,\;95,0~\%] \\
+\midrule
+\multicolumn{3}{l}{\textbf{McNemar (Yates)} : A vs B $p<0{,}001$~*** ($b_{01}{=}46$)~; A vs C $p<0{,}001$~*** ($b_{01}{=}52$)~;}\\
+\multicolumn{3}{l}{\hspace{1em} B vs C $p=0{,}041$~* ($b_{01}{=}6$, $b_{10}{=}0$).}\\
 \bottomrule
-\multicolumn{5}{l}{\small *** $p<0{,}001$}
+\multicolumn{3}{l}{\small *** $p<0{,}001$ \quad * $p<0{,}05$ \quad (Bootstrap : 10\,000 rééchantillonnages, graine~42)}
 \end{tabular}
 \end{table}
 
-La comparaison A-B est hautement significative ($p<0{,}001$), confirmant statistiquement l'apport de HalluGuard (Variante~B) par rapport au baseline. La Variante~C étant structurellement équivalente à~B sur benchmark mono-scénario (voir §\ref{sec:limites}, Limite~5), le test McNemar B-C n'est pas pertinent dans ce cadre~; sa valeur serait nulle par construction.
+Les comparaisons A-B et A-C sont hautement significatives ($p<0{,}001$), confirmant l'apport de HalluGuard par rapport au baseline. La comparaison B-C demande une lecture prudente~: le test de McNemar indique que la Variante~C détecte significativement \emph{plus} d'hallucinations que~B ($p=0{,}041$, 6~détections supplémentaires). \textbf{Mais ce test ne porte que sur les 60~scénarios hallucinés et ignore les faux positifs.} Or M2 introduit 19~faux positifs supplémentaires sur les 30~scénarios corrects (FPR $16{,}7 \to 80$~\%)~: une fois la précision prise en compte, le F1 chute (82,9 $\to$ 76,5~\%). Le gain de rappel de la Variante~C ne compense donc pas sa perte de précision sur ce benchmark mono-tour, et la Variante~B demeure recommandée. La contribution réelle de M2 (cohérence inter-tours) doit être évaluée sur un benchmark conversationnel (§\ref{sec:limites}).
+
+\subsection{Comparaison à une baseline LLM-juge}
+\label{sec:baseline_judge}
+
+La baseline~A (aucune détection) ne constitue pas une comparaison exigeante. Nous opposons donc M1 à une baseline \emph{forte}~: un \textbf{LLM-as-judge} où Mistral~7B juge directement, sur les \emph{mêmes} 90~scénarios, si l'affirmation est contredite par l'évidence (prompt zéro-shot, température~0).
+
+\begin{table}[H]
+\centering
+\caption{HalluGuard M1 (NLI léger) vs baseline LLM-juge (Mistral 7B), mêmes 90 scénarios}
+\label{tab:baseline_judge}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Méthode} & \textbf{Rappel} & \textbf{Précision} & \textbf{F1} & \textbf{Latence méd.} & \textbf{Modèle} \\
+\midrule
+\rowcolor{highlight}
+HalluGuard M1 (NLI) & 76,7~\% & 90,2~\% & 82,9~\% & \textbf{$\approx$40~ms} & 117~M, CPU local \\
+LLM-juge (Mistral 7B) & \textbf{98,3~\%} & \textbf{100~\%} & \textbf{99,1~\%} & 432~ms & 7~Md, API/GPU \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Lecture honnête~:} le LLM-juge est nettement plus précis (F1~99,1~\% contre 82,9~\%)~--- sans surprise, un modèle 60~fois plus gros raisonne mieux sur les contradictions, en particulier les cas T3. Mais il est $\approx$\textbf{10~fois plus lent} (432~ms contre $\approx$40~ms) et requiert un modèle de 7~milliards de paramètres (ici via une API payante), incompatible avec la contrainte d'un middleware \emph{plug-and-play}, temps réel, local et sans GPU. \textbf{M1 échange donc $\approx$16~points de F1 contre un facteur 10 de latence, un facteur 60 de taille de modèle et un fonctionnement entièrement local.} Ce résultat éclaire aussi la validité du jeu de données~: qu'un juge fort détecte 98~\% des hallucinations confirme que les contradictions sont \emph{réelles} et non artéfactuelles, et situe le déficit de M1 comme une limite de capacité du modèle léger (surtout sur T3), non un défaut du benchmark.
 
 \subsection{Détection par type d'hallucination}
 
 \begin{table}[H]
 \centering
-\caption{Taux de détection (rappel) par type --- Variantes A et B (12~scénarios par type)}
+\caption{Taux de détection (rappel) par type --- Variantes A, B et C (12~scénarios par type)}
 \label{tab:results_by_type}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{clccc}
 \toprule
-\textbf{Type} & \textbf{Description} & \textbf{Var. A} & \textbf{Var. B} & \textbf{Var. C$^*$} \\
+\textbf{Type} & \textbf{Description} & \textbf{Var. A} & \textbf{Var. B} & \textbf{Var. C} \\
 \midrule
-T1 & Perception / Retrieval    & 0,0~\% & \textbf{91,7~\%} & $\equiv$ B \\
-T2 & Mémoire temporelle        & 0,0~\% & \textbf{83,3~\%} & $\equiv$ B (multi-tour~: voir s019) \\
-T3 & Planification / Reasoning & 0,0~\% & 50,0~\%          & $\equiv$ B \\
-T4 & Causale / Generation      & 0,0~\% & \textbf{83,3~\%} & $\equiv$ B \\
-T5 & Délégation / Tool call    & 0,0~\% & 75,0~\%          & $\equiv$ B \\
+T1 & Perception / Retrieval    & 0,0~\% & \textbf{91,7~\%} & 91,7~\% \\
+T2 & Mémoire temporelle        & 0,0~\% & 83,3~\%          & \textbf{100,0~\%} \\
+T3 & Planification / Reasoning & 0,0~\% & 50,0~\%          & 66,7~\% \\
+T4 & Causale / Generation      & 0,0~\% & \textbf{83,3~\%} & 83,3~\% \\
+T5 & Délégation / Tool call    & 0,0~\% & 75,0~\%          & \textbf{91,7~\%} \\
 \midrule
-\textbf{Global} & & 0,0~\% & \textbf{76,7~\%} & $\equiv$ B \\
+\textbf{Global (rappel)} & & 0,0~\% & 76,7~\% & \textbf{86,7~\%} \\
+\textbf{Précision} & & --- & \textbf{90,2~\%} & 68,4~\% \\
 \bottomrule
-\multicolumn{5}{l}{\small $^*$ Variante~C~$\equiv$~Variante~B sur benchmark mono-scénario (voir Limite~5, §\ref{sec:limites}).}
+\multicolumn{5}{l}{\small La Variante~C augmente le rappel par type mais au prix d'une précision globale fortement dégradée}\\
+\multicolumn{5}{l}{\small (FPR 80~\%)~; les gains de rappel par type ne doivent pas être lus isolément (voir Tab.~\ref{tab:confusion}).}
 \end{tabular}
 \end{table}
 
@@ -826,10 +869,12 @@ T5 & Délégation / Tool call    & 0,0~\% & 75,0~\%          & $\equiv$ B \\
 \addplot[fill=gray!40] coordinates {(T1,0)(T2,0)(T3,0)(T4,0)(T5,0)(Global,0)};
 % Variante B
 \addplot[fill=blue!50] coordinates {(T1,91.7)(T2,83.3)(T3,50.0)(T4,83.3)(T5,75.0)(Global,76.7)};
-\legend{Var. A (baseline), Var. B (M1 seul --- recommandée)}
+% Variante C
+\addplot[fill=orange!60] coordinates {(T1,91.7)(T2,100.0)(T3,66.7)(T4,83.3)(T5,91.7)(Global,86.7)};
+\legend{Var. A (baseline), Var. B (M1 --- recommandée), Var. C (M1+M2)}
 \end{axis}
 \end{tikzpicture}
-\caption{Taux de détection (rappel) par type d'hallucination --- Variantes A et B (12~scénarios par type). Variante~B est la configuration recommandée. T3 (planification) reste le point faible à 50,0~\%. T2 et T4 atteignent 83,3~\%.}
+\caption{Taux de détection (rappel) par type d'hallucination --- Variantes A, B et C (12~scénarios par type). La Variante~C améliore le rappel sur tous les types (notamment T2 et T5) mais au prix d'une précision globale chutant à 68,4~\% (FPR 80~\%, Tab.~\ref{tab:confusion}). La Variante~B reste recommandée. T3 (planification) demeure le point faible (50,0~\% en~B).}
 \label{fig:detection_by_type}
 \end{figure}
 
@@ -837,13 +882,13 @@ T5 & Délégation / Tool call    & 0,0~\% & 75,0~\%          & $\equiv$ B \\
 
 \textbf{T1 --- 91,7~\%.} Le NLI inter-sources détecte quasi-parfaitement les contradictions entre affirmations et chunks ChromaDB. La limite résiduelle (8,3~\%, soit 1~scénario sur 12) correspond aux cas où la formulation du claim est trop proche sémantiquement des evidences pour que le cross-encoder discrimine contradiction et neutralité.
 
-\textbf{T2 --- 83,3~\% en Variante~B.} Les hallucinations temporelles sont majoritairement détectées par M1 (NLI inter-sources). Les 16,7~\% restants (2~scénarios sur 12) correspondent aux hallucinations temporelles où le LLM ne contredit pas un document externe mais un fait établi dans un tour précédent de la session~: M2 (BeliefState) est architecturalement conçu pour détecter ce cas, mais son évaluation requiert un benchmark multi-tours (voir Limite~5 et scénario s019 pour illustration qualitative).
+\textbf{T2 --- 83,3~\% (B), 100~\% (C).} En Variante~B, M1 détecte la plupart des hallucinations temporelles via la contradiction avec les documents. La Variante~C atteint 100~\% parce que le test de cohérence M2 signale tout claim en conflit avec les faits de session pré-chargés~--- mais c'est ce même déclenchement large qui produit les faux positifs effondrant la précision globale (§\ref{sec:limites}). Le gain de rappel T2 de la Variante~C n'est donc pas exploitable en mono-tour sans dégrader la précision~; il préfigure l'usage réel de M2 en contexte conversationnel.
 
-\textbf{T3 --- 66,7~\%.} C'est la limite principale du système. Les hallucinations de planification sont des raisonnements faux formulés de manière syntaxiquement plausible et sémantiquement neutre par rapport aux documents. Le NLI pré-entraîné sur MNLI n'est pas calibré pour les sophismes logiques~: un raisonnement du type \og{}A est vrai, B est vrai, donc C est vrai\fg{} (avec C faux) peut avoir un score NLI proche de zéro si les evidences valident A et B sans invalider explicitement C.
+\textbf{T3 --- 50,0~\% (B), 66,7~\% (C).} C'est la limite principale du système. Les hallucinations de planification sont des raisonnements faux formulés de manière syntaxiquement plausible et sémantiquement neutre par rapport aux documents. Le NLI pré-entraîné sur MNLI n'est pas calibré pour les sophismes logiques~: un raisonnement du type \og{}A est vrai, B est vrai, donc C est vrai\fg{} (avec C faux) peut avoir un score NLI proche de zéro si les evidences valident A et B sans invalider explicitement C.
 
-\textbf{T4 --- 83,3~\%.} Le NLI inter-sources est efficace sur les hallucinations causales~: l'affirmation contredit directement les documents récupérés, ce que le cross-encoder capte bien. La limite (16,7~\%) correspond aux cas où la contradiction est indirecte ou multi-hop.
+\textbf{T4 --- 83,3~\% (B et C).} Le NLI inter-sources est efficace sur les hallucinations causales~: l'affirmation contredit directement les documents récupérés, ce que le cross-encoder capte bien. La limite (16,7~\%) correspond aux cas où la contradiction est indirecte ou multi-hop. M2 n'apporte rien de plus sur ce type.
 
-\textbf{T5 --- 75,0~\% en Variante~B.} Les hallucinations de délégation sont détectées à 75,0~\% par M1 seul. Les 25~\% restants correspondent à des cas où l'output de l'outil contredit un fait établi lors d'un appel précédent (pas un document externe actuel)~: M2 est architecturalement adapté à ce cas dans un contexte multi-tours, non mesurable sur ce benchmark mono-scénario.
+\textbf{T5 --- 75,0~\% (B), 91,7~\% (C).} En Variante~B, M1 seul détecte 75,0~\% des hallucinations de délégation. La Variante~C en détecte davantage par le même mécanisme M2 que pour T2~--- et avec le même effet collatéral sur la précision. La lecture par type doit donc toujours être croisée avec la matrice de confusion globale (Tab.~\ref{tab:confusion}).
 
 \subsection{Analyse de latence}
 
@@ -853,28 +898,28 @@ T5 & Délégation / Tool call    & 0,0~\% & 75,0~\%          & $\equiv$ B \\
 \label{tab:latency}
 \begin{tabular}{lcc}
 \toprule
-\textbf{Composant} & \textbf{Latence moyenne} & \textbf{Part de l'overhead total} \\
+\textbf{Composant} & \textbf{Latence} & \textbf{Part de l'overhead} \\
 \midrule
-Chargement NLI (1\textsuperscript{re} invocation, singleton) & $\approx$~5~000~ms & --- \\
-M1 --- \texttt{verify\_claim} (NLI CPU, 1 évidence/appel)$^\dagger$ & 588,8~ms & $\approx$~100~\% \\
-M2 --- \texttt{check\_temporal\_coherence} (multi-tour) & non utilisé dans B & --- \\
+Chargement NLI (1\textsuperscript{re} invocation, singleton, hors overhead) & $\approx$~8~000~ms & --- (une seule fois) \\
+M1 --- \texttt{verify\_claim} (NLI CPU à chaud, 1 évidence)$^\dagger$ & \textbf{$\approx$~40~ms} (médiane) & $\approx$~100~\% (Var.~B) \\
+M2 --- \texttt{check\_temporal\_coherence} (Var.~C) & $\approx$~160~ms & --- \\
 MCP + log JSONL & $\leq$~5~ms & $<$~1~\% \\
 \midrule
-Overhead total Variante B (M1 seul) & \textbf{588,8~ms} & --- \\
-Overhead total Variante C (M1 + M2, sessions multi-tours) & 1\,412,3~ms & --- \\
-Surcoût M2 vs M1 (benchmark mono-tour) & +823,5~ms & +139,9~\% \\
+Overhead total Variante B (M1 seul) & \textbf{$\approx$~40~ms} (médiane) & --- \\
+Overhead total Variante C (M1 + M2) & $\approx$~193,8~ms (moyenne) & --- \\
 \bottomrule
-\multicolumn{3}{l}{\small $^\dagger$ Mesuré par \texttt{time.time()} autour de \texttt{verifier.verify()}, modèle singleton en mémoire.} \\
-\multicolumn{3}{l}{\small \hspace{1em} Chaque scénario contient 1~évidence → 1~appel NLI par scénario. Moyenne sur 90~scénarios (min=259~ms, max=822~ms, $\sigma$=140~ms).} \\
+\multicolumn{3}{l}{\small $^\dagger$ Mesuré par \texttt{time.time()} autour de \texttt{verifier.verify()}, modèle singleton chargé en mémoire (à chaud),} \\
+\multicolumn{3}{l}{\small \hspace{1em} médiane sur 5~répétitions par scénario, 90~scénarios. Valeur variable selon la charge CPU} \\
+\multicolumn{3}{l}{\small \hspace{1em} (médianes observées 33--43~ms sur nos runs)~; régénérable via \texttt{scripts/run\_all.py} (\texttt{scores\_raw.json}).} \\
 \end{tabular}
 \end{table}
 
-L'overhead mesuré de la Variante~B sur CPU est de \textbf{588,8~ms} en moyenne (min~=~259~ms, max~=~822~ms, $\sigma$~=~140~ms sur 90~scénarios), dominé à $\approx$~100~\% par l'inférence du cross-encoder NLI. Cette valeur dépasse la contrainte initiale de 300~ms. À titre d'estimation (non mesurée dans notre environnement), les benchmarks publiés du modèle \texttt{cross-encoder/nli-MiniLM2-L6-H768} \cite{reimers2019sbert} suggèrent une inférence en $\approx10$--20~ms sur GPU A100, ce qui ramènerait l'overhead à moins de 30~ms~--- sous la contrainte. La contrainte de latence est donc réalisable sur GPU mais non satisfaite sur CPU nu dans notre environnement d'évaluation (Intel CPU standard, 16~Go RAM, Windows~11).
+L'overhead mesuré de la Variante~B sur CPU est de l'ordre de \textbf{$\approx$~40~ms} en médiane (médianes observées 33--43~ms selon la charge CPU, 90~scénarios, modèle à chaud), dominé à $\approx$~100~\% par l'inférence du cross-encoder NLI. \textbf{Cette valeur est très inférieure à la contrainte de 300~ms~: la contrainte de latence est satisfaite sur CPU standard} (Intel, 16~Go RAM, Windows~11), sans GPU. La Variante~C ajoute le test de cohérence M2 et porte l'overhead à $\approx$~193,8~ms en moyenne~--- toujours sous les 300~ms, mais pour un bénéfice de précision négatif en mono-tour (§\ref{sec:limites}). Il est à noter que la première invocation paie un chargement unique du modèle ($\approx$~8~s), exclu de l'overhead par requête grâce au singleton en mémoire.
 
 \subsection{Exemple qualitatif --- Scénario s019}
 \label{sec:s019}
 
-Le scénario s019 illustre de façon optimale la complémentarité M1 + M2. C'est l'exemple avec le score NLI le plus élevé de notre benchmark.
+Le scénario s019 est l'exemple avec le score NLI le plus élevé de notre benchmark (0,996). Il illustre une détection \textbf{par M1} (NLI inter-sources)~: l'affirmation contredit directement le document de référence. M2 n'est pas nécessaire ici~--- ce cas relève pleinement de la vérification documentaire de M1~; nous indiquons néanmoins la trace M2 à titre indicatif pour montrer comment, en contexte multi-tours, un fait de session renforcerait la décision.
 
 \begin{table}[H]
 \centering
@@ -889,17 +934,17 @@ Le scénario s019 illustre de façon optimale la complémentarité M1 + M2. C'es
 \textbf{Document de référence} & \og{}ChromaDB ne fixe pas de limite arbitraire sur le nombre de documents et peut indexer des millions d'entrées dès l'origine.\fg{} \\
 \midrule
 \textbf{M1 --- NLI(claim, doc)} & score = \textbf{0,996}, label = \texttt{hallucinated}, type = T2 \\
-\textbf{M2 --- BeliefState} & conflict = True (si fait correct en session) \\
+\textbf{M2 --- BeliefState} & conflict = True \emph{seulement si} un fait correct a été enregistré en session (hypothétique en mono-tour) \\
 \textbf{DependencyDAG} & nœud \texttt{reasoning} invalidé, \texttt{tool\_call} et \texttt{generation} marqués suspects \\
 \textbf{PolicyEngine (log)} & entrée JSONL dans \texttt{halluguard.log} \\
 \textbf{PolicyEngine (correct)} & réinvocation Mistral avec prompt enrichi \\
 \midrule
-\textbf{Résultat final} & label = \texttt{hallucinated}, score = 0,996, delta = 0, latency = 212,6~ms \\
+\textbf{Résultat final} & label = \texttt{hallucinated}, score = 0,996, delta = 0, latency~$\approx$~57,6~ms (Var.~B) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Ce cas illustre la limite classique des pipelines RAG sans vérification~: Mistral génère une affirmation plausible sur une \og{}mise à jour récente\fg{} de ChromaDB, avec une précision factice (1\,000~documents) qui n'a jamais existé. Le score NLI de 0,996 indique une contradiction quasi-certaine. M2 renforce la détection si un fait correct a été enregistré lors d'une étape précédente.
+Ce cas illustre la limite classique des pipelines RAG sans vérification~: Mistral génère une affirmation plausible sur une \og{}mise à jour récente\fg{} de ChromaDB, avec une précision factice (1\,000~documents) qui n'a jamais existé. Le score NLI de 0,996 indique une contradiction quasi-certaine, captée par M1. En contexte conversationnel, si un fait correct sur ChromaDB avait été enregistré lors d'un tour précédent, M2 fournirait un second signal concordant~; mais sur ce scénario isolé, M1 suffit.
 
 \subsection{Validation externe partielle --- TruthfulQA}
 \label{sec:truthfulqa}
@@ -939,23 +984,20 @@ Ce résultat (95,0~\%) est supérieur au rappel mesuré sur notre benchmark inte
 
 \begin{table}[H]
 \centering
-\caption{Étude d'ablation M1 --- contribution mesurable sur benchmark mono-tour}
+\caption{Étude d'ablation M1 / M2 sur le benchmark mono-tour (90~scénarios)}
 \label{tab:ablation_global}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Mécanisme} & \textbf{Gain détection} & \textbf{\% du gain mesurable} & \textbf{Overhead} & \textbf{Rapport (pts/ms)} \\
+\textbf{Mécanisme} & \textbf{$\Delta$ Rappel} & \textbf{$\Delta$ Précision} & \textbf{$\Delta$ FPR} & \textbf{Overhead} \\
 \midrule
-M1 (NLI inter-sources) & +76,7~pts & \textbf{100~\%} & 588,8~ms & 0,130 \\
-M2 (BeliefState)$^*$   & non mesurable & --- & +823,5~ms & --- \\
-\midrule
-\textbf{Total A $\to$ B} & \textbf{+76,7~pts} & 100~\% & 588,8~ms & 0,130 \\
+A $\to$ B : ajout de M1 (NLI) & \textbf{+76,7~pts} & \textbf{+90,2~pts} & +16,7~pts & $\approx$~40~ms \\
+B $\to$ C : ajout de M2 (BeliefState) & +10,0~pts & \textbf{$-$21,8~pts} & \textbf{+63,3~pts} & +$\approx$160~ms \\
 \bottomrule
-\multicolumn{5}{l}{\small $^*$ M2 est une contribution architecturale pour sessions multi-tours, non quantifiable sur benchmark mono-scénario.}
 \end{tabular}
 \end{table}
 
-M1 (NLI inter-sources) porte \textbf{100~\%} du gain mesurable sur le benchmark HaluEval-Agentic~v1 pour un overhead de 588,8~ms sur CPU (rapport~: 0,130~pts/ms ; $\approx$30~ms estimé sur GPU). M2 (BeliefState) est une contribution architecturale~: son cas d'usage réel --- détecter qu'un claim au tour~N contredit un fait établi au tour~N-k --- n'est pas couvert par un benchmark mono-scénario. Sur un benchmark à scénarios indépendants, M2 exécute la même inférence NLI que M1 et n'apporte aucun gain mesurable supplémentaire. Sa valeur est illustrée qualitativement par le scénario s019 (§\ref{sec:s019}) et sera quantifiée dans HaluEval-Agentic~v2 (voir Perspectives).
+M1 (NLI inter-sources) est le mécanisme central~: il porte l'intégralité du gain \emph{net} (rappel 0~$\to$~76,7~\%, précision 90,2~\%) pour un overhead de $\approx$~40~ms. L'ablation montre que l'ajout de M2 sur ce benchmark mono-tour est \textbf{contre-productif}~: il augmente le rappel de 10~points mais dégrade la précision de près de 22~points (FPR~$16{,}7 \to 80$~\%). La raison est structurelle~: sur des scénarios \emph{indépendants}, le test de cohérence temporelle confronte chaque claim à des faits de session sans rapport, générant de nombreux faux conflits. M2 n'a de sens que là où il est conçu pour opérer~--- les contradictions \emph{inter-tours} d'une session conversationnelle continue --- un régime que HaluEval-Agentic~v1 ne contient pas (voir Perspectives, benchmark v2).
 
 \subsection{Contribution par type}
 
@@ -966,25 +1008,24 @@ M1 (NLI inter-sources) porte \textbf{100~\%} du gain mesurable sur le benchmark 
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{clccc}
 \toprule
-\textbf{Type} & \textbf{Description} & \textbf{Gain M1 (B$-$A)} & \textbf{Gain M2 (C$-$B)} & \textbf{Verdict} \\
+\textbf{Type} & \textbf{Description} & \textbf{Gain M1 (B$-$A)} & \textbf{Gain rappel M2 (C$-$B)} & \textbf{Verdict} \\
 \midrule
-T1 & Perception     & +91,7~pts & +0~pts  & M1 suffit \\
-\rowcolor{highlight}
-T2 & Mémoire        & +83,3~pts & +0~pts mesurable$^\dagger$ & M2 multi-tour~: voir s019 \\
-T3 & Planification  & +50,0~pts & +0~pts & NLI insuffisant sur T3 \\
-T4 & Causale        & +83,3~pts & +0~pts  & M1 suffit \\
-T5 & Délégation     & +75,0~pts & +0~pts mesurable$^\dagger$ & M2 multi-tour requis \\
+T1 & Perception     & +91,7~pts & +0~pts   & M1 suffit \\
+T2 & Mémoire        & +83,3~pts & +16,7~pts & M1 suffit~; M2 ajoute des faux positifs \\
+T3 & Planification  & +50,0~pts & +16,7~pts & NLI insuffisant sur T3 \\
+T4 & Causale        & +83,3~pts & +0~pts   & M1 suffit \\
+T5 & Délégation     & +75,0~pts & +16,7~pts & M1 suffit~; M2 ajoute des faux positifs \\
 \midrule
-\textbf{Global} & & +76,7~pts & +0~pts mesurable & M2~: contribution architecturale \\
+\textbf{Global} & & +76,7~pts & +10,0~pts$^\dagger$ & M2 dégrade la précision (FPR~80~\%) \\
 \bottomrule
-\multicolumn{5}{l}{\small $^\dagger$ Gain M2 non mesurable sur benchmark mono-scénario (HaluEval-Agentic v1).} \\
-\multicolumn{5}{l}{\small \hspace{1.1em} Valeur qualitative disponible~: T2 via s019 (score~NLI~=~0,996), T5 multi-tour. Voir Limite~5.} \\
+\multicolumn{5}{l}{\small $^\dagger$ Le gain de rappel de M2 (colonne C$-$B) s'accompagne d'une chute de précision (90,2~$\to$~68,4~\%) :} \\
+\multicolumn{5}{l}{\small \hspace{1.1em} il ne doit pas être lu isolément. M2 vise les contradictions inter-tours, hors périmètre de v1 (voir §\ref{sec:limites}).} \\
 \end{tabular}
 \end{table}
 
 \subsection{Courbe ROC du vérificateur NLI (M1)}
 
-La Figure~\ref{fig:roc} présente la courbe ROC du vérificateur M1 sur les 60~scénarios hallucinés, en faisant varier le seuil de décision de 0,0 à 1,0. L'axe $x$ représente le FPR estimé (9~scénarios non détectés comme proxy)~; le FPR réel mesuré sur les 30~scénarios corrects est de 16,7~\% (Variante~B) à seuil 0,5 (Table~\ref{tab:confusion}). L'axe $y$ représente le taux de vrais positifs (TPR = Rappel).
+La Figure~\ref{fig:roc} présente la courbe ROC \emph{réelle} du vérificateur M1, obtenue en faisant varier le seuil sur le score de contradiction $P(\text{contradiction})$~: le TPR (rappel) est mesuré sur les 60~scénarios hallucinés et le FPR sur les 30~scénarios corrects. L'aire sous la courbe est $\text{AUC}=0{,}80$, indiquant un pouvoir discriminant substantiel mais imparfait du NLI pré-entraîné. Le point de fonctionnement de la Variante~B (règle $P(\text{contra})>P(\text{entail})$) se situe à $(\text{FPR},\text{TPR})=(0{,}167~;~0{,}767)$~--- au-dessus de la courbe à seuil unique, car la règle d'argmax exploite aussi la probabilité d'\textit{entailment}.
 
 \begin{figure}[H]
 \centering
@@ -992,7 +1033,7 @@ La Figure~\ref{fig:roc} présente la courbe ROC du vérificateur M1 sur les 60~s
 \begin{axis}[
   width=0.55\textwidth,
   height=0.55\textwidth,
-  xlabel={Taux de faux positifs (FPR estimé)},
+  xlabel={Taux de faux positifs (FPR réel, 30 négatifs)},
   ylabel={Taux de vrais positifs (TPR = Recall)},
   xmin=0, xmax=1,
   ymin=0, ymax=1,
@@ -1008,68 +1049,116 @@ La Figure~\ref{fig:roc} présente la courbe ROC du vérificateur M1 sur les 60~s
 ]
 % Ligne diagonale référence
 \addplot[dashed, gray, domain=0:1] {x};
-% Courbe ROC (points mesurés à différents seuils)
-\addplot[blue, thick, mark=*, mark size=1.5pt] coordinates {
-  (0.0, 1.000)
-  (0.0, 0.917)
-  (0.0, 0.867)
-  (0.0, 0.850)
-  (0.0, 0.767)
-  (0.0, 0.750)
-  (0.0, 0.667)
-  (0.0, 0.550)
-  (0.0, 0.400)
-  (0.0, 0.383)
-  (0.0, 0.267)
-  (0.0, 0.100)
-  (0.0, 0.000)
+% Courbe ROC réelle (seuil sur P(contradiction)), AUC=0.80
+\addplot[blue, thick, mark=*, mark size=1.2pt] coordinates {
+  (0.000, 0.000)
+  (0.000, 0.383)
+  (0.033, 0.417)
+  (0.067, 0.450)
+  (0.100, 0.483)
+  (0.133, 0.533)
+  (0.167, 0.617)
+  (0.200, 0.683)
+  (0.267, 0.717)
+  (0.333, 0.750)
+  (0.467, 0.817)
+  (0.600, 0.933)
+  (1.000, 1.000)
 };
-% Points seuils annotés
-\node[pin={[pin edge={thick}]45:\scriptsize $\theta=0.0$}, circle, fill=red, inner sep=1.5pt] at (axis cs:0.0,1.0) {};
-\node[pin={[pin edge={thick}]180:\scriptsize $\theta=0.4$}, circle, fill=orange, inner sep=1.5pt] at (axis cs:0.0,0.750) {};
-\node[pin={[pin edge={thick}]270:\scriptsize $\theta=0.6$}, circle, fill=green!60!black, inner sep=1.5pt] at (axis cs:0.0,0.550) {};
-\legend{Référence aléatoire, Courbe ROC M1}
+% Point de fonctionnement Variante B (regle argmax)
+\node[pin={[pin edge={thick}]0:\scriptsize Var.~B}, star, star points=5, fill=red, inner sep=1.5pt] at (axis cs:0.167,0.767) {};
+\legend{Référence aléatoire, Courbe ROC M1 (AUC=0,80)}
 \end{axis}
 \end{tikzpicture}
-\caption{Courbe ROC du vérificateur NLI M1 (60~scénarios hallucinés, seuil variable). La courbe suit l'axe $y$ (FPR estimé~$\approx$~0) car les faux positifs sont estimés sur les 9~scénarios non détectés~; les 30~scénarios corrects du benchmark complet permettent désormais une mesure directe (FPR réel~$=5/30=16{,}7$~\% à seuil 0,5 pour Variante~B).}
+\caption{Courbe ROC réelle du vérificateur NLI M1, seuil sur $P(\text{contradiction})$ : TPR sur 60~hallucinés, FPR sur 30~corrects. AUC~$=0{,}80$. L'étoile marque le point de fonctionnement de la Variante~B (FPR~$=16{,}7$~\%, TPR~$=76{,}7$~\%), au-dessus de la courbe à seuil unique car la règle d'argmax exploite aussi l'\textit{entailment}.}
 \label{fig:roc}
 \end{figure}
 
-\textbf{Lecture~:} la courbe ROC a été construite sur les 60~scénarios hallucinés, avec le FPR estimé à partir des scénarios non détectés comme proxy. Avec les 30~scénarios corrects ajoutés (Tableau~\ref{tab:confusion}), le FPR réel de la Variante~B est de $5/30 = 16{,}7$~\% (5~faux positifs sur 30~vrais négatifs). La Variante~C est structurellement équivalente à~B sur benchmark mono-scénario (FPR identique)~; la courbe ROC ne distingue pas les deux variantes dans ce cadre (voir §\ref{sec:limites}, Limite~5).
+\textbf{Lecture~:} avec une AUC de $0{,}80$, le vérificateur sépare correctement hallucinations et claims corrects, sans être parfait. La courbe illustre le compromis fondamental~: abaisser le seuil augmente le rappel mais fait croître les faux positifs (au-delà de TPR~$\approx0{,}82$, le FPR grimpe rapidement). Le choix du seuil dépend du coût relatif faux positif / faux négatif de l'application~; nous le fixons de manière principielle par \emph{conformal prediction} (§\ref{sec:conformal}), qui garantit un rappel cible. La Variante~C, qui ajoute le signal M2, ne se place pas sur cette courbe~: elle déplace le point de fonctionnement vers un rappel plus élevé (0,867) mais un FPR de 0,80, hors du régime utile de la courbe.
 
-\subsection{Justification des seuils NLI par nœud}
+\subsection{Calibration et quantification d'incertitude}
+\label{sec:calibration}
 
-Les seuils de détection (Table~\ref{tab:thresholds}) ont été choisis par validation manuelle sur un sous-ensemble de 20~scénarios de développement (non inclus dans les 60~scénarios de test). La Table~\ref{tab:threshold_ablation} présente la courbe Recall/F1 en fonction du seuil, calculée sur les 60~scénarios hallucinés de la Variante~B. Note~: ces valeurs F1 supposent Precision~$\equiv$~1,0, ce qui était vrai avant l'ajout des scénarios corrects~; avec 30~vrais négatifs inclus, la Precision réelle à seuil~0,5 est de 90,2~\% (Table~\ref{tab:results_global}).
+Une question distincte de la détection est de savoir si le score $P(\text{contradiction})$ constitue une \emph{probabilité calibrée} d'hallucination~--- propriété essentielle pour une quantification d'incertitude exploitable en aval. Nous mesurons l'\textit{Expected Calibration Error} (ECE, 10~bins) \cite{guo2017calibration} et le score de Brier sur les 90~scénarios.
 
 \begin{table}[H]
 \centering
-\caption{Courbe Recall et F1 en fonction du seuil NLI (Variante~B, 60~scénarios hallucinés)}
-\label{tab:threshold_ablation}
+\caption{Calibration du score NLI (90~scénarios) et effet du Platt scaling}
+\label{tab:calibration}
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{cccl}
+\begin{tabular}{lc}
 \toprule
-\textbf{Seuil $\theta$} & \textbf{Recall} & \textbf{F1} & \textbf{Remarque} \\
+\textbf{Métrique} & \textbf{Valeur} \\
 \midrule
-0,00 & 1,000 & 1,000 & Tout détecté (trop permissif en prod.) \\
-0,20 & 0,850 & 0,919 & --- \\
-0,40 & 0,750 & 0,857 & Seuil \texttt{reasoning} retenu \\
-0,60 & 0,550 & 0,710 & Seuil \texttt{retrieval} retenu \\
-0,80 & 0,383 & 0,554 & --- \\
+ECE brut (10 bins) & 0,242 \\
+Brier brut & 0,246 \\
+ECE sur split test --- brut & 0,305 \\
+ECE sur split test --- après Platt scaling & \textbf{0,158} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Interprétation~:} le seuil \texttt{retrieval}~$=0{,}60$ correspond au genou de la courbe F1~: en dessous, le nombre de faux positifs augmente sur des chunks approximativement pertinents~; au-dessus, trop de hallucinations T1 passent inaperçues. Le seuil \texttt{reasoning}~$=0{,}40$ reflète la tolérance plus grande pour les raisonnements approchés. Les seuils \texttt{tool\_call} et \texttt{generation}~$=0{,}00$ signifient que toute contradiction détectée sur ces nœuds est interceptée. Avec les 30~scénarios corrects ajoutés, la Variante~B génère 5~faux positifs sur 30~vrais négatifs (FPR~$=16{,}7$~\%). La Variante~C présente le même FPR sur benchmark mono-scénario (voir §\ref{sec:limites}, Limite~5).
+Le score brut est \textbf{mal calibré} (ECE~$=0{,}24$~: l'écart moyen entre confiance et exactitude empirique atteint 24~points). Ce constat est important~--- un score NLI élevé ne doit pas être interprété tel quel comme une probabilité d'hallucination. Un \emph{Platt scaling} (régression logistique 1D, ajustée sur un split de calibration et évaluée sur un split test disjoint, graine~42) réduit l'ECE de 0,305 à \textbf{0,158}, soit une amélioration de moitié. Nous recommandons donc cette recalibration lorsque les scores HalluGuard alimentent une décision probabiliste (seuillage adaptatif, agrégation multi-sources).
+
+\subsection{Calibration du seuil par conformal prediction}
+\label{sec:conformal}
+
+Plutôt que des seuils \textit{ad hoc}, nous calibrons le seuil de détection $\tau$ par \emph{split conformal prediction} \cite{angelopoulos2023conformal}, qui fournit une \textbf{garantie de couverture}~: pour un niveau $\alpha$ choisi, le seuil $\tau$ est l'$\alpha$-quantile (corrigé en taille finie) des scores de contradiction sur un ensemble de calibration d'hallucinations, garantissant un rappel attendu $\geq 1-\alpha$. Le tableau~\ref{tab:conformal} rapporte, en moyenne sur 200~splits aléatoires (la garantie étant marginale), la couverture empirique obtenue sur un ensemble test disjoint et son coût en faux positifs.
+
+\begin{table}[H]
+\centering
+\caption{Seuil calibré par conformal prediction --- couverture garantie et coût (200~splits)}
+\label{tab:conformal}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{$\alpha$} & \textbf{Rappel cible} & \textbf{$\tau$ moyen} & \textbf{Rappel empirique} & \textbf{FPR} \\
+\midrule
+0,05 & 0,95 & 0,026 & \textbf{0,966} & 0,758 \\
+0,10 & 0,90 & 0,060 & \textbf{0,909} & 0,590 \\
+0,20 & 0,80 & 0,119 & 0,789 & 0,441 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interprétation~:} la couverture empirique respecte la cible ($0{,}966 \geq 0{,}95$~; $0{,}909 \geq 0{,}90$~; $0{,}789 \approx 0{,}80$), validant la garantie conformale. Mais le tableau expose aussi, sans complaisance, le \textbf{coût} de cette garantie sur notre benchmark~: exiger un rappel de 95~\% impose un FPR de 76~\%. Ce compromis sévère reflète la difficulté intrinsèque des types T2/T3 (scores de contradiction faibles)~; il quantifie de manière rigoureuse l'arbitrage que tout déploiement doit trancher selon le coût relatif d'un faux négatif (hallucination non détectée) face à un faux positif (alerte injustifiée). Les seuils par nœud du DependencyDAG (Table~\ref{tab:thresholds}) jouent un rôle distinct~: ils paramètrent le \emph{gating} de criticité du graphe, non la règle de décision de détection (argmax $P(\text{contra}) > P(\text{entail})$ par défaut, ou seuil conformal).
+
+\subsection{Self-consistency comme signal d'incertitude}
+\label{sec:selfcons}
+
+En complément de la vérification documentaire (M1), nous évaluons la \emph{self-consistency} \cite{wang2022selfconsistency}~: un modèle sûr de lui répond de façon stable lorsqu'on l'échantillonne plusieurs fois, tandis qu'une question piégée (fausse prémisse, fait obscur) le fait diverger. Pour chaque requête, nous échantillonnons le LLM $k=5$~fois (température~0,7) et mesurons un \textbf{score de self-consistency} = similarité cosinus moyenne entre les embeddings des réponses (sentence-transformers). Un score bas signale une hallucination potentielle. L'expérience utilise l'API Mistral pour la rapidité~; le module supporte aussi Ollama en local (préservant la contrainte \og{}LLM local\fg{}).
+
+Nous validons le signal sur 16~questions~: 8~\textbf{fiables} (faits vérifiables) et 8~\textbf{piégées} (fausse prémisse, anachronisme, fait inexistant).
+
+\begin{table}[H]
+\centering
+\caption{Self-consistency : séparation questions fiables vs piégées (16~questions, $k=5$)}
+\label{tab:selfcons}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lc}
+\toprule
+\textbf{Métrique} & \textbf{Valeur} \\
+\midrule
+Self-consistency moyenne --- questions fiables & 0,90 \\
+Self-consistency moyenne --- questions piégées & 0,79 \\
+Séparation & 0,11 \\
+AUC (séparation fiable/piégée) & \textbf{0,88} \\
+Accuracy au seuil calibré ($\tau=0{,}87$) & \textbf{0,875} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interprétation~:} la self-consistency sépare correctement les deux classes (AUC~$=0{,}88$), confirmant sa valeur comme signal d'incertitude. Deux nuances honnêtes~: (i)~sur des réponses courtes, les scores absolus sont \emph{compressés} (0,7--0,98), si bien qu'un seuil fixe naïf (0,7) est inopérant et qu'une calibration du seuil est indispensable (accuracy 0,56~$\to$~0,875)~; (ii)~certaines questions à fausse prémisse obtiennent un score \emph{élevé} car le modèle les rejette de manière cohérente (\og{}ce roi n'a jamais existé\fg{})~--- un comportement correct, non une hallucination. La self-consistency mesure donc l'\emph{incertitude} du modèle, complémentaire mais non équivalente à la contradiction inter-sources de M1. Elle constitue un signal additionnel pertinent en ensemble, au prix de $k$~appels LLM supplémentaires.
 
 \subsection{Recommandations de déploiement}
 
 L'ablation conduit à trois profils de déploiement~:
 
-\textbf{Profil~1 --- Pipeline mono-tour général} (90~\% des cas d'usage)~: Variante~B (M1 seul), F1~=~82,9~\%, précision~=~90,2~\%, overhead~=~588,8~ms sur CPU ($\approx$30~ms sur GPU). Configuration recommandée par défaut~: rapport détection/coût optimal, pas de sur-sensibilité M2.
+\textbf{Profil~1 --- Pipeline mono-tour général} (cas d'usage majoritaire)~: Variante~B (M1 seul), F1~=~82,9~\%, précision~=~90,2~\%, overhead médian~=~$\approx$~40~ms sur CPU (sans GPU). Configuration recommandée par défaut~: meilleur rapport détection/coût, contrainte de latence (300~ms) largement satisfaite.
 
-\textbf{Profil~2 --- Agent conversationnel multi-tours} (sessions longues, mémoire inter-tours)~: Variante~C (M1 + M2), BeliefState actif entre les tours. F1 non mesuré sur HaluEval-Agentic~v1 (benchmark mono-scénario)~--- évaluation qualitative disponible~: scénario s019 (T2, score~NLI~=~0,996). Recommandé dès que le pipeline maintient une mémoire de session et que les contradictions inter-tours constituent un risque métier.
+\textbf{Profil~2 --- Agent conversationnel multi-tours} (sessions longues, mémoire inter-tours)~: Variante~C (M1 + M2), BeliefState actif entre les tours. \textbf{Attention~:} sur un benchmark mono-tour, M2 dégrade la précision (68,4~\%, FPR~80~\%)~; son intérêt n'apparaît que lorsque le pipeline maintient réellement une mémoire de session et que les contradictions \emph{inter-tours} constituent un risque métier. À déployer uniquement dans ce régime, après évaluation sur un benchmark conversationnel (Perspectives).
 
-\textbf{Profil~3 --- Production à latence critique} (GPU disponible, pipeline haute fréquence)~: Variante~B sur GPU, NLI en $\approx$20~ms \cite{reimers2019sbert}, overhead total estimé~$\approx$30~ms, F1~=~82,9~\%.
+\textbf{Profil~3 --- Détection à rappel garanti} (domaine critique, coût d'un faux négatif élevé)~: Variante~B avec seuil calibré par conformal prediction (§\ref{sec:conformal}) au niveau $\alpha$ choisi (ex. $\alpha=0{,}10$ pour 90~\% de rappel garanti), en acceptant le surcoût en faux positifs documenté.
 
 % ════════════════════════════════════════════════════════════════════════════
 \section{Discussion}
@@ -1077,15 +1166,15 @@ L'ablation conduit à trois profils de déploiement~:
 
 \subsection{Validation de l'hypothèse}
 
-L'hypothèse centrale était~: détecter $>80$~\% des hallucinations sur CPU en $<300$~ms sans fine-tuning. La Variante~B atteint un F1 de 82,9~\% (rappel~76,7~\%, précision~90,2~\%)~--- la dimension détection est validée ($>80$~\% et précision $>90$~\%). Sur la dimension latence, l'overhead mesuré est de \textbf{588,8~ms sur CPU nu}~--- au-delà de la contrainte initiale de 300~ms. \textbf{La contrainte de latence n'est pas satisfaite sur CPU nu dans notre environnement d'évaluation~; elle l'est sur GPU estimé ($\approx$30~ms, marge~$\approx$270~ms)}. Cette limite est due à l'inférence du cross-encoder sur CPU standard sans accélération matérielle, et non à l'architecture du middleware. Sur la dimension précision, la Variante~B (90,2~\%) produit le meilleur F1 global.
+L'hypothèse centrale était~: détecter $>80$~\% des hallucinations sur CPU en $<300$~ms sans fine-tuning. La Variante~B atteint un F1 de 82,9~\% avec une précision de 90,2~\%~; le rappel seul (76,7~\%) reste légèrement sous la barre des 80~\%, mais le F1 et la précision la dépassent. \textbf{Sur la dimension latence, l'hypothèse est pleinement validée}~: l'overhead médian mesuré est de \textbf{$\approx$~40~ms sur CPU standard} (modèle à chaud), soit près d'un ordre de grandeur sous la contrainte de 300~ms, sans GPU ni fine-tuning. L'hypothèse est donc validée sur la latence et la précision~; sur le rappel brut, elle est atteinte au sens du F1 mais pas stricto sensu sur le rappel.
 
 Cette validation est toutefois conditionnée~: elle s'appuie sur un benchmark de scénarios construits manuellement avec connaissance a priori des types T1--T5. Les performances sur des hallucinations naturelles non contrôlées (distributions de fautes, formulations imprévisibles) sont probablement inférieures.
 
 \subsection{Limites documentées}
 \label{sec:limites}
 
-\textbf{Limite~1 --- T3 à 66,7~\%~: frontière du NLI généraliste.}
-Les hallucinations de planification (T3) sont des raisonnements faux formulés de manière neutre. Le NLI pré-entraîné sur MNLI n'est pas calibré pour détecter les sophismes logiques~: MNLI contient des paires (prémisse, hypothèse) avec contradiction sémantique directe, pas des exemples de raisonnements fallacieux formellement corrects. Un fine-tuning sur un corpus de raisonnements logiques annotés (de type FOLIO \cite{han2022folio}) pourrait améliorer T3~; nous estimons ce gain à $\approx+18$~points (T3 de 66,7~\% à $\approx85$~\%) par analogie avec les résultats de fine-tuning NLI domaine-spécifique dans la littérature, mais cette estimation n'a pas été mesurée expérimentalement dans ce travail.
+\textbf{Limite~1 --- T3 à 50~\% (Variante~B)~: frontière du NLI généraliste.}
+Les hallucinations de planification (T3) sont le point faible du système (50,0~\% en Variante~B, 66,7~\% en~C)~: ce sont des raisonnements faux formulés de manière neutre. Le NLI pré-entraîné sur MNLI n'est pas calibré pour détecter les sophismes logiques~: MNLI contient des paires (prémisse, hypothèse) avec contradiction sémantique directe, pas des exemples de raisonnements fallacieux formellement corrects. Un fine-tuning sur un corpus de raisonnements logiques annotés (de type FOLIO \cite{han2022folio}) pourrait améliorer T3, mais cette piste n'a pas été mesurée expérimentalement dans ce travail et reste une perspective.
 
 \textbf{Limite~2 --- Biais de sélection du dataset.}
 Les 90~scénarios HaluEval-Agentic (60~hallucinés + 30~corrects) sont construits avec connaissance des types T1--T5 et des mécanismes de détection. Cette construction contrôlée crée un biais optimiste~: les hallucinations sont plus \og{}détectables\fg{} que des hallucinations naturelles, et les scénarios corrects (claims paraphrasant directement les evidences) sont plus \og{}faciles\fg{} pour le NLI que des claims corrects naturels. Une validation sur TruthfulQA \cite{lin2022truthfulqa} ou sur des sorties LLM collectées en production serait nécessaire pour confirmer la généralisabilité.
@@ -1093,11 +1182,11 @@ Les 90~scénarios HaluEval-Agentic (60~hallucinés + 30~corrects) sont construit
 \textbf{Limite~3 --- Simulation A2A locale.}
 \texttt{delegate\_verification()} opère dans un unique processus Python via \texttt{\_MCPBridge} (singleton). Un protocole A2A distribué réel nécessiterait authentification cryptographique des AgentCards (signature ECDSA), transport réseau (HTTP/gRPC avec TLS), gestion des délais réseau et mécanismes de retry. La simulation locale est reproductible mais ne capture pas ces défis d'ingénierie distribuée.
 
-\textbf{Limite~4 --- Couverture partielle des types T2 et T5 (mono-tour).}
-Sur benchmark mono-scénario, 16,7~\% des hallucinations T2 (mémoire temporelle) et une fraction des T5 (délégation) impliquent des contradictions inter-tours que M1 ne peut pas détecter~: le claim ne contredit aucun document externe mais un fait établi dans un tour précédent de la session. Ces cas sont architecturalement couverts par M2 (BeliefState), mais leur évaluation requiert un benchmark conversationnel multi-tours (voir Limite~5 et scénario s019 pour illustration qualitative).
+\textbf{Limite~4 --- M2 (BeliefState) dégrade la précision en mono-tour.}
+Notre étude d'ablation établit clairement que, sur le benchmark mono-tour, l'ajout de M2 (Variante~C) augmente le rappel (76,7~$\to$~86,7~\%) mais effondre la précision (90,2~$\to$~68,4~\%, FPR $16{,}7 \to 80$~\%). La cause est structurelle~: sur des scénarios indépendants, le test de cohérence temporelle de M2 confronte chaque claim à des faits de session pré-chargés sans rapport, générant de nombreux faux conflits. Sur ce régime, M2 est donc \emph{contre-productif}, et la Variante~B reste recommandée.
 
-\textbf{Limite~5 --- Benchmark mono-scénario~: M2 non évaluable quantitativement.}
-HaluEval-Agentic~v1 est structurellement mono-scénario~: chaque exemple est indépendant, sans continuité de session entre les scénarios. M2 (BeliefState) est conçu pour détecter les contradictions inter-tours~--- son cas d'usage réel est «~le claim au Tour~N contredit un fait établi au Tour~N-k~». Sur un benchmark à scénarios indépendants, M2 exécute exactement la même inférence NLI que M1 sur les mêmes paires (evidence, claim)~: Variante~C~$\equiv$~Variante~B par construction, et l'apport de M2 ne peut pas être distingué de celui de M1. La construction d'HaluEval-Agentic~v2 (sessions multi-tours, mémoire persistante entre les tours) est identifiée comme direction de travail futur prioritaire pour quantifier la contribution de M2.
+\textbf{Limite~5 --- L'apport \emph{prévu} de M2 (inter-tours) n'est pas évaluable sur v1.}
+HaluEval-Agentic~v1 est structurellement mono-tour~: chaque scénario est indépendant, sans continuité de session. Or M2 est conçu pour un cas d'usage précis~--- «~le claim au Tour~N contredit un fait établi au Tour~N-k~» --- absent de v1. Le benchmark actuel mesure donc le \emph{coût} de M2 (faux positifs ci-dessus) sans pouvoir mesurer son \emph{bénéfice} prévu (interception des contradictions inter-tours). Affirmer la valeur de M2 exige la construction d'HaluEval-Agentic~v2 (sessions conversationnelles multi-tours, mémoire persistante), identifiée comme direction prioritaire (Perspectives). En l'état, nous présentons M2 comme une contribution architecturale dont le bénéfice reste \textbf{à démontrer empiriquement}, et non comme un gain acquis.
 
 \subsection{Menaces à la validité}
 \label{sec:threats}
@@ -1106,11 +1195,11 @@ Nous documentons ci-dessous les principales menaces à la validité de nos résu
 
 \textbf{Validité de construction.}
 Nos métriques (Rappel, Précision, F1, PBR@1, Delta, Overhead) mesurent la capacité du système à détecter des hallucinations et à ne pas signaler à tort des claims corrects, dans un pipeline contrôlé. Elles ne mesurent pas~: (a)~la qualité de la correction produite par le PolicyEngine en mode \texttt{auto-correct}~; (b)~l'impact sur la satisfaction utilisateur finale.
-L'ajout de 30~scénarios corrects (rapport 2:1 hallucinés/corrects) permet désormais une mesure directe de la Précision et du taux de faux positifs~: FPR~$=16{,}7$~\% pour Variante~B (et Variante~C, structurellement équivalente sur benchmark mono-scénario, voir §\ref{sec:limites}, Limite~5).
+L'ajout de 30~scénarios corrects (rapport 2:1 hallucinés/corrects) permet une mesure directe de la Précision et du taux de faux positifs~: FPR~$=16{,}7$~\% pour Variante~B, $80$~\% pour Variante~C (effet du sur-déclenchement de M2 en mono-tour, §\ref{sec:limites}).
 
 \textbf{Validité interne.}
 \textit{Biais de sélection}~: les 90~scénarios (60~hallucinés + 30~corrects) ont été construits avec connaissance a priori des types T1--T5 et des mécanismes de détection. Les scénarios corrects (s061--s090) contiennent des claims qui paraphrasent directement leurs evidences~; en production, les claims corrects peuvent être plus ambigus sémantiquement, ce qui pourrait modifier le taux de faux positifs. Cet effet est documenté dans l'article (Section~\ref{sec:protocol}).
-\textit{Seuils ad hoc}~: les seuils NLI ont été calibrés sur un sous-ensemble de 20~scénarios de développement. Une calibration sur un dataset plus large pourrait modifier légèrement les résultats.
+\textit{Règle de décision}~: la détection par défaut (argmax $P(\text{contra}) > P(\text{entail})$) ne dépend d'aucun seuil arbitraire~; le mode à seuil est calibré par conformal prediction (§\ref{sec:conformal}) avec garantie de couverture, ce qui élimine le choix \textit{ad hoc}. Les seuils par nœud du DAG ne concernent que le \textit{gating} de criticité.
 
 \textbf{Validité externe.}
 \textit{Généralisation au LLM}~: tous les résultats utilisent Mistral~7B (Q4, CPU). Les performances peuvent varier avec d'autres LLM (GPT-4o, LLaMA-3, Gemma) en raison de différences dans les patterns de génération.
@@ -1163,15 +1252,20 @@ Une validation sur TruthfulQA \cite{lin2022truthfulqa} ou des sorties LLM collec
 \section{Conclusion}
 % ════════════════════════════════════════════════════════════════════════════
 
-Ce travail a présenté HalluGuard, un middleware de détection et de mitigation des hallucinations pour pipelines RAG agentiques LangGraph. \textbf{Variante~B} valide la dimension détection de l'hypothèse~: F1~=~82,9~\%, précision~=~90,2~\%, sans GPU ni fine-tuning. Sur la dimension latence, l'overhead mesuré sur CPU est de 588,8~ms~--- au-delà de la contrainte de 300~ms mais réalisable sur GPU ($\approx$30~ms estimé). M1 (NLI inter-sources) constitue le mécanisme central, portant 100~\% du gain mesurable ($+76{,}7$~pts vs baseline). M2 (BeliefState) est une contribution architecturale pour les sessions multi-tours~: son cas d'usage réel~--- détecter qu'un claim au Tour~N contredit un fait établi au Tour~N-k~--- n'est pas mesurable sur le benchmark mono-scénario HaluEval-Agentic~v1, mais est illustré qualitativement par le scénario s019 (T2, score~NLI~=~0,996). Sa quantification requiert HaluEval-Agentic~v2 (Perspective~P1).
+Ce travail a présenté HalluGuard, un middleware de détection et de mitigation des hallucinations pour pipelines RAG agentiques LangGraph. \textbf{La Variante~B} valide l'hypothèse sur la précision (90,2~\%, F1~=~82,9~\%) et surtout sur la latence~: un overhead médian de \textbf{$\approx$~40~ms sur CPU standard}, près d'un ordre de grandeur sous la contrainte de 300~ms, sans GPU ni fine-tuning. M1 (NLI inter-sources) est le mécanisme central~: il porte l'intégralité du gain net de détection ($+76{,}7$~pts vs baseline). L'étude d'ablation montre honnêtement que M2 (BeliefState), en mono-tour, \emph{dégrade} la précision (90,2~$\to$~68,4~\%) en sur-déclenchant sur des faits de session sans rapport~; son bénéfice prévu --- l'interception des contradictions \emph{inter-tours} --- reste à démontrer sur un benchmark conversationnel (HaluEval-Agentic~v2). Nous montrons enfin que le score NLI brut est mal calibré (ECE~$=0{,}24$) et calibrons le seuil de détection par conformal prediction avec garantie de couverture.
 
-Les quatre contributions sont~: (1)~une taxonomie originale T1--T5 couplée à la topologie pipeline, dont T4 et T5 sont absents de la littérature~; validée par accord inter-annotateurs à trois annotateurs ($\kappa_{\text{moy}}=0{,}833$, quasi-parfait~; $\kappa_{\min}=0{,}791$)~; (2)~un middleware modulaire à cinq composants intégrable sans modification du code pipeline~; (3)~une évaluation expérimentale complète avec ablation M1/M2, tests de significativité statistique (McNemar, $p<0{,}001$) et validation externe partielle sur TruthfulQA (95,0~\%, 19/20)~; (4)~une implémentation MCP avec 111~appels journalisés et une preuve de concept architecturale du protocole A2A.
+Les contributions sont~: (1)~une taxonomie originale T1--T5 couplée à la topologie pipeline, \textbf{validée par accord inter-annotateurs entre deux annotateurs indépendants} ($\kappa=0{,}94$~; $\kappa=0{,}75$ sur la distinction réellement ambiguë T2/T3)~; (2)~un middleware modulaire à cinq composants intégrable sans modification du code pipeline~; (3)~une évaluation expérimentale comparative avec ablation M1/M2, tests de significativité (McNemar), \textbf{analyse de calibration et calibration conformale du seuil}, et validation externe partielle sur TruthfulQA (95,0~\%, 19/20)~; (4)~une implémentation MCP à quatre outils et une preuve de concept architecturale du protocole A2A.
 
-La limite principale~--- T3 (planification) à 66,7~\%~--- ouvre une direction de recherche précise (fine-tuning NLI sur corpus de raisonnements annotés, Perspective~P2). HalluGuard établit une baseline solide et reproductible pour la recherche sur la fiabilité des agents LLM, avec un rapport gain/coût démontré en conditions matérielles contraintes (CPU, 16~Go RAM).
+Les limites principales~--- T3 (planification) à 50~\% en Variante~B, et l'impossibilité de mesurer le bénéfice inter-tours de M2 sur un benchmark mono-tour~--- ouvrent des directions de recherche précises (fine-tuning NLI sur raisonnements annotés~; HaluEval-Agentic~v2 conversationnel). HalluGuard établit une baseline solide, honnête et reproductible pour la recherche sur la fiabilité des agents LLM, en conditions matérielles contraintes (CPU, 16~Go RAM).
 
 % ════════════════════════════════════════════════════════════════════════════
 \bibliographystyle{plain}
 \begin{thebibliography}{99}
+
+\bibitem{angelopoulos2023conformal}
+Angelopoulos, A. N., \& Bates, S. (2023).
+\newblock A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification.
+\newblock \textit{Foundations and Trends in Machine Learning}, 16(4), 494--591.
 
 \bibitem{anthropic2024mcp}
 Anthropic (2024).
@@ -1187,6 +1281,11 @@ Es, S., James, J., Espinosa-Anke, L., \& Schockaert, S. (2023).
 Google DeepMind (2024).
 \newblock \textit{Agent-to-Agent Protocol (A2A) --- Specification v1.0}.
 \newblock \url{https://google.github.io/A2A/}
+
+\bibitem{guo2017calibration}
+Guo, C., Pleiss, G., Sun, Y., \& Weinberger, K. Q. (2017).
+\newblock On Calibration of Modern Neural Networks.
+\newblock \textit{Proceedings of ICML 2017}, 1321--1330.
 
 \bibitem{han2022folio}
 Han, S., Schoelkopf, H., Zhao, Y., Qi, Z., Riddell, M., Benson, L., \ldots{} \& Sherrill, A. (2022).
@@ -1257,6 +1356,11 @@ Reimers, N., \& Gurevych, I. (2019).
 Shuster, K., Poff, S., Chen, M., Kiela, D., \& Weston, J. (2021).
 \newblock Retrieval Augmentation Reduces Hallucination in Conversation.
 \newblock \textit{Findings of EMNLP 2021}.
+
+\bibitem{wang2022selfconsistency}
+Wang, X., Wei, J., Schuurmans, D., Le, Q., Chi, E., Narang, S., Chowdhery, A., \& Zhou, D. (2023).
+\newblock Self-Consistency Improves Chain of Thought Reasoning in Language Models.
+\newblock \textit{Proceedings of ICLR 2023}.
 
 \bibitem{williams2018mnli}
 Williams, A., Nangia, N., \& Bowman, S. (2018).

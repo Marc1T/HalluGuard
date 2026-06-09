@@ -1,20 +1,39 @@
+# ── Secrets — NE JAMAIS committer ──────────────────────────────
+.env
+*.key
+
+# ── Python ─────────────────────────────────────────────────────
 venv/
 __pycache__/
 *.pyc
 *.pyo
-.env
+*.egg-info/
+.pytest_cache/
+*.pkl
+
+# ── Données runtime / volumineuses ─────────────────────────────
 data/memory/*.json
 data/chromadb/
 results/logs/*.log
-*.pkl
-*.egg-info/
-.pytest_cache/
+
+# ── LaTeX : artefacts de compilation (on garde .tex et .pdf) ────
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/*.synctex.gz
+docs/*.fls
+docs/*.fdb_latexmk
+docs/*.bbl
+docs/*.blg
+docs/*.nav
+docs/*.snm
+docs/*.vrb
+docs/_*
+
+# ── Documents internes de travail (ne pas publier sur GitHub) ──
 CONTEXT.md
 docs/article_content.md
 docs/slides_content.md
-docs/article.aux
-docs/article.log
-docs/article.out
-docs/article.toc
-docs/article.tex
-docs/.gitkeep
+docs/PLAN_CORRECTIONS.md
+scripts/make_slides.py

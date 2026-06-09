@@ -20,10 +20,10 @@
       "ci_95": "[65.0%, 86.7%]"
     },
     "C": {
-      "rate": 85.0,
-      "ci_lower": 75.0,
-      "ci_upper": 93.3,
-      "ci_95": "[75.0%, 93.3%]"
+      "rate": 86.7,
+      "ci_lower": 78.3,
+      "ci_upper": 95.0,
+      "ci_95": "[78.3%, 95.0%]"
     }
   },
   "mcnemar_tests": {
@@ -42,42 +42,42 @@
       }
     },
     "A_vs_C": {
-      "chi2": 49.0196,
+      "chi2": 50.0192,
       "p_value": 0.0,
-      "b01": 51,
+      "b01": 52,
       "b10": 0,
       "significant_005": true,
       "interpretation": "hautement significatif (p<0.001)",
       "contingency": {
         "A=1 C=1": 0,
         "A=1 C=0": 0,
-        "A=0 C=1": 51,
-        "A=0 C=0": 9
+        "A=0 C=1": 52,
+        "A=0 C=0": 8
       }
     },
     "B_vs_C": {
-      "chi2": 3.2,
-      "p_value": 0.0736,
-      "b01": 5,
+      "chi2": 4.1667,
+      "p_value": 0.0412,
+      "b01": 6,
       "b10": 0,
-      "significant_005": false,
-      "interpretation": "tendance non significative (p<0.10)",
+      "significant_005": true,
+      "interpretation": "significatif (p<0.05)",
       "contingency": {
         "B=1 C=1": 46,
         "B=1 C=0": 0,
-        "B=0 C=1": 5,
-        "B=0 C=0": 9
+        "B=0 C=1": 6,
+        "B=0 C=0": 8
       }
     }
   },
   "summary_for_article": {
     "A_rate_ci": "[0.0%, 0.0%]",
     "B_rate_ci": "[65.0%, 86.7%]",
-    "C_rate_ci": "[75.0%, 93.3%]",
+    "C_rate_ci": "[78.3%, 95.0%]",
     "A_vs_B_p": 0.0,
     "A_vs_C_p": 0.0,
-    "B_vs_C_p": 0.0736,
-    "B_vs_C_sig": false,
-    "note_B_vs_C": "La difference B-C (8.3 pts, 5 scenarios) n'est pas statistiquement significative (p>0.05) sur 60 scenarios. Elle l'est au niveau p<0.10 (tendance). La contribution de M2 est mieux etablie par la performance T2 100% vs 83.3% que par le test global."
+    "B_vs_C_p": 0.0412,
+    "B_vs_C_sig": true,
+    "note_B_vs_C": "Le test de McNemar ne porte que sur les 60 scenarios hallucines (rappel) : C detecte plus d'hallucinations que B. MAIS ce test ignore les faux positifs : sur les 30 scenarios corrects, M2 fait passer le FPR de 16.7% (B) a 80% (C), effondrant la precision (90.2% -> 68.4%) et le F1 (82.9% -> 76.5%). Le gain de rappel ne compense pas la perte de precision sur ce benchmark mono-tour."
   }
 }

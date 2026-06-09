@@ -135,10 +135,11 @@ output = {
         "B_vs_C_p":   mc_BC["p_value"],
         "B_vs_C_sig": mc_BC["significant_005"],
         "note_B_vs_C": (
-            "La difference B-C (8.3 pts, 5 scenarios) n'est pas statistiquement "
-            "significative (p>0.05) sur 60 scenarios. Elle l'est au niveau p<0.10 "
-            "(tendance). La contribution de M2 est mieux etablie par la performance "
-            "T2 100% vs 83.3% que par le test global."
+            "Le test de McNemar ne porte que sur les 60 scenarios hallucines (rappel) : "
+            "C detecte plus d'hallucinations que B. MAIS ce test ignore les faux positifs : "
+            "sur les 30 scenarios corrects, M2 fait passer le FPR de 16.7% (B) a 80% (C), "
+            "effondrant la precision (90.2% -> 68.4%) et le F1 (82.9% -> 76.5%). "
+            "Le gain de rappel ne compense pas la perte de precision sur ce benchmark mono-tour."
         )
     }
 }
@@ -153,7 +154,7 @@ print(f"  Variante C : {ci_C['rate']}%  CI {ci_C['ci_95']}")
 print()
 print("=== Tests de McNemar (correction Yates) ===")
 for pair, res in [("A vs B", mc_AB), ("A vs C", mc_AC), ("B vs C", mc_BC)]:
-    print(f"  {pair} : χ²={res['chi2']}, p={res['p_value']}  → {res['interpretation']}")
+    print(f"  {pair} : chi2={res['chi2']}, p={res['p_value']}  -> {res['interpretation']}")
     print(f"          Table : b01={res['b01']} (discordant +), b10={res['b10']} (discordant -)")
 print()
 print(f"Résultats sauvegardés dans : {OUT_FILE}")

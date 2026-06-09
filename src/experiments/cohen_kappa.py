@@ -1,178 +1,154 @@
 """
-Calcul du Cohen's kappa pour la validation inter-annotateurs de la taxonomie T1-T5.
-3 annotateurs, 60 scenarios, 5 categories. Kappas pairwise + kappa moyen.
+cohen_kappa.py — Accord inter-annotateurs RÉEL à 2 auteurs (C1).
 
-Distribution gold (sequentielle dans scenarios.jsonl) :
-  T1: s001-s012  T2: s013-s024  T3: s025-s036  T4: s037-s048  T5: s049-s060
+Lit data/taxonomy_annotation_sheet.csv (rempli à la main par Marc et Souleymane,
+à l'aveugle, sans concertation). Calcule le kappa de Cohen entre les deux
+annotateurs, l'accord observé, la matrice de confusion et la liste des désaccords.
+
+AUCUNE annotation n'est simulée ou générée. Si la feuille n'est pas remplie,
+le script s'arrête et explique quoi faire — il n'invente rien.
+
+Entrée  : data/taxonomy_annotation_sheet.csv  (généré par make_annotation_sheet.py)
+Gold    : data/halueval/scenarios.jsonl        (pour l'accuracy indicative vs gold)
+Sortie  : results/cohen_kappa_result.json
+Lancer  : venv\\Scripts\\python.exe src/experiments/cohen_kappa.py
 """
+from __future__ import annotations
+import csv
 import json
+import sys
 from pathlib import Path
 
-SCENARIOS_FILE = Path(__file__).parents[2] / "data" / "halueval" / "scenarios.jsonl"
-ANNOT_FILE     = Path(__file__).parents[2] / "data" / "taxonomy_annotations.json"
-OUT_FILE       = Path(__file__).parents[2] / "results" / "cohen_kappa_result.json"
-
-# ── Chargement des scenarios ──────────────────────────────────────────────────
-scenarios = []
-with open(SCENARIOS_FILE, encoding="utf-8") as f:
-    for line in f:
-        scenarios.append(json.loads(line.strip()))
-
+ROOT = Path(__file__).resolve().parents[2]
+SHEET = ROOT / "data" / "taxonomy_annotation_sheet.csv"
+SPLIT_MARC = ROOT / "data" / "annotation" / "taxonomy_marc.csv"
+SPLIT_SOUL = ROOT / "data" / "annotation" / "taxonomy_souleymane.csv"
+SCENARIOS_FILE = ROOT / "data" / "halueval" / "scenarios.jsonl"
+OUT_FILE = ROOT / "results" / "cohen_kappa_result.json"
 TYPES = ["T1", "T2", "T3", "T4", "T5"]
-N = len(scenarios)   # 60
-
-# ── Annotations simulees reproductibles ──────────────────────────────────────
-# Ann1 = etiquette gold (auteur principal)
-# Ann2 = co-auteur : 8 desaccords reels (accord quasi-parfait avec Ann1)
-# Ann3 = pair externe : 10 desaccords reels (accord substantiel avec Ann1)
-#
-# Format des commentaires : gold_type -> type_assigne_par_annotateur
-# Confusions documentees dans la litterature :
-#   T3 (planification) souvent confondu avec T2 (memoire) ou T4 (causal)
-#   T5 (delegation) parfois confondu avec T4 (causal) ou T3 (planification)
-
-CONFUSION_MAP_ANN2 = {
-    # 8 desaccords reels (gold != valeur assignee)
-    "s024": "T4",  # T2 -> T4  (repere temporel lu comme causalite)
-    "s035": "T2",  # T3 -> T2  (planification formulee comme memoire temporelle)
-    "s036": "T4",  # T3 -> T4  (raisonnement long terme lu comme causalite)
-    "s047": "T2",  # T4 -> T2  (contradiction document vue comme biais temporel)
-    "s049": "T4",  # T5 -> T4  (sortie outil confondue avec causalite)
-    "s055": "T4",  # T5 -> T4  (outil vs document ambigu)
-    "s057": "T4",  # T5 -> T4  (delegation confondue avec causalite)
-    "s059": "T3",  # T5 -> T3  (delegation confondue avec planification)
-}
-
-CONFUSION_MAP_ANN3 = {
-    # 10 desaccords reels (gold != valeur assignee)
-    # 4 cas partages avec Ann2 (frontieres reconnues ambigues) :
-    "s035": "T2",  # T3 -> T2  (meme confusion qu'Ann2 — cas ambigu confirme)
-    "s036": "T4",  # T3 -> T4  (meme confusion qu'Ann2 — cas ambigu confirme)
-    "s055": "T4",  # T5 -> T4  (meme confusion qu'Ann2 — cas ambigu confirme)
-    "s059": "T3",  # T5 -> T3  (meme confusion qu'Ann2 — cas ambigu confirme)
-    # 6 cas specifiques a Ann3 :
-    "s025": "T2",  # T3 -> T2  (planification lue comme memoire)
-    "s027": "T4",  # T3 -> T4  (planification lue comme causalite)
-    "s029": "T2",  # T3 -> T2  (marqueur temporel ambigu)
-    "s044": "T3",  # T4 -> T3  (causalite multi-hop vue comme planification)
-    "s050": "T4",  # T5 -> T4  (sortie outil confondue avec causalite)
-    "s052": "T4",  # T5 -> T4  (delegation confondue avec causalite)
-}
-
-ann1 = [s["hallucination_type"] for s in scenarios]
-ann2 = [CONFUSION_MAP_ANN2.get(s["id"], s["hallucination_type"]) for s in scenarios]
-ann3 = [CONFUSION_MAP_ANN3.get(s["id"], s["hallucination_type"]) for s in scenarios]
-
-# ── Kappa de Cohen ────────────────────────────────────────────────────────────
-
-def cohen_kappa(a1, a2, categories):
-    n = len(a1)
-    assert n == len(a2)
-
-    po = sum(1 for x, y in zip(a1, a2) if x == y) / n
-
-    freq1 = {c: a1.count(c) / n for c in categories}
-    freq2 = {c: a2.count(c) / n for c in categories}
-    pe = sum(freq1[c] * freq2[c] for c in categories)
-
-    kappa = (po - pe) / (1 - pe) if pe < 1.0 else 0.0
-
-    confusion = {c1: {c2: 0 for c2 in categories} for c1 in categories}
-    for x, y in zip(a1, a2):
-        confusion[x][y] += 1
-
-    agreements = sum(1 for x, y in zip(a1, a2) if x == y)
-    return {
-        "po_observed": round(po, 4),
-        "pe_expected": round(pe, 4),
-        "kappa": round(kappa, 4),
-        "n": n,
-        "agreements": agreements,
-        "disagreements": n - agreements,
-        "interpretation": interpret_kappa(kappa),
-        "confusion_matrix": confusion,
-        "marginal_ann1": {c: round(v, 3) for c, v in freq1.items()},
-        "marginal_ann2": {c: round(v, 3) for c, v in freq2.items()},
-    }
 
 
-def interpret_kappa(k):
-    """Landis & Koch (1977)"""
-    if k < 0:    return "desaccord"
+def _read_col(path: Path, col: str) -> dict:
+    out = {}
+    with open(path, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            out[r["id"]] = (r.get(col) or "").strip().upper()
+    return out
+
+
+def load_annotations():
+    """Fichiers séparés si présents (aveugle garanti), sinon feuille combinée."""
+    if SPLIT_MARC.exists() and SPLIT_SOUL.exists():
+        m_map, s_map = _read_col(SPLIT_MARC, "annotation"), _read_col(SPLIT_SOUL, "annotation")
+        ids = [i for i in m_map if i in s_map]
+        return ids, [m_map[i] for i in ids], [s_map[i] for i in ids], "fichiers séparés"
+    if SHEET.exists():
+        ids, marc, soul = [], [], []
+        with open(SHEET, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                ids.append(r["id"])
+                marc.append((r.get("ann_marc") or "").strip().upper())
+                soul.append((r.get("ann_souleymane") or "").strip().upper())
+        return ids, marc, soul, "feuille combinée"
+    sys.exit("[STOP] Aucune feuille d'annotation. Lancer d'abord : "
+             "python src/experiments/make_annotation_sheet.py")
+
+
+def interpret_kappa(k: float) -> str:
+    """Landis & Koch (1977)."""
+    if k < 0:    return "désaccord"
     if k < 0.20: return "accord faible"
     if k < 0.40: return "accord passable"
-    if k < 0.60: return "accord modere"
+    if k < 0.60: return "accord modéré"
     if k < 0.80: return "accord substantiel"
     return "accord quasi-parfait"
 
 
-result_12 = cohen_kappa(ann1, ann2, TYPES)
-result_13 = cohen_kappa(ann1, ann3, TYPES)
-result_23 = cohen_kappa(ann2, ann3, TYPES)
+def cohen_kappa(a1, a2, categories):
+    n = len(a1)
+    po = sum(1 for x, y in zip(a1, a2) if x == y) / n
+    f1 = {c: a1.count(c) / n for c in categories}
+    f2 = {c: a2.count(c) / n for c in categories}
+    pe = sum(f1[c] * f2[c] for c in categories)
+    kappa = (po - pe) / (1 - pe) if pe < 1.0 else 0.0
+    confusion = {c1: {c2: 0 for c2 in categories} for c1 in categories}
+    for x, y in zip(a1, a2):
+        if x in confusion and y in confusion[x]:
+            confusion[x][y] += 1
+    return po, pe, kappa, confusion
 
-kappas = [result_12["kappa"], result_13["kappa"], result_23["kappa"]]
-kappa_moyen = round(sum(kappas) / 3, 4)
 
-# ── Sauvegarde annotations ────────────────────────────────────────────────────
-annot_data = {
-    "description": "Annotations de 3 annotateurs sur la taxonomie T1-T5 (60 scenarios)",
-    "annotateurs": ["Ann1 (auteur principal)", "Ann2 (co-auteur)", "Ann3 (pair externe)"],
-    "pairwise_kappa": {
-        "Ann1_Ann2": result_12["kappa"],
-        "Ann1_Ann3": result_13["kappa"],
-        "Ann2_Ann3": result_23["kappa"],
-        "moyenne":   kappa_moyen,
-    },
-    "annotations": [
-        {
-            "id":        s["id"],
-            "ann1":      a1,
-            "ann2":      a2,
-            "ann3":      a3,
-            "agree_all": a1 == a2 == a3,
-            "agree_12":  a1 == a2,
-            "agree_13":  a1 == a3,
-            "agree_23":  a2 == a3,
-        }
-        for s, a1, a2, a3 in zip(scenarios, ann1, ann2, ann3)
-    ],
-}
-with open(ANNOT_FILE, "w", encoding="utf-8") as f:
-    json.dump(annot_data, f, ensure_ascii=False, indent=2)
+def main() -> None:
+    ids, marc, soul, source = load_annotations()
+    print(f"Source des annotations : {source}")
 
-output = {
-    "n_annotateurs": 3,
-    "n_scenarios":   N,
-    "Ann1_Ann2": {**result_12, "annotateurs": ["Ann1 (auteur principal)", "Ann2 (co-auteur)"]},
-    "Ann1_Ann3": {**result_13, "annotateurs": ["Ann1 (auteur principal)", "Ann3 (pair externe)"]},
-    "Ann2_Ann3": {**result_23, "annotateurs": ["Ann2 (co-auteur)",        "Ann3 (pair externe)"]},
-    "kappa_moyen":          kappa_moyen,
-    "interpretation_moyenne": interpret_kappa(kappa_moyen),
-    "reference": "Landis & Koch (1977) — seuil kappa > 0.60 requis pour validation taxonomie",
-}
-with open(OUT_FILE, "w", encoding="utf-8") as f:
-    json.dump(output, f, ensure_ascii=False, indent=2)
+    # Garde-fou : refuser de calculer sur des annotations incomplètes/invalides
+    pairs = [(i, m, s) for i, m, s in zip(ids, marc, soul)
+             if m in TYPES and s in TYPES]
+    n_filled = len(pairs)
+    if n_filled < len(ids):
+        missing = len(ids) - n_filled
+        print(f"[ATTENTION] {missing}/{len(ids)} lignes non (ou mal) annotées "
+              f"(valeurs attendues : {TYPES}).")
+    if n_filled < 20:
+        sys.exit(f"[STOP] Seulement {n_filled} lignes valides — annotez au moins 20 scénarios "
+                 f"(idéalement les 60) dans {SHEET.name}, puis relancez.\n"
+                 f"  Aucune valeur n'est inventée : le kappa ne sera calculé que sur de vraies annotations.")
 
-# ── Affichage ─────────────────────────────────────────────────────────────────
-print("=== Cohen's Kappa — Validation Taxonomie T1-T5 (3 annotateurs) ===")
-print()
-for label, res in [("Ann1 -- Ann2", result_12), ("Ann1 -- Ann3", result_13), ("Ann2 -- Ann3", result_23)]:
-    print(f"  {label}")
-    print(f"    Accord observe (Po)  : {res['po_observed']*100:.1f}%  ({res['agreements']}/{N})")
-    print(f"    Accord attendu (Pe)  : {res['pe_expected']*100:.1f}%")
-    print(f"    kappa de Cohen       : {res['kappa']}  ({res['interpretation']})")
-    print()
+    ids_f = [p[0] for p in pairs]
+    a_marc = [p[1] for p in pairs]
+    a_soul = [p[2] for p in pairs]
 
-print(f"  kappa moyen : {kappa_moyen}  ({interpret_kappa(kappa_moyen)})")
-print()
-print("Matrice de confusion Ann1 vs Ann2 :")
-header = "       " + "  ".join(f"{c:>4}" for c in TYPES)
-print(header)
-for c1 in TYPES:
-    row = f"  {c1} ->  " + "  ".join(
-        f"{result_12['confusion_matrix'][c1][c2]:>4}" for c2 in TYPES
-    )
-    print(row)
-print()
-print(f"Resultats sauvegardes dans : {OUT_FILE}")
-print(f"Annotations sauvegardees dans : {ANNOT_FILE}")
+    po, pe, kappa, confusion = cohen_kappa(a_marc, a_soul, TYPES)
+    disagreements = [{"id": i, "marc": m, "souleymane": s}
+                     for i, m, s in pairs if m != s]
+
+    # Accuracy indicative vs gold (n'entre PAS dans le kappa)
+    gold = {}
+    for line in SCENARIOS_FILE.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            d = json.loads(line)
+            gold[d["id"]] = d.get("hallucination_type")
+    acc_marc = sum(1 for i, m in zip(ids_f, a_marc) if gold.get(i) == m) / n_filled
+    acc_soul = sum(1 for i, s in zip(ids_f, a_soul) if gold.get(i) == s) / n_filled
+
+    # Kappa sur le sous-ensemble réellement ambigu (T2/T3, nœud reasoning) :
+    # c'est là que l'accord humain a une vraie valeur, le node_type déterminant
+    # quasi mécaniquement T1/T4/T5. (Le gold ne sert qu'à stratifier, pas à noter.)
+    def subset_kappa(gold_types):
+        sel = [(m, s) for i, m, s in zip(ids_f, a_marc, a_soul) if gold.get(i) in gold_types]
+        if len(sel) < 2:
+            return {"n": len(sel), "kappa": None}
+        po_s, pe_s, k_s, _ = cohen_kappa([m for m, _ in sel], [s for _, s in sel], TYPES)
+        return {"n": len(sel), "accord_observe": round(po_s, 4), "kappa": round(k_s, 4),
+                "interpretation": interpret_kappa(k_s)}
+
+    out = {
+        "n_annotateurs": 2,
+        "annotateurs": ["Marc (auteur)", "Souleymane (auteur)"],
+        "n_scenarios_annotes": n_filled,
+        "accord_observe": round(po, 4),
+        "accord_attendu_hasard": round(pe, 4),
+        "kappa_cohen": round(kappa, 4),
+        "interpretation": interpret_kappa(kappa),
+        "kappa_sous_ensemble": {
+            "reasoning_T2_T3": subset_kappa({"T2", "T3"}),
+            "autres_T1_T4_T5": subset_kappa({"T1", "T4", "T5"}),
+        },
+        "n_desaccords": len(disagreements),
+        "desaccords": disagreements,
+        "confusion_matrix": confusion,
+        "accuracy_vs_gold": {"marc": round(acc_marc, 3), "souleymane": round(acc_soul, 3)},
+        "reference": "Cohen (1960) ; interprétation Landis & Koch (1977), seuil kappa > 0.60.",
+        "source_annotations": source,
+        "note": "Annotation réelle à 2 auteurs, à l'aveugle. Aucune valeur simulée.",
+    }
+    OUT_FILE.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\nkappa de Cohen (Marc vs Souleymane) = {out['kappa_cohen']} "
+          f"({out['interpretation']}) sur {n_filled} scénarios")
+    print(f"Accord observé = {po*100:.1f}% | désaccords = {len(disagreements)}")
+    print(f"Écrit : {OUT_FILE.relative_to(ROOT)}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,646 @@
+{
+  "description": "Baseline LLM-as-judge (Mistral) sur les 90 scénarios, comparée à M1 NLI.",
+  "model": "open-mistral-7b",
+  "n_scenarios": 90,
+  "TP": 59,
+  "FP": 0,
+  "TN": 30,
+  "FN": 1,
+  "recall_pct": 98.3,
+  "precision_pct": 100.0,
+  "f1_pct": 99.1,
+  "avg_latency_ms": 503.3,
+  "median_latency_ms": 431.7,
+  "results": [
+    {
+      "id": "s001",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 561.2
+    },
+    {
+      "id": "s002",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 480.7
+    },
+    {
+      "id": "s003",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 450.2
+    },
+    {
+      "id": "s004",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 421.5
+    },
+    {
+      "id": "s005",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 400.4
+    },
+    {
+      "id": "s006",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 474.8
+    },
+    {
+      "id": "s007",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 434.1
+    },
+    {
+      "id": "s008",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 412.0
+    },
+    {
+      "id": "s009",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 433.3
+    },
+    {
+      "id": "s010",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 405.2
+    },
+    {
+      "id": "s011",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 452.3
+    },
+    {
+      "id": "s012",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 417.8
+    },
+    {
+      "id": "s013",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 399.5
+    },
+    {
+      "id": "s014",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 466.5
+    },
+    {
+      "id": "s015",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 445.3
+    },
+    {
+      "id": "s016",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 431.9
+    },
+    {
+      "id": "s017",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 415.6
+    },
+    {
+      "id": "s018",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 438.3
+    },
+    {
+      "id": "s019",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 478.8
+    },
+    {
+      "id": "s020",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 462.9
+    },
+    {
+      "id": "s021",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 442.5
+    },
+    {
+      "id": "s022",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 545.4
+    },
+    {
+      "id": "s023",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": false,
+      "latency_ms": 428.0
+    },
+    {
+      "id": "s024",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 459.7
+    },
+    {
+      "id": "s025",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 413.7
+    },
+    {
+      "id": "s026",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 392.1
+    },
+    {
+      "id": "s027",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 533.7
+    },
+    {
+      "id": "s028",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 437.7
+    },
+    {
+      "id": "s029",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 757.4
+    },
+    {
+      "id": "s030",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 520.9
+    },
+    {
+      "id": "s031",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 547.6
+    },
+    {
+      "id": "s032",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 406.2
+    },
+    {
+      "id": "s033",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 429.4
+    },
+    {
+      "id": "s034",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 414.4
+    },
+    {
+      "id": "s035",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 399.9
+    },
+    {
+      "id": "s036",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 432.0
+    },
+    {
+      "id": "s037",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 3238.4
+    },
+    {
+      "id": "s038",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 445.0
+    },
+    {
+      "id": "s039",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 409.6
+    },
+    {
+      "id": "s040",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 424.3
+    },
+    {
+      "id": "s041",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 416.2
+    },
+    {
+      "id": "s042",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 419.4
+    },
+    {
+      "id": "s043",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 411.7
+    },
+    {
+      "id": "s044",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 416.3
+    },
+    {
+      "id": "s045",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 407.4
+    },
+    {
+      "id": "s046",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 720.8
+    },
+    {
+      "id": "s047",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 400.0
+    },
+    {
+      "id": "s048",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 425.9
+    },
+    {
+      "id": "s049",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 459.8
+    },
+    {
+      "id": "s050",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 414.6
+    },
+    {
+      "id": "s051",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 585.0
+    },
+    {
+      "id": "s052",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 429.5
+    },
+    {
+      "id": "s053",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 415.1
+    },
+    {
+      "id": "s054",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 480.6
+    },
+    {
+      "id": "s055",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 450.5
+    },
+    {
+      "id": "s056",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 451.8
+    },
+    {
+      "id": "s057",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 446.7
+    },
+    {
+      "id": "s058",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 448.0
+    },
+    {
+      "id": "s059",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 481.3
+    },
+    {
+      "id": "s060",
+      "expected_label": "hallucinated",
+      "is_hallucinated": true,
+      "detected": true,
+      "latency_ms": 435.0
+    },
+    {
+      "id": "s061",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 417.6
+    },
+    {
+      "id": "s062",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 432.2
+    },
+    {
+      "id": "s063",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 393.1
+    },
+    {
+      "id": "s064",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 400.0
+    },
+    {
+      "id": "s065",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 449.7
+    },
+    {
+      "id": "s066",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 401.7
+    },
+    {
+      "id": "s067",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 483.3
+    },
+    {
+      "id": "s068",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 530.7
+    },
+    {
+      "id": "s069",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 502.9
+    },
+    {
+      "id": "s070",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 470.4
+    },
+    {
+      "id": "s071",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 1098.4
+    },
+    {
+      "id": "s072",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 451.6
+    },
+    {
+      "id": "s073",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 1989.1
+    },
+    {
+      "id": "s074",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 431.4
+    },
+    {
+      "id": "s075",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 416.9
+    },
+    {
+      "id": "s076",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 430.1
+    },
+    {
+      "id": "s077",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 403.9
+    },
+    {
+      "id": "s078",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 448.3
+    },
+    {
+      "id": "s079",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 422.1
+    },
+    {
+      "id": "s080",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 391.3
+    },
+    {
+      "id": "s081",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 382.7
+    },
+    {
+      "id": "s082",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 412.1
+    },
+    {
+      "id": "s083",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 403.3
+    },
+    {
+      "id": "s084",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 383.4
+    },
+    {
+      "id": "s085",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 405.2
+    },
+    {
+      "id": "s086",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 663.8
+    },
+    {
+      "id": "s087",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 416.5
+    },
+    {
+      "id": "s088",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 421.2
+    },
+    {
+      "id": "s089",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 378.6
+    },
+    {
+      "id": "s090",
+      "expected_label": "correct",
+      "is_hallucinated": false,
+      "detected": false,
+      "latency_ms": 387.2
+    }
+  ]
+}

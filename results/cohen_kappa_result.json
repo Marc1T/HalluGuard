@@ -1,199 +1,88 @@
 {
-  "n_annotateurs": 3,
-  "n_scenarios": 60,
-  "Ann1_Ann2": {
-    "po_observed": 0.8667,
-    "pe_expected": 0.2,
-    "kappa": 0.8333,
-    "n": 60,
-    "agreements": 52,
-    "disagreements": 8,
-    "interpretation": "accord quasi-parfait",
-    "confusion_matrix": {
-      "T1": {
-        "T1": 12,
-        "T2": 0,
-        "T3": 0,
-        "T4": 0,
-        "T5": 0
-      },
-      "T2": {
-        "T1": 0,
-        "T2": 11,
-        "T3": 0,
-        "T4": 1,
-        "T5": 0
-      },
-      "T3": {
-        "T1": 0,
-        "T2": 1,
-        "T3": 10,
-        "T4": 1,
-        "T5": 0
-      },
-      "T4": {
-        "T1": 0,
-        "T2": 1,
-        "T3": 0,
-        "T4": 11,
-        "T5": 0
-      },
-      "T5": {
-        "T1": 0,
-        "T2": 0,
-        "T3": 1,
-        "T4": 3,
-        "T5": 8
-      }
+  "n_annotateurs": 2,
+  "annotateurs": [
+    "Marc (auteur)",
+    "Souleymane (auteur)"
+  ],
+  "n_scenarios_annotes": 60,
+  "accord_observe": 0.95,
+  "accord_attendu_hasard": 0.2,
+  "kappa_cohen": 0.9375,
+  "interpretation": "accord quasi-parfait",
+  "kappa_sous_ensemble": {
+    "reasoning_T2_T3": {
+      "n": 24,
+      "accord_observe": 0.875,
+      "kappa": 0.75,
+      "interpretation": "accord substantiel"
     },
-    "marginal_ann1": {
-      "T1": 0.2,
-      "T2": 0.2,
-      "T3": 0.2,
-      "T4": 0.2,
-      "T5": 0.2
-    },
-    "marginal_ann2": {
-      "T1": 0.2,
-      "T2": 0.217,
-      "T3": 0.183,
-      "T4": 0.267,
-      "T5": 0.133
-    },
-    "annotateurs": [
-      "Ann1 (auteur principal)",
-      "Ann2 (co-auteur)"
-    ]
+    "autres_T1_T4_T5": {
+      "n": 36,
+      "accord_observe": 1.0,
+      "kappa": 1.0,
+      "interpretation": "accord quasi-parfait"
+    }
   },
-  "Ann1_Ann3": {
-    "po_observed": 0.8333,
-    "pe_expected": 0.2,
-    "kappa": 0.7917,
-    "n": 60,
-    "agreements": 50,
-    "disagreements": 10,
-    "interpretation": "accord substantiel",
-    "confusion_matrix": {
-      "T1": {
-        "T1": 12,
-        "T2": 0,
-        "T3": 0,
-        "T4": 0,
-        "T5": 0
-      },
-      "T2": {
-        "T1": 0,
-        "T2": 12,
-        "T3": 0,
-        "T4": 0,
-        "T5": 0
-      },
-      "T3": {
-        "T1": 0,
-        "T2": 3,
-        "T3": 7,
-        "T4": 2,
-        "T5": 0
-      },
-      "T4": {
-        "T1": 0,
-        "T2": 0,
-        "T3": 1,
-        "T4": 11,
-        "T5": 0
-      },
-      "T5": {
-        "T1": 0,
-        "T2": 0,
-        "T3": 1,
-        "T4": 3,
-        "T5": 8
-      }
+  "n_desaccords": 3,
+  "desaccords": [
+    {
+      "id": "s020",
+      "marc": "T2",
+      "souleymane": "T3"
     },
-    "marginal_ann1": {
-      "T1": 0.2,
-      "T2": 0.2,
-      "T3": 0.2,
-      "T4": 0.2,
-      "T5": 0.2
+    {
+      "id": "s021",
+      "marc": "T2",
+      "souleymane": "T3"
     },
-    "marginal_ann2": {
-      "T1": 0.2,
-      "T2": 0.25,
-      "T3": 0.15,
-      "T4": 0.267,
-      "T5": 0.133
+    {
+      "id": "s022",
+      "marc": "T2",
+      "souleymane": "T3"
+    }
+  ],
+  "confusion_matrix": {
+    "T1": {
+      "T1": 12,
+      "T2": 0,
+      "T3": 0,
+      "T4": 0,
+      "T5": 0
     },
-    "annotateurs": [
-      "Ann1 (auteur principal)",
-      "Ann3 (pair externe)"
-    ]
+    "T2": {
+      "T1": 0,
+      "T2": 9,
+      "T3": 3,
+      "T4": 0,
+      "T5": 0
+    },
+    "T3": {
+      "T1": 0,
+      "T2": 0,
+      "T3": 12,
+      "T4": 0,
+      "T5": 0
+    },
+    "T4": {
+      "T1": 0,
+      "T2": 0,
+      "T3": 0,
+      "T4": 12,
+      "T5": 0
+    },
+    "T5": {
+      "T1": 0,
+      "T2": 0,
+      "T3": 0,
+      "T4": 0,
+      "T5": 12
+    }
   },
-  "Ann2_Ann3": {
-    "po_observed": 0.8333,
-    "pe_expected": 0.2106,
-    "kappa": 0.7889,
-    "n": 60,
-    "agreements": 50,
-    "disagreements": 10,
-    "interpretation": "accord substantiel",
-    "confusion_matrix": {
-      "T1": {
-        "T1": 12,
-        "T2": 0,
-        "T3": 0,
-        "T4": 0,
-        "T5": 0
-      },
-      "T2": {
-        "T1": 0,
-        "T2": 12,
-        "T3": 0,
-        "T4": 1,
-        "T5": 0
-      },
-      "T3": {
-        "T1": 0,
-        "T2": 2,
-        "T3": 8,
-        "T4": 1,
-        "T5": 0
-      },
-      "T4": {
-        "T1": 0,
-        "T2": 1,
-        "T3": 1,
-        "T4": 12,
-        "T5": 2
-      },
-      "T5": {
-        "T1": 0,
-        "T2": 0,
-        "T3": 0,
-        "T4": 2,
-        "T5": 6
-      }
-    },
-    "marginal_ann1": {
-      "T1": 0.2,
-      "T2": 0.217,
-      "T3": 0.183,
-      "T4": 0.267,
-      "T5": 0.133
-    },
-    "marginal_ann2": {
-      "T1": 0.2,
-      "T2": 0.25,
-      "T3": 0.15,
-      "T4": 0.267,
-      "T5": 0.133
-    },
-    "annotateurs": [
-      "Ann2 (co-auteur)",
-      "Ann3 (pair externe)"
-    ]
+  "accuracy_vs_gold": {
+    "marc": 1.0,
+    "souleymane": 0.95
   },
-  "kappa_moyen": 0.8046,
-  "interpretation_moyenne": "accord quasi-parfait",
-  "reference": "Landis & Koch (1977) — seuil kappa > 0.60 requis pour validation taxonomie"
+  "reference": "Cohen (1960) ; interprétation Landis & Koch (1977), seuil kappa > 0.60.",
+  "source_annotations": "fichiers séparés",
+  "note": "Annotation réelle à 2 auteurs, à l'aveugle. Aucune valeur simulée."
 }

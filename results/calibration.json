@@ -1,0 +1,110 @@
+{
+  "description": "Calibration et UQ du vérificateur NLI. p = P(contradiction), y = halluciné.",
+  "n_scenarios": 90,
+  "n_bins": 10,
+  "seed": 42,
+  "raw_all": {
+    "ece": 0.2423,
+    "brier": 0.2463,
+    "reliability_bins": [
+      {
+        "bin": [
+          0.0,
+          0.1
+        ],
+        "count": 27,
+        "confidence": 0.0462,
+        "accuracy": 0.4074
+      },
+      {
+        "bin": [
+          0.1,
+          0.2
+        ],
+        "count": 12,
+        "confidence": 0.1385,
+        "accuracy": 0.5
+      },
+      {
+        "bin": [
+          0.2,
+          0.3
+        ],
+        "count": 4,
+        "confidence": 0.2191,
+        "accuracy": 0.5
+      },
+      {
+        "bin": [
+          0.3,
+          0.4
+        ],
+        "count": 5,
+        "confidence": 0.3755,
+        "accuracy": 0.8
+      },
+      {
+        "bin": [
+          0.4,
+          0.5
+        ],
+        "count": 6,
+        "confidence": 0.4342,
+        "accuracy": 0.8333
+      },
+      {
+        "bin": [
+          0.5,
+          0.6
+        ],
+        "count": 4,
+        "confidence": 0.5487,
+        "accuracy": 0.75
+      },
+      {
+        "bin": [
+          0.6,
+          0.7
+        ],
+        "count": 6,
+        "confidence": 0.6467,
+        "accuracy": 0.6667
+      },
+      {
+        "bin": [
+          0.7,
+          0.8
+        ],
+        "count": 3,
+        "confidence": 0.7208,
+        "accuracy": 0.6667
+      },
+      {
+        "bin": [
+          0.8,
+          0.9
+        ],
+        "count": 3,
+        "confidence": 0.8893,
+        "accuracy": 1.0
+      },
+      {
+        "bin": [
+          0.9,
+          1.0
+        ],
+        "count": 20,
+        "confidence": 0.9673,
+        "accuracy": 1.0
+      }
+    ]
+  },
+  "platt_split": {
+    "n_calibration": 45,
+    "n_test": 45,
+    "ece_test_raw": 0.3046,
+    "ece_test_platt": 0.1583,
+    "improvement": 0.1463
+  },
+  "interpretation": "ECE brut=0.2423 (0=parfaitement calibré). Platt scaling: ECE test 0.3046 -> 0.1583 (amélioration)."
+}

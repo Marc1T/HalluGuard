@@ -1,0 +1,187 @@
+{
+  "_README": "CHIFFRES OFFICIELS. README, article et slides ne doivent citer que ce fichier.",
+  "benchmark": "HaluEval-Agentic (90 scénarios : 60 hallucinés + 30 corrects)",
+  "model": "cross-encoder/nli-MiniLM2-L6-H768",
+  "variants": {
+    "A_baseline": {
+      "TP": 0,
+      "FP": 0,
+      "TN": 30,
+      "FN": 60,
+      "recall_pct": 0.0,
+      "precision_pct": null,
+      "f1_pct": 0.0,
+      "fpr_pct": 0.0,
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 0,
+          "recall_pct": 0.0
+        },
+        "T2": {
+          "total": 12,
+          "detected": 0,
+          "recall_pct": 0.0
+        },
+        "T3": {
+          "total": 12,
+          "detected": 0,
+          "recall_pct": 0.0
+        },
+        "T4": {
+          "total": 12,
+          "detected": 0,
+          "recall_pct": 0.0
+        },
+        "T5": {
+          "total": 12,
+          "detected": 0,
+          "recall_pct": 0.0
+        }
+      }
+    },
+    "B_M1_argmax": {
+      "TP": 46,
+      "FP": 5,
+      "TN": 25,
+      "FN": 14,
+      "recall_pct": 76.7,
+      "precision_pct": 90.2,
+      "f1_pct": 82.9,
+      "fpr_pct": 16.7,
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 11,
+          "recall_pct": 91.7
+        },
+        "T2": {
+          "total": 12,
+          "detected": 10,
+          "recall_pct": 83.3
+        },
+        "T3": {
+          "total": 12,
+          "detected": 6,
+          "recall_pct": 50.0
+        },
+        "T4": {
+          "total": 12,
+          "detected": 10,
+          "recall_pct": 83.3
+        },
+        "T5": {
+          "total": 12,
+          "detected": 9,
+          "recall_pct": 75.0
+        }
+      }
+    },
+    "C_M1_or_M2": {
+      "TP": 52,
+      "FP": 24,
+      "TN": 6,
+      "FN": 8,
+      "recall_pct": 86.7,
+      "precision_pct": 68.4,
+      "f1_pct": 76.5,
+      "fpr_pct": 80.0,
+      "by_type": {
+        "T1": {
+          "total": 12,
+          "detected": 11,
+          "recall_pct": 91.7
+        },
+        "T2": {
+          "total": 12,
+          "detected": 12,
+          "recall_pct": 100.0
+        },
+        "T3": {
+          "total": 12,
+          "detected": 8,
+          "recall_pct": 66.7
+        },
+        "T4": {
+          "total": 12,
+          "detected": 10,
+          "recall_pct": 83.3
+        },
+        "T5": {
+          "total": 12,
+          "detected": 11,
+          "recall_pct": 91.7
+        }
+      }
+    }
+  },
+  "decision_rule": {
+    "B": "label=hallucinated si P(contradiction) > P(entailment) (argmax)",
+    "C": "B OR conflit BeliefState (M2)",
+    "note_C": "M2 augmente le rappel mais dégrade fortement la précision (faux positifs)."
+  },
+  "latency_overhead_ms": {
+    "median": 42.7,
+    "mean": 43.0,
+    "iqr": [
+      39.6,
+      47.6
+    ],
+    "min": 28.0,
+    "max": 55.1
+  },
+  "calibration": {
+    "ece_raw": 0.2423,
+    "brier_raw": 0.2463,
+    "ece_test_raw": 0.3046,
+    "ece_test_platt": 0.1583
+  },
+  "conformal": [
+    {
+      "alpha": 0.05,
+      "target_recall": 0.95,
+      "tau_mean": 0.026,
+      "empirical_recall_mean": 0.966,
+      "empirical_fpr_mean": 0.758,
+      "coverage_ok": true
+    },
+    {
+      "alpha": 0.1,
+      "target_recall": 0.9,
+      "tau_mean": 0.0601,
+      "empirical_recall_mean": 0.909,
+      "empirical_fpr_mean": 0.59,
+      "coverage_ok": true
+    },
+    {
+      "alpha": 0.2,
+      "target_recall": 0.8,
+      "tau_mean": 0.1188,
+      "empirical_recall_mean": 0.789,
+      "empirical_fpr_mean": 0.441,
+      "coverage_ok": false
+    }
+  ],
+  "self_consistency": {
+    "auc": 0.875,
+    "separation_fiable_vs_piegee": 0.114,
+    "best_threshold_accuracy": {
+      "threshold": 0.867,
+      "accuracy": 0.875
+    },
+    "backend": "mistral_api"
+  },
+  "baseline_llm_judge": {
+    "model": "open-mistral-7b",
+    "recall_pct": 98.3,
+    "precision_pct": 100.0,
+    "f1_pct": 99.1,
+    "median_latency_ms": 431.7
+  },
+  "kappa_taxonomie": {
+    "status": "réel",
+    "kappa_cohen": 0.9375,
+    "n": 60,
+    "interpretation": "accord quasi-parfait"
+  }
+}

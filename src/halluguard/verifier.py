@@ -58,14 +58,24 @@ class LightweightVerifier:
     # API principale — Interface 2 (CONTEXT.md)                             #
     # ------------------------------------------------------------------ #
 
-    def verify(self, claim: str, evidences: List[str], node_type: str = "generation") -> Dict:
+    def verify(self, claim: str, evidences: List[str], node_type: str = "generation",
+               threshold: Optional[float] = None) -> Dict:
         """
         Vérifie si claim est supporté par les evidences.
+
+        Règle de décision :
+          - threshold is None (défaut) : label="hallucinated" si P(contradiction) > P(entailment)
+            (argmax entre contradiction et entailment — règle historique).
+          - threshold fixé (ex. calibré par conformal prediction) : label="hallucinated"
+            si P(contradiction) > threshold.
 
         Returns:
             score              : probabilité du label gagnant [0, 1]
             label              : "correct" | "hallucinated"
             confidence         : même valeur que score (compatibilité Interface 2)
+            p_contradiction    : P(contradiction) — axe de détection cohérent (calibration/conformal)
+            p_entailment       : P(entailment)
+            p_neutral          : P(neutral)
             hallucination_type : "T1"–"T5" | None
             insufficient_evidence : True si evidences vide
             latency_ms         : temps d'inférence en ms
@@ -96,15 +106,17 @@ class LightweightVerifier:
         contra_idx = self._idx("contradiction")
         entail_idx = self._idx("entailment")
 
+        neutral_idx = self._idx("neutral")
         max_contra = float(probs[:, contra_idx].max())
         max_entail = float(probs[:, entail_idx].max())
+        max_neutral = float(probs[:, neutral_idx].max())
 
-        if max_contra > max_entail:
-            label = "hallucinated"
-            score = max_contra
+        if threshold is None:
+            is_hallu = max_contra > max_entail
         else:
-            label = "correct"
-            score = max_entail
+            is_hallu = max_contra > threshold
+        label = "hallucinated" if is_hallu else "correct"
+        score = max_contra if is_hallu else max_entail
 
         latency = (time.time() - t0) * 1000
         h_type = self._classify_type(claim, node_type, label)
@@ -113,6 +125,9 @@ class LightweightVerifier:
             "score": round(score, 3),
             "label": label,
             "confidence": round(max(max_contra, max_entail), 3),
+            "p_contradiction": round(max_contra, 4),
+            "p_entailment": round(max_entail, 4),
+            "p_neutral": round(max_neutral, 4),
             "hallucination_type": h_type,
             "insufficient_evidence": False,
             "latency_ms": round(latency, 1),

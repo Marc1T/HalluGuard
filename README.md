@@ -2,7 +2,9 @@
 
 Projet 15 — ENSAM Meknès 4ème Année — Prof. Hajji Tarik — 2025-2026 — Étudiants : Souleymane Diallo & Marc Thierry Nankouli
 
-HalluGuard est un middleware de détection d'hallucinations pour pipelines RAG agentiques (LangGraph). Il combine un vérificateur NLI inter-sources (M1, cross-encoder 117 M params), un BeliefState temporel (M2, 50 faits max), un graphe de dépendances (DependencyDAG), une politique de correction (PolicyEngine) et un serveur MCP exposant 4 outils. Sur 60 scénarios HaluEval-Agentic, HalluGuard détecte 85 % des hallucinations (contre 0 % pour le baseline) avec un overhead de 278 ms.
+HalluGuard est un middleware de détection d'hallucinations pour pipelines RAG agentiques (LangGraph). Il combine un vérificateur NLI inter-sources (M1, cross-encoder 117 M params), un BeliefState temporel (M2, 50 faits max), un graphe de dépendances (DependencyDAG), une politique de correction (PolicyEngine) et un serveur MCP exposant 4 outils. Sur 90 scénarios HaluEval-Agentic (60 hallucinés + 30 corrects), la configuration recommandée **Variante B** (M1 seul) atteint **F1 = 82,9 %** (rappel 76,7 %, précision 90,2 %) pour un overhead médian de **~40 ms sur CPU** (variable selon la charge, toujours ≪ 300 ms) (contre 0 % de détection pour le baseline). Le vérificateur est en outre analysé en calibration (ECE) et son seuil calibré par conformal prediction.
+
+> **Chiffres officiels** : tous les résultats ci-dessous proviennent de `results/SUMMARY.json`, régénéré par `python scripts/run_all.py`. Ne pas citer d'autres sources.
 
 ---
 
@@ -72,7 +74,7 @@ demo.bat
 
 | Fichier | Description |
 |---|---|
-| `verifier.py` | **M1** — Vérificateur NLI inter-sources. Modèle : `cross-encoder/nli-MiniLM2-L6-H768` (117 M params, MNLI 433 K paires). Classifie chaque paire (claim, evidence) en contradiction / neutral / entailment. Seuils par nœud : `tool_call`=0.0, `generation`=0.0, `reasoning`=0.4, `retrieval`=0.6. |
+| `verifier.py` | **M1** — Vérificateur NLI inter-sources. Modèle : `cross-encoder/nli-MiniLM2-L6-H768` (117 M params, MNLI 433 K paires). Classifie chaque paire (claim, evidence) en contradiction / neutral / entailment. **Règle de décision** : `hallucinated` si `P(contradiction) > P(entailment)` (argmax), ou seuil calibré par conformal prediction. Les seuils par nœud (`tool_call`=0.0, …) servent au *gating* de criticité du `DependencyDAG`, pas à la décision de détection. |
 | `belief_state.py` | **M2** — BeliefState temporel. 50 faits max par session, éviction par score `confiance × récence`. Détecte les contradictions temporelles via NLI contre les faits stockés. |
 | `dag.py` | **DependencyDAG** — Graphe de dépendances des nœuds LangGraph. Criticité : `criticite(n) = nb_descendants(n) × (1 − confiance(n))`. Propage l'invalidation aux nœuds descendants. |
 | `policy.py` | **PolicyEngine** — Mode `log-only` (JSONL) ou `auto-correct` (réinvocation LLM). Mesure le TTR (Time-To-Recover). |
@@ -138,27 +140,33 @@ demo.bat
 
 ## Résultats obtenus
 
-### Benchmark HaluEval-Agentic (60 scénarios, tous hallucinés)
+### Benchmark HaluEval-Agentic (90 scénarios : 60 hallucinés + 30 corrects)
 
-| Variante | Description | Détection | PBR@1 | Overhead moyen |
-|---|---|:---:|:---:|:---:|
-| **A** | Baseline RAG sans HalluGuard | **0.0 %** | 0.0 % | 0 ms |
-| **B** | HalluGuard M1 (NLI inter-sources) | **76.7 %** | 76.7 % | 122.9 ms |
-| **C** | HalluGuard complet (M1 + M2 + MCP) | **85.0 %** | 85.0 % | 278.1 ms |
+| Variante | Description | Rappel | Précision | F1 | FPR | Overhead médian |
+|---|---|:---:|:---:|:---:|:---:|:---:|
+| **A** | Baseline RAG sans HalluGuard | 0.0 % | — | 0.0 % | 0.0 % | 0 ms |
+| **B** ⭐ | HalluGuard M1 (NLI seul) — **recommandée** | 76.7 % | **90.2 %** | **82.9 %** | 16.7 % | **~40 ms** |
+| **C** | HalluGuard M1 + M2 (BeliefState) | **86.7 %** | 68.4 % | 76.5 % | 80.0 % | ~194 ms |
 
-Gain A → C : **+85 points de détection** pour un overhead de 278 ms (acceptable en production).
+> **Lecture honnête** : M1 (Variante B) porte tout le gain net de détection. L'ajout de M2 (Variante C) augmente le rappel (+10 pts) mais **effondre la précision** (90,2 → 68,4 %, FPR 16,7 → 80 %) : sur un benchmark *mono-tour*, M2 sur-déclenche sur des faits de session sans rapport. M2 vise les contradictions *inter-tours* (sessions conversationnelles), un régime non couvert par ce benchmark. **La Variante B est donc recommandée.**
 
 ### Détection par type d'hallucination (12 scénarios chacun)
 
-| Type | Description | Variante B | Variante C | Apport M2 |
-|---|---|:---:|:---:|:---:|
-| **T1** | Perception / Retrieval | 91.7 % | 91.7 % | — |
-| **T2** | Mémoire temporelle | 83.3 % | **100.0 %** | **+16.7 pts** |
-| **T3** | Planification / Reasoning | 50.0 % | 66.7 % | +16.7 pts |
-| **T4** | Causale / Generation | 83.3 % | 83.3 % | — |
-| **T5** | Délégation / Tool call | 75.0 % | 83.3 % | +8.3 pts |
+| Type | Description | Variante B | Variante C |
+|---|---|:---:|:---:|
+| **T1** | Perception / Retrieval | 91.7 % | 91.7 % |
+| **T2** | Mémoire temporelle | 83.3 % | 100.0 % |
+| **T3** | Planification / Reasoning | 50.0 % | 66.7 % |
+| **T4** | Causale / Generation | 83.3 % | 83.3 % |
+| **T5** | Délégation / Tool call | 75.0 % | 91.7 % |
 
-> Le BeliefState (M2) apporte un gain décisif sur T2 (83.3 % → **100 %**) : les hallucinations temporelles sont entièrement couvertes grâce à la détection de contradictions inter-sessions.
+> ⚠️ Les gains de rappel de la Variante C par type **ne doivent pas être lus isolément** : ils s'accompagnent d'une chute de précision globale (FPR 80 %). Voir la matrice de confusion dans `results/SUMMARY.json`.
+
+### Validation de la taxonomie & calibration
+
+- **Accord inter-annotateurs** (2 auteurs, annotation réelle à l'aveugle) : **κ = 0,94** (global), κ = 0,75 sur la distinction ambiguë T2/T3.
+- **Calibration** : le score NLI brut est mal calibré (ECE = 0,24) ; Platt scaling le réduit à 0,16.
+- **Conformal prediction** : seuil de détection avec garantie de couverture (rappel cible respecté ; cf. `results/conformal_calibration.json`).
 
 ### Tests unitaires
 
@@ -240,12 +248,25 @@ venv\Scripts\python.exe src\tools\rag_tools.py
 # 3. Lancer la suite de tests (23 tests, ~14s)
 venv\Scripts\python.exe -m pytest src/tests/test_halluguard.py -v
 
-# 4. Lancer le benchmark complet (60 scénarios, ~25s)
+# 4. Lancer le benchmark complet (90 scénarios : 60 hallucinés + 30 corrects)
 venv\Scripts\python.exe src/tests/benchmark_runner.py --all
 
-# 5. Vérifier les résultats
-venv\Scripts\python.exe demo_metrics.py
+# 5. Régénérer TOUS les chiffres officiels -> results/SUMMARY.json
+#    (scores NLI, calibration, conformal, stats McNemar, kappa réel)
+venv\Scripts\python.exe scripts/run_all.py
 ```
+
+#### Expériences optionnelles (nécessitent un LLM — Ollama local OU clé API dans `.env`)
+
+```powershell
+# Self-consistency (signal d'incertitude) — 16 questions, k=5 échantillons
+venv\Scripts\python.exe src/experiments/self_consistency_eval.py --backend mistral_api
+
+# Baseline LLM-juge (Mistral 7B) comparée à M1 sur les 90 scénarios
+venv\Scripts\python.exe src/experiments/baseline_llm_judge.py
+```
+
+> Pour ces deux scripts, créez un fichier `.env` (gitignoré) contenant `MISTRAL_API_KEY=...`, ou utilisez `--backend ollama` pour rester 100 % local.
 
 ### Temps d'exécution (machine de référence — CPU Intel, 16 Go RAM)
 
