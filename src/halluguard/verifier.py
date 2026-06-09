@@ -105,16 +105,33 @@ class LightweightVerifier:
 
         contra_idx = self._idx("contradiction")
         entail_idx = self._idx("entailment")
-
         neutral_idx = self._idx("neutral")
-        max_contra = float(probs[:, contra_idx].max())
-        max_entail = float(probs[:, entail_idx].max())
+
+        contra_per = probs[:, contra_idx]      # contradiction par évidence
+        entail_per = probs[:, entail_idx]      # implication par évidence
+        max_contra = float(contra_per.max())
+        max_entail = float(entail_per.max())
         max_neutral = float(probs[:, neutral_idx].max())
 
-        if threshold is None:
-            is_hallu = max_contra > max_entail
-        else:
+        if threshold is not None:
+            # mode seuil (ex. conformal) : décision sur la contradiction maximale
             is_hallu = max_contra > threshold
+        else:
+            # Agrégation multi-documents par pertinence : les évidences sont supposées
+            # ordonnées par pertinence décroissante (sortie ChromaDB). Le PREMIER document
+            # "décisif" (signal fort, max(entail, contra) >= DECISIVE) tranche, ce qui évite
+            # les faux positifs dus à des documents hors-sujet (autre entité/chiffres) qui
+            # contrediraient un claim pourtant confirmé par un document plus pertinent.
+            # À défaut de document décisif, on retombe sur l'argmax global.
+            # NB : sur une évidence unique (benchmark), cette règle est strictement
+            # équivalente à l'ancienne décision (contradiction > implication).
+            DECISIVE = 0.4
+            is_hallu = max_contra > max_entail        # repli (signaux faibles)
+            for i in range(len(contra_per)):
+                ci, ei = float(contra_per[i]), float(entail_per[i])
+                if max(ci, ei) >= DECISIVE:
+                    is_hallu = ci > ei
+                    break
         label = "hallucinated" if is_hallu else "correct"
         score = max_contra if is_hallu else max_entail
 

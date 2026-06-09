@@ -114,7 +114,7 @@ demo.bat
 
 | Répertoire / Fichier | Description |
 |---|---|
-| `data/documents/` | 5 fichiers de faits précis et chiffrés (histoire IA, LLM, RAG, frameworks, hallucinations) — 71 chunks indexés dans ChromaDB. |
+| `data/documents/` | 5 fichiers de faits précis et chiffrés (histoire IA, LLM, RAG, frameworks, hallucinations) — 70 chunks indexés dans ChromaDB. |
 | `data/chromadb/` | Base vectorielle HNSW persistante (`halluguard_docs`, indexation O(log n), rappel >95 %). |
 | `data/halueval/scenarios.jsonl` | 60 scénarios hallucinés T1-T5 (longueurs 3/7/12 nœuds, distribution équilibrée). |
 | `data/memory/` | Sessions BeliefState JSON persistantes inter-sessions. |
@@ -189,7 +189,7 @@ Composants : LightweightVerifier (4) · DependencyDAG (4) · BeliefState (4) · 
 Question
    │
    ▼
-[retrieval] ──► ChromaDB HNSW (71 chunks)
+[retrieval] ──► ChromaDB HNSW (70 chunks)
    │                │
    │         ◄──────┘  documents
    │

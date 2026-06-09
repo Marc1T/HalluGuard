@@ -264,7 +264,6 @@ def run_verification(
 def interactive_loop(policy_mode: str, session_id: str = "interactive_session") -> None:
     from src.memory.persistent_memory import PersistentMemory
     from src.halluguard.belief_state import BeliefState
-    from src.agents.a2a_protocol import _reset_mcp_belief_for_demo
 
     mem = PersistentMemory(memory_dir=str(ROOT / "data" / "memory"))
     belief = BeliefState(session_id=session_id)

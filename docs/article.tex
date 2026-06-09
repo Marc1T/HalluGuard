@@ -99,7 +99,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small HalluGuard --- D\'etection d'hallucinations dans les pipelines RAG agentiques}
-\fancyhead[R]{\small ENSAM Meknès 2025-2026}
+\fancyfoot[L]{\small ENSAM Meknès 2025-2026}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -114,8 +114,8 @@
   dans les Pipelines RAG Agentiques\\
   par un Middleware NLI Multi-Couches\\[0.6em]
   \normalsize\normalfont
-  Projet 15 --- Module Représentation et Résolution de Problèmes en Intelligence Artificielle\\
-  ENSAM Mekn\`es --- 4\textsuperscript{e} Ann\'ee G\'enie Informatique --- 2025-2026
+  Module Framework d'Agents Intelligents\\
+  ENSAM Mekn\`es \\ 4\textsuperscript{e} Ann\'ee G\'enie Informatique --- 2025-2026
 }
 \author{%
   Souleymane Diallo \quad \& \quad Marc Thierry Nankouli\\
@@ -147,27 +147,27 @@
 \end{minipage}
 
 \vspace{0.8cm}
-\includegraphics[width=0.40\textwidth]{LOGO_ENSAM.png}
+\includegraphics[width=0.50\textwidth]{LOGO_ENSAM.png}
 
 \vspace{1.0cm}
-{\large Filière Génie Intelligence Artificielle et Technologies des Données --- 4\textsuperscript{e} Année\par}
+{\large Filière Génie Intelligence Artificielle et Technologies des Données \\ 4\textsuperscript{e} Année\par}
 \vspace{0.25cm}
-{\large Module : Représentation et Résolution de Problèmes en Intelligence Artificielle\par}
+{\large Module : Framework d'Agents Intelligents\par}
 \vspace{0.25cm}
-{\large\bfseries Projet 15 --- Rapport de recherche\par}
+{\large\bfseries Rapport de recherche\par}
 
 \vspace{1.4cm}
 \rule{\linewidth}{0.6pt}
-\vspace{0.7cm}
+\vspace{0.5cm}
 
 {\Huge\bfseries HalluGuard\par}
-\vspace{0.5cm}
+\vspace{0.4cm}
 {\LARGE\bfseries Détection et Mitigation des Hallucinations\\[0.2em]
 dans les Pipelines RAG Agentiques\par}
-\vspace{0.45cm}
+\vspace{0.35cm}
 {\large\itshape par un Middleware NLI Multi-Couches\par}
 
-\vspace{0.7cm}
+\vspace{0.5cm}
 \rule{\linewidth}{0.6pt}
 
 \vfill
@@ -189,8 +189,8 @@ dans les Pipelines RAG Agentiques\par}
 
 \end{titlepage}
 
-\maketitle
-\thispagestyle{empty}
+% \maketitle
+% \thispagestyle{empty}
 
 % ── Résumé ──────────────────────────────────────────────────────────────────
 \begin{abstract}
@@ -205,6 +205,7 @@ Les pipelines RAG agentiques réduisent les hallucinations LLM de 30 à 60~\%, m
 \rule{0.6\linewidth}{0.4pt}
 \end{center}
 
+\newpage
 \begin{abstract}
 \noindent\textbf{Abstract.}
 Agentic RAG (Retrieval-Augmented Generation) pipelines reduce LLM hallucinations by 30--60\%, yet the remaining 40--70\% of erroneous outputs propagate unchecked through all downstream pipeline nodes. We present \textbf{HalluGuard}, a hallucination detection and mitigation middleware for 4-node LangGraph pipelines. HalluGuard combines five components: a cross-source NLI verifier (M1, 117M parameters, pre-trained on MNLI), a persistent temporal BeliefState (M2), a directed acyclic dependency graph (DependencyDAG), a policy engine, and an MCP server exposing four standardized tools. We propose an original taxonomy of five agentic hallucination types (T1--T5) coupled to pipeline topology, validated by inter-annotator agreement between two independent annotators ($\kappa=0.94$ overall; $\kappa=1.0$ on topology-determined types, $\kappa=0.75$ on the genuinely ambiguous T2/T3 distinction). On a 90-scenario benchmark (60 hallucinated + 30 correct), \textbf{Variant~B} (M1 NLI only) achieves \textbf{F1~=~82.9\%} (recall 76.7\%, precision 90.2\%) at a median CPU overhead of \textbf{$\approx$40~ms} (McNemar $p<0.001$ vs baseline) --- recommended configuration, within the 300~ms budget. Adding the BeliefState (Variant~C) raises recall to 86.7\% but \emph{sharply degrades precision} (68.4\%, 80\% FPR): M2 increases coverage at the cost of many false positives on a single-turn benchmark. We further show the raw NLI score is poorly calibrated (ECE~$=0.24$), calibrate the detection threshold via \emph{conformal prediction} with an empirically verified coverage guarantee, and evaluate \emph{self-consistency} as a complementary uncertainty signal (AUC~$=0.88$ separating reliable from adversarial questions). Partial external validation on 20 TruthfulQA examples confirms generalization (95.0\% detection rate). The system core (M1 detection, M2 memory, MCP server) runs locally, without GPU or paid API.
@@ -432,7 +433,7 @@ HalluGuard s'intègre dans tout pipeline LangGraph via les hooks \texttt{pre\_no
   \draw[arr] (tc)  -- (gen);
 
   % ChromaDB
-  \node[mbox, above=of ret, fill=green!10] (chroma) {ChromaDB\\71 chunks};
+  \node[mbox, above=of ret, fill=green!10] (chroma) {ChromaDB\\70 chunks};
   \draw[arr, dashedarr] (ret) -- (chroma);
   \draw[arr, dashedarr] (chroma) -- (ret);
 
@@ -503,6 +504,7 @@ Les seuils de détection sont paramétrés par type de nœud, reflétant leur cr
 \end{table}
 
 \subsection{Composant 2 --- LightweightVerifier (M1)}
+\label{sec:m1}
 
 M1 est la pièce centrale du système. Il utilise le modèle \texttt{cross-encoder/nli-MiniLM2-L6-H768} \cite{reimers2019sbert}~:
 
@@ -514,11 +516,13 @@ M1 est la pièce centrale du système. Il utilise le modèle \texttt{cross-encod
   \item \textbf{Classes de sortie~:} contradiction (0) / neutralité (1) / implication (2)
 \end{itemize}
 
-Le score de contradiction (classe~0 du softmax) est agrégé sur les $k \leq 10$ evidences par maximum~:
+Pour chaque évidence, le softmax fournit $\bigl(P(\text{contra}), P(\text{neutre}), P(\text{impl})\bigr)$. Le score de contradiction rapporté est le maximum sur les $k \leq 10$ evidences~:
 \begin{equation}
-\text{score\_final} = \max_{i=1}^{k} \,\text{softmax}\bigl(\text{logits}(\text{claim},\,\text{evidence}_i)\bigr)_{\!\text{contradiction}}
+\text{score} = \max_{i=1}^{k} \,P_{\text{contradiction}}(\text{claim},\,\text{evidence}_i)
 \label{eq:max_score}
 \end{equation}
+
+\textbf{Règle de décision.} Sur une évidence \emph{unique} (cas du benchmark), le claim est jugé halluciné si $P(\text{contra}) > P(\text{impl})$. Sur \emph{plusieurs} évidences issues de la récupération (ordonnées par pertinence décroissante), une simple agrégation par maximum de contradiction provoquerait des faux positifs~: un document récupéré hors-sujet (autre entité, autres chiffres) peut contredire un claim pourtant confirmé par un document plus pertinent. Nous adoptons donc une \textbf{agrégation par pertinence}~: on parcourt les évidences dans l'ordre et le premier document \emph{décisif} ($\max(P(\text{impl}), P(\text{contra})) \geq 0{,}4$) tranche~; à défaut, on retombe sur l'argmax global. Cette règle est strictement équivalente à la décision sur évidence unique lorsque $k=1$ (les résultats du benchmark sont donc inchangés).
 
 \begin{lstlisting}[caption={Mécanisme de vérification M1}, label={lst:verifier}]
 def verify(self, claim: str, evidences: list[str],
@@ -673,7 +677,7 @@ Python & 3.13.11 \\
 LLM local & Mistral~7B via Ollama~0.6.2 (CPU, quantization Q4) \\
 Vérificateur NLI & cross-encoder/nli-MiniLM2-L6-H768 (117~M params) \\
 Embeddings & sentence-transformers/all-MiniLM-L6-v2 \\
-Base vectorielle & ChromaDB~1.5.9 PersistentClient, HNSW, 71~chunks \\
+Base vectorielle & ChromaDB~1.5.9 PersistentClient, HNSW, 70~chunks \\
 Pipeline & LangGraph~1.2.0 + LangChain~1.3.1 \\
 MCP & FastMCP~3.3.1, mcp~1.27.1 \\
 Graphs & NetworkX~3.6.1 \\
@@ -1188,6 +1192,9 @@ Notre étude d'ablation établit clairement que, sur le benchmark mono-tour, l'a
 \textbf{Limite~5 --- L'apport \emph{prévu} de M2 (inter-tours) n'est pas évaluable sur v1.}
 HaluEval-Agentic~v1 est structurellement mono-tour~: chaque scénario est indépendant, sans continuité de session. Or M2 est conçu pour un cas d'usage précis~--- «~le claim au Tour~N contredit un fait établi au Tour~N-k~» --- absent de v1. Le benchmark actuel mesure donc le \emph{coût} de M2 (faux positifs ci-dessus) sans pouvoir mesurer son \emph{bénéfice} prévu (interception des contradictions inter-tours). Affirmer la valeur de M2 exige la construction d'HaluEval-Agentic~v2 (sessions conversationnelles multi-tours, mémoire persistante), identifiée comme direction prioritaire (Perspectives). En l'état, nous présentons M2 comme une contribution architecturale dont le bénéfice reste \textbf{à démontrer empiriquement}, et non comme un gain acquis.
 
+\textbf{Limite~6 --- Vérificateur NLI anglais appliqué à un corpus francophone.}
+Le modèle \texttt{cross-encoder/nli-MiniLM2-L6-H768} est entraîné sur MNLI (anglais), alors que nos scénarios et documents sont en français. Notre analyse manuelle révèle une asymétrie nette~: le modèle détecte raisonnablement les \emph{contradictions} en français, mais reconnaît mal l'\emph{implication}~--- un document qui reformule pourtant le claim en français reçoit fréquemment un score d'implication quasi nul (classé \og{}neutre\fg{}). Cette limite a deux conséquences. (i)~Sur le benchmark, où chaque scénario fournit une évidence \emph{unique} et ciblée, le signal de contradiction reste exploitable (F1~=~82,9~\%)~; les résultats sont donc valides \emph{comme mesure sur ce jeu contrôlé}. (ii)~En récupération RAG \emph{réelle} multi-documents, des documents pertinents mais hors-sujet peuvent produire de fausses contradictions. Nous atténuons (ii) par une agrégation par pertinence (le premier document décisif tranche, §\ref{sec:m1})~--- ce qui supprime les faux positifs dus aux documents frères --- mais l'incapacité du modèle anglais à valider l'implication en français demeure une limite de fond. \textbf{Le correctif propre est un vérificateur NLI multilingue} (p.~ex. mDeBERTa-XNLI), identifié comme amélioration prioritaire~; il n'a pas été substitué dans ce travail pour préserver la cohérence des mesures déjà conduites avec ce modèle.
+
 \subsection{Menaces à la validité}
 \label{sec:threats}
 
@@ -1203,8 +1210,9 @@ L'ajout de 30~scénarios corrects (rapport 2:1 hallucinés/corrects) permet une 
 
 \textbf{Validité externe.}
 \textit{Généralisation au LLM}~: tous les résultats utilisent Mistral~7B (Q4, CPU). Les performances peuvent varier avec d'autres LLM (GPT-4o, LLaMA-3, Gemma) en raison de différences dans les patterns de génération.
-\textit{Généralisation au domaine}~: la base de connaissances (5~documents, 71~chunks) est intentionnellement restreinte au domaine IA/NLP. Les performances sur des domaines très différents (médical, juridique) nécessiteraient une réévaluation.
+\textit{Généralisation au domaine}~: la base de connaissances (5~documents, 70~chunks) est intentionnellement restreinte au domaine IA/NLP. Les performances sur des domaines très différents (médical, juridique) nécessiteraient une réévaluation.
 \textit{Généralisation au benchmark}~: la validation externe partielle sur TruthfulQA (Section~\ref{sec:truthfulqa}) confirme le fonctionnement de M1 sur des hallucinations factuelles, mais ne couvre pas les types T2 et T3 de notre taxonomie.
+\textit{Généralisation à la langue}~: le vérificateur étant entraîné en anglais (MNLI) et appliqué à un corpus français, sa fiabilité sur l'implication en français est limitée (Limite~6). De façon cohérente, la validation TruthfulQA \emph{anglaise} atteint 95~\% contre 76,7~\% sur le benchmark français~--- un écart compatible avec cette limite. Un vérificateur multilingue est attendu plus robuste.
 
 \subsection{Positionnement par rapport à l'état de l'art}
 

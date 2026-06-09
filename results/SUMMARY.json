@@ -121,14 +121,14 @@
     "note_C": "M2 augmente le rappel mais dégrade fortement la précision (faux positifs)."
   },
   "latency_overhead_ms": {
-    "median": 42.7,
-    "mean": 43.0,
+    "median": 35.8,
+    "mean": 35.4,
     "iqr": [
-      39.6,
-      47.6
+      32.5,
+      39.0
     ],
-    "min": 28.0,
-    "max": 55.1
+    "min": 20.2,
+    "max": 48.0
   },
   "calibration": {
     "ece_raw": 0.2423,
